@@ -1,0 +1,94 @@
+package com.ufro.dci.etransparency.etransparency_api_user.models.process;
+
+import java.util.Date;
+import java.util.List;
+
+import com.ufro.dci.etransparency.etransparency_api_user.models.evidence.Evidence;
+import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
+import com.ufro.dci.etransparency.etransparency_api_user.models.maturity.MaturityModel;
+import com.ufro.dci.etransparency.etransparency_api_user.models.recommendation.Recommendation;
+import com.ufro.dci.etransparency.etransparency_api_user.models.result.ProcessResult;
+import com.ufro.dci.etransparency.etransparency_api_user.models.survey.Survey;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+public class Process {
+
+    public enum ProcessStatus {
+        UNINITIATED, IN_PROGRESS , REJECTED, AUDIT, FINISHED
+    }
+
+    public enum RequestStatus {
+        UNREAD , READ, ACCEPTED, REJECTED
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private ProcessStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private RequestStatus requestStatus;
+
+    @NotNull
+    @Column(length = 30)
+    private String name;
+
+    private Date startDate;
+
+    private Date endDate;
+
+    private Long step;
+
+    @Column(columnDefinition = "TEXT")
+    private String surveyLink;
+
+    @Column(columnDefinition = "TEXT")
+    private String employeesNames;
+
+    @Column(columnDefinition = "TEXT")
+    private String employeesEmails;
+
+    @Column(columnDefinition = "TEXT")
+    private String employeesRut;
+
+    private Long nEmployees;
+
+    private Date createdAt;
+
+    private Date updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "institution_id", nullable = false)
+    private Institution institution;
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @JoinColumn(name = "maturity_model_id", referencedColumnName = "id")
+    private MaturityModel maturityModel;
+
+    @OneToOne(cascade = { CascadeType.ALL })
+    @JoinColumn(name = "process_result_id", referencedColumnName = "id")
+    private ProcessResult processResult;
+
+    @OneToMany(mappedBy = "process", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Evidence> evidences;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @JoinTable(name = "process_recommendation", joinColumns = @JoinColumn(name = "recommendation_id"), inverseJoinColumns = @JoinColumn(name = "process_id"))
+    private List<Recommendation> recommendations;
+
+    @OneToOne
+    @JoinColumn(name = "survey_id")
+    @ToString.Exclude
+    private Survey survey;
+
+}
