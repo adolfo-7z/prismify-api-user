@@ -2,14 +2,12 @@ package com.ufro.dci.etransparency.etransparency_api_user.models.process;
 
 import java.util.Date;
 import java.util.List;
-
 import com.ufro.dci.etransparency.etransparency_api_user.models.evidence.Evidence;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
 import com.ufro.dci.etransparency.etransparency_api_user.models.maturity.MaturityModel;
 import com.ufro.dci.etransparency.etransparency_api_user.models.recommendation.Recommendation;
 import com.ufro.dci.etransparency.etransparency_api_user.models.result.ProcessResult;
 import com.ufro.dci.etransparency.etransparency_api_user.models.survey.Survey;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -19,14 +17,15 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
+@Cacheable
 public class Process {
 
     public enum ProcessStatus {
-        UNINITIATED, IN_PROGRESS , REJECTED, AUDIT, FINISHED
+        UNINITIATED, IN_PROGRESS, REJECTED, AUDIT, FINISHED
     }
 
     public enum RequestStatus {
-        UNREAD , READ, ACCEPTED, REJECTED
+        UNREAD, READ, ACCEPTED, REJECTED
     }
 
     @Id
@@ -79,10 +78,11 @@ public class Process {
     @JoinColumn(name = "process_result_id", referencedColumnName = "id")
     private ProcessResult processResult;
 
-    @OneToMany(mappedBy = "process", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "process", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Evidence> evidences;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinTable(name = "process_recommendation", joinColumns = @JoinColumn(name = "recommendation_id"), inverseJoinColumns = @JoinColumn(name = "process_id"))
     private List<Recommendation> recommendations;
 

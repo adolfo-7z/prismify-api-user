@@ -10,6 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
+@Cacheable
 public class Evidence {
 
     public enum EvidenceStatus {

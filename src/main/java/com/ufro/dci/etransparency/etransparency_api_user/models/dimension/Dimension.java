@@ -1,7 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.dimension;
 
 import java.util.*;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -37,15 +36,15 @@ public class Dimension {
     @Column(name = "json_questions")
     private String jsonQuestions;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "json_evidence_requirements")
-    private String jsonEvidenceRequirements;
+    @Column(name = "evidence_requirements", columnDefinition = "TEXT")
+    private String evidenceRequirements;
 
     @ManyToOne
     @JoinColumn(name = "maturity_model_id")
     private MaturityModel maturityModel;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH })
     @JoinTable(name = "dimension_level", joinColumns = @JoinColumn(name = "dimension_id"), inverseJoinColumns = @JoinColumn(name = "level_id"))
     private List<Level> levels;
 

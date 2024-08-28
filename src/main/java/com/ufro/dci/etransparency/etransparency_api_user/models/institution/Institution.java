@@ -13,6 +13,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
+@Cacheable
 public class Institution {
 
     @Id
@@ -83,5 +84,5 @@ public class Institution {
 
     @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Process> processes;
-    
+
 }
