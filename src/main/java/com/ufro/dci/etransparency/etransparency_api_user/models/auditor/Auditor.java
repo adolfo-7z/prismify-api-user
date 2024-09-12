@@ -1,8 +1,10 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.auditor;
 
 import java.util.*;
+
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

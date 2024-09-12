@@ -1,7 +1,10 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.level;
 
 import java.util.*;
+
 import com.ufro.dci.etransparency.etransparency_api_user.models.dimension.Dimension;
+import com.ufro.dci.etransparency.etransparency_api_user.models.survey.Question;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -23,8 +26,16 @@ public class Level {
     @Column(length = 50)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-            CascadeType.REFRESH })
-    @JoinTable(name = "dimension_level", joinColumns = @JoinColumn(name = "level_id"), inverseJoinColumns = @JoinColumn(name = "dimension_id"))
-    private List<Dimension> dimensions;
+    private Long trueLevelValue;
+
+    @Column(columnDefinition = "TEXT")
+    private String questions;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dimension_id")
+    private Dimension dimension;
+
+    //Respuestas
+    @OneToMany(mappedBy = "level", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> answers;
 }

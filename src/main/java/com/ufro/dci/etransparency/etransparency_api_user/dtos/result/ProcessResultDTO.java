@@ -1,7 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.dtos.result;
 
 import java.util.*;
-import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.process.ProcessDTO;
 import lombok.*;
 
 @Data
@@ -11,18 +12,17 @@ public class ProcessResultDTO {
 
     private Long id;
 
+    @JsonIgnore
     private boolean isActive = true;
-    
-    private Long levelValue;
 
-    private Long levelPercentage;
+    private Double peopleAnswered;
 
-    private List<String> dimensions;
+    private List<Long> dimensionLevels;
 
-    private List<Double> dimensionsAverage;
+    private Long institutionLevel;
 
-    private Long percentageAnswered;
+    private ProcessDTO process;
 
-    private Process process;
+    private List<ClusterResultDTO> clusters;
 
 }

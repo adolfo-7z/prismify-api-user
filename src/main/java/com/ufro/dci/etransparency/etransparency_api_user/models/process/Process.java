@@ -60,6 +60,8 @@ public class Process {
     @Column(columnDefinition = "TEXT")
     private String employeesRut;
 
+    private Long maxLevelScore;
+
     private Long nEmployees;
 
     private Date createdAt;

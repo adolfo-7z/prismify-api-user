@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.manager;
 
+import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "managers")
 public class ManagerServiceImpl implements ManagerService {
 
     private final ManagerRepository managerRepository;
@@ -30,6 +32,7 @@ public class ManagerServiceImpl implements ManagerService {
      *         páginas.
      */
     @Override
+    @Cacheable(key = "'allManagers_' + #page + '-' + #size")
     public Object getAllManagers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Manager> managerPage = managerRepository.findAll(pageable);

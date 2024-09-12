@@ -1,9 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.result;
 
 import java.util.*;
-
 import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,17 +18,16 @@ public class ProcessResult {
 
     private boolean isActive;
 
-    private Long levelValue;
+    private Double peopleAnswered;
 
-    private Long levelPercentage;
+    private List<Long> dimensionLevels;
 
-    private List<String> dimensions;
-
-    private List<Double> dimensionsAverage;
-
-    private Long percentageAnswered;
+    private Long institutionLevel;
 
     @OneToOne(mappedBy = "processResult")
     private Process process;
+
+    @OneToMany(mappedBy = "processResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<ClusterResult> clusters;
     
 }

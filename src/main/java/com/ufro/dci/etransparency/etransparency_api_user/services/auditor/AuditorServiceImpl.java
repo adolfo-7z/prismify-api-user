@@ -2,6 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,6 @@ import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorDTO
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
-
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "auditors")
 public class AuditorServiceImpl implements AuditorService {
 
     private final AuditorRepository auditorRepository;
@@ -28,12 +29,14 @@ public class AuditorServiceImpl implements AuditorService {
      *
      * @param page Número de página.
      * @param size Tamaño de la página.
-     * @return Un mapa que contiene la lista de auditores activos y el número total de páginas.
+     * @return Un mapa que contiene la lista de auditores activos y el número total
+     *         de páginas.
      */
     @Override
+    @Cacheable(key = "'allAuditors_' + #page + '-' + #size + '-' + #sortDirection + '-' + #name")
     public Object getAllAuditors(int page, int size, String sortDirection, String name) {
         Sort sort = sortDirection.equalsIgnoreCase("asc") ? Sort.by("updatedAt").ascending()
-                                : Sort.by("updatedAt").descending();
+                : Sort.by("updatedAt").descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Auditor> auditorPage;
         if (name != null && !name.isEmpty()) {
@@ -48,17 +51,6 @@ public class AuditorServiceImpl implements AuditorService {
                 .collect(Collectors.toList()));
         response.put("totalPages", auditorPage.getTotalPages());
         return response;
-    }
-
-    /**
-     * Obtiene los resultados de una encuesta específica.
-     *
-     * @param processId ID del proceso de encuesta.
-     * @return Resultados de la encuesta.
-     */
-    @Override
-    public Object getSurveyResults(Long processId) {
-        return null;
     }
 
 }

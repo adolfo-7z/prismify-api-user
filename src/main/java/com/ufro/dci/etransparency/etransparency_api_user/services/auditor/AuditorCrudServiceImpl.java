@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
 
+import org.springframework.cache.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.Date;
  */
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "auditors")
 public class AuditorCrudServiceImpl implements AuditorCrudService {
 
     private final AuditorRepository auditorRepository;
@@ -36,6 +38,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
      *                                   inactivo.
      */
     @Override
+    @Cacheable(key="#auditorId")
     public AuditorDTO getAuditor(Long auditorId) {
         return auditorRepository.findById(auditorId)
                 .filter(Auditor::isActive)
@@ -51,6 +54,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
      * @return DTO del auditor creado.
      */
     @Override
+    @CacheEvict(allEntries = true)
     public AuditorDTO createAuditor(AuditorDTO auditorDTO) {
         auditorDTO.setPassword(passwordEncoder.encode(auditorDTO.getPassword()));
         auditorDTO.setRole(UserRole.AUDITOR);
@@ -74,6 +78,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
      */
     @Override
     @Transactional
+    @CacheEvict(key = "#auditorId", allEntries = true)
     public AuditorDTO updateAuditor(Long auditorId, AuditorUpdateDTO auditorUpdateDTO) {
         Auditor auditor = auditorRepository.findById(auditorId)
                 .filter(Auditor::isActive)
@@ -99,6 +104,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
      */
     @Override
     @Transactional
+    @CacheEvict(key = "#auditorId", allEntries = true)
     public AuditorDTO toggleAuditorStatus(Long auditorId) {
         return auditorRepository.findById(auditorId)
                 .map(existingAuditor -> {

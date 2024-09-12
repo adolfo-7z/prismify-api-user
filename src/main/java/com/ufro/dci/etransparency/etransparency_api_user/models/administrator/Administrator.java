@@ -1,6 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.administrator;
 
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.manager;
 
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
+import org.springframework.cache.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "managers")
 public class ManagerCrudServiceImpl implements ManagerCrudService {
 
     private final ManagerRepository managerRepository;
@@ -34,6 +35,7 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
      *                                   inactivo.
      */
     @Override
+    @Cacheable(key = "#managerId")
     public ManagerDTO getManager(Long managerId) {
         Manager manager = managerRepository.findById(managerId)
                 .filter(Manager::isActive)
@@ -58,6 +60,7 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
      * @return DTO del gestor creado.
      */
     @Override
+    @CacheEvict(allEntries = true)
     public ManagerDTO createManager(ManagerDTO managerDTO) {
         managerDTO.setPassword(passwordEncoder.encode(managerDTO.getPassword()));
         managerDTO.setRole(UserRole.MANAGER);
@@ -77,6 +80,7 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
      */
     @Override
     @Transactional
+    @CacheEvict(key = "#managerId", allEntries = true)
     public ManagerDTO updateManager(Long managerId, ManagerUpdateDTO managerUpdateDTO) {
         Manager manager = managerRepository.findById(managerId)
                 .filter(Manager::isActive)
@@ -101,6 +105,7 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
      */
     @Override
     @Transactional
+    @CacheEvict(key = "#managerId", allEntries = true)
     public ManagerDTO toggleManagerStatus(Long managerId) {
         return managerRepository.findById(managerId)
                 .map(existingInstitution -> {

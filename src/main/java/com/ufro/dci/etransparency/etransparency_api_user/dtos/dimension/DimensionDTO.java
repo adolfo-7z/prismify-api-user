@@ -22,7 +22,7 @@ public class DimensionDTO {
     @NotBlank(message = "Description cannot be blank")
     private String description;
 
-    private String jsonQuestions;
+    private String questions;
 
     private String jsonEvidenceRequirements;
     

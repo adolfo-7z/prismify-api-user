@@ -30,6 +30,8 @@ public class MaturityModel {
     @NotNull
     private Long timeLimit;
 
+    private Double approvalPercentage;
+
     private Date createdAt;
 
     private Date updatedAt;

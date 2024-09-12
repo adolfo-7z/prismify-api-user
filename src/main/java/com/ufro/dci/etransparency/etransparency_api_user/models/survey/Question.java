@@ -1,5 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.survey;
 
+import com.ufro.dci.etransparency.etransparency_api_user.models.level.Level;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +22,19 @@ public class Question {
     @Column(columnDefinition = "TEXT", length = 1024)
     private String text;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "section_id")
-    private Section section;
+    @Column(length = 10)
+    private String levelName;
 
+    @Column(length = 50)
+    private String dimensionName;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "level_id")
+    private Level level;
 
     private int stronglyDisagreeCount = 0;
     private int disagreeCount = 0;
