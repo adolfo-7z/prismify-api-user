@@ -68,6 +68,11 @@ public class Process {
 
     private Date updatedAt;
 
+    @ElementCollection
+    @CollectionTable(name = "process_milestones", joinColumns = @JoinColumn(name = "process_id"))
+    @Column(name = "milestone")
+    private List<String> milestones;
+
     @ManyToOne
     @JoinColumn(name = "institution_id", nullable = false)
     private Institution institution;
