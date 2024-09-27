@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.dtos.process;
 
-import java.util.Date;
+import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.institution.InstitutionDTO;
@@ -47,6 +47,8 @@ public class ProcessDTO {
     private Date createdAt;
 
     private Date updatedAt;
+
+    private List<String> milestones;
 
     private SimpleInstitutionDTO simpleInstitutionDTO;
 

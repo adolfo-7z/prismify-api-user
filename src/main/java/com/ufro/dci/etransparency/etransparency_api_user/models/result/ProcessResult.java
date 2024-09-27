@@ -29,5 +29,5 @@ public class ProcessResult {
 
     @OneToMany(mappedBy = "processResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ClusterResult> clusters;
-    
+
 }

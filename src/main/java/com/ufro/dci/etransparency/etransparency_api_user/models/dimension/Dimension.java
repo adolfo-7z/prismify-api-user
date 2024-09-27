@@ -29,8 +29,9 @@ public class Dimension {
     @Column(length = 150)
     private String description;
 
-    @Column(name = "evidence_requirements", columnDefinition = "TEXT")
-    private String evidenceRequirements;
+    @ElementCollection
+    @CollectionTable(name = "evidence_requirements", joinColumns = @JoinColumn(name = "dimension_id"))
+    private List<EvidenceRequirement> evidenceRequirements;
 
     @ManyToOne
     @JoinColumn(name = "maturity_model_id")

@@ -14,7 +14,7 @@ import lombok.*;
 public class Evidence {
 
     public enum EvidenceStatus {
-        NOT_EVALUATED, ACCEPTED, REJECTED
+        NOT_EVALUATED, ACCEPTED, REJECTED, APPEAL
     }
 
     @Id
