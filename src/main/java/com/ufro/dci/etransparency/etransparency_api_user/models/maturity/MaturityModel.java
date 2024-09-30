@@ -36,20 +36,16 @@ public class MaturityModel {
 
     private Date updatedAt;
 
-    @Lob
-    @Column(name = "file_data")
-    private byte[] modelFileData;
-
-    @Column(columnDefinition = "TEXT")
-    private String modelFileName;
-
-    @Column(columnDefinition = "TEXT")
-    private String modelFileType;
-
-    @OneToMany(mappedBy = "maturityModel", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval = false)
+    @OneToMany(mappedBy = "maturityModel", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH }, orphanRemoval = false)
     private List<Process> processes;
 
-    @OneToMany(mappedBy = "maturityModel", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval = false)
+    @OneToMany(mappedBy = "maturityModel", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+            CascadeType.REFRESH }, orphanRemoval = false)
     private List<Dimension> dimensions;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id")
+    private MaturityModelFile maturityModelFile;
     
 }
