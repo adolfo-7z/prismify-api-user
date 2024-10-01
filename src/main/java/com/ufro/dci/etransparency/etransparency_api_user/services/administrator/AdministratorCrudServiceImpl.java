@@ -1,7 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,26 +11,41 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserR
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
-
 import lombok.RequiredArgsConstructor;
 
 /**
- * Servicio para la gestión de Administradores.
+ * Servicio para la gestión de administradores en el sistema.
+ * <p>
+ * Esta clase implementa la lógica CRUD (Crear, Leer, Actualizar,
+ * Desactivar/Activar) para los administradores
+ * utilizando el repositorio {@link AdministratorRepository} y herramientas de
+ * conversión de entidades a DTO.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
 public class AdministratorCrudServiceImpl implements AdministratorCrudService {
 
     private final AdministratorRepository administratorRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     /**
      * Obtiene un administrador por su ID.
+     * <p>
+     * Busca el administrador en el repositorio, filtrando solo aquellos que están
+     * activos. Si no se encuentra,
+     * lanza una excepción {@link ResourceNotFoundException}.
+     * </p>
      *
-     * @param adminId ID del administrador.
-     * @return DTO del administrador.
-     * @throws ResourceNotFoundException si el administrador no es encontrado o está
-     *                                   inactivo.
+     * @param adminId el ID del administrador a buscar
+     * @return el administrador encontrado, convertido a {@link AdministratorDTO}
+     * @throws ResourceNotFoundException si no se encuentra el administrador o está
+     *                                   inactivo
      */
     @Override
     public AdministratorDTO getAdministrator(Long adminId) {
@@ -44,9 +58,14 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
 
     /**
      * Crea un nuevo administrador.
+     * <p>
+     * Recibe un DTO de administrador, codifica su contraseña, asigna el rol de
+     * administrador y lo guarda
+     * en el repositorio.
+     * </p>
      *
-     * @param administratorDTO DTO del administrador a crear.
-     * @return DTO del administrador creado.
+     * @param administratorDTO el DTO con la información del administrador a crear
+     * @return el administrador creado, convertido a {@link AdministratorDTO}
      */
     @Override
     public AdministratorDTO createAdministrator(AdministratorDTO administratorDTO) {
@@ -58,13 +77,20 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
     }
 
     /**
-     * Actualiza un administrador existente.
+     * Actualiza la información de un administrador existente.
+     * <p>
+     * Encuentra el administrador por su ID, filtra los inactivos y actualiza su
+     * información
+     * utilizando los datos proporcionados en un DTO de actualización. Si se
+     * proporciona una nueva contraseña,
+     * esta es codificada antes de ser guardada.
+     * </p>
      *
-     * @param adminId                ID del administrador a actualizar.
-     * @param administratorUpdateDTO DTO con los datos a actualizar.
-     * @return DTO del administrador actualizado.
-     * @throws ResourceNotFoundException si el administrador no es encontrado o está
-     *                                   inactivo.
+     * @param adminId                el ID del administrador a actualizar
+     * @param administratorUpdateDTO el DTO con los datos a actualizar
+     * @return el administrador actualizado, convertido a {@link AdministratorDTO}
+     * @throws ResourceNotFoundException si no se encuentra el administrador o está
+     *                                   inactivo
      */
     @Override
     @Transactional
@@ -82,11 +108,16 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
     }
 
     /**
-     * Alterna el estado de actividad de un administrador.
+     * Activa o desactiva un administrador.
+     * <p>
+     * Si el administrador está activo, se desactiva y viceversa. Si no se
+     * encuentra,
+     * lanza una excepción {@link ResourceNotFoundException}.
+     * </p>
      *
-     * @param adminId ID del administrador.
-     * @return DTO del administrador con el estado actualizado.
-     * @throws ResourceNotFoundException si el administrador no es encontrado.
+     * @param adminId el ID del administrador a activar o desactivar
+     * @return el administrador actualizado, convertido a {@link AdministratorDTO}
+     * @throws ResourceNotFoundException si no se encuentra el administrador
      */
     @Override
     @Transactional

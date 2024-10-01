@@ -11,15 +11,24 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserR
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
-
 import lombok.RequiredArgsConstructor;
-
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
 import java.util.Date;
 
 /**
- * Servicio para la gestión de Auditores.
+ * Servicio para la gestión de auditores, que incluye la creación,
+ * actualización, obtención
+ * y desactivación/activación de auditores. Utiliza el almacenamiento en caché
+ * para optimizar
+ * las consultas de auditores y el manejo de contraseñas seguras mediante
+ * {@link PasswordEncoder}.
+ * <p>
+ * Esta clase implementa el servicio {@link AuditorCrudService}.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -27,18 +36,24 @@ import java.util.Date;
 public class AuditorCrudServiceImpl implements AuditorCrudService {
 
     private final AuditorRepository auditorRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * Obtiene un auditor por su ID.
-     *
-     * @param auditorId ID del auditor.
-     * @return DTO del auditor.
-     * @throws ResourceNotFoundException si el auditor no es encontrado o está
-     *                                   inactivo.
+     * Obtiene un auditor por su ID, asegurándose de que esté activo.
+     * <p>
+     * Si el auditor no está activo o no se encuentra, se lanza una
+     * {@link ResourceNotFoundException}.
+     * Utiliza almacenamiento en caché para optimizar las búsquedas.
+     * </p>
+     * 
+     * @param auditorId ID del auditor a buscar
+     * @return {@link AuditorDTO} con los detalles del auditor encontrado
+     * @throws ResourceNotFoundException si no se encuentra el auditor o está
+     *                                   inactivo
      */
     @Override
-    @Cacheable(key="#auditorId")
+    @Cacheable(key = "#auditorId")
     public AuditorDTO getAuditor(Long auditorId) {
         return auditorRepository.findById(auditorId)
                 .filter(Auditor::isActive)
@@ -48,10 +63,16 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     }
 
     /**
-     * Crea un nuevo auditor.
-     *
-     * @param auditorDTO DTO del auditor a crear.
-     * @return DTO del auditor creado.
+     * Crea un nuevo auditor con la información proporcionada en el DTO.
+     * <p>
+     * La contraseña del auditor es codificada antes de almacenarla, y se
+     * inicializan otros
+     * campos predeterminados como el número de instituciones asignadas y auditorías
+     * realizadas.
+     * </p>
+     * 
+     * @param auditorDTO DTO con la información del auditor a crear
+     * @return {@link AuditorDTO} con los detalles del auditor recién creado
      */
     @Override
     @CacheEvict(allEntries = true)
@@ -68,13 +89,19 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     }
 
     /**
-     * Actualiza un auditor existente.
-     *
-     * @param auditorId        ID del auditor a actualizar.
-     * @param auditorUpdateDTO DTO con los datos a actualizar.
-     * @return DTO del auditor actualizado.
-     * @throws ResourceNotFoundException si el auditor no es encontrado o está
-     *                                   inactivo.
+     * Actualiza la información de un auditor existente.
+     * <p>
+     * Si se proporciona una nueva contraseña, esta se codifica antes de
+     * actualizarse.
+     * Este método utiliza la anotación {@link Transactional} para asegurar que
+     * los cambios se realicen de manera atómica.
+     * </p>
+     * 
+     * @param auditorId        ID del auditor a actualizar
+     * @param auditorUpdateDTO DTO con los nuevos valores para el auditor
+     * @return {@link AuditorDTO} con los detalles del auditor actualizado
+     * @throws ResourceNotFoundException si no se encuentra el auditor o está
+     *                                   inactivo
      */
     @Override
     @Transactional
@@ -96,11 +123,16 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     }
 
     /**
-     * Alterna el estado de actividad de un auditor.
-     *
-     * @param auditorId ID del auditor.
-     * @return DTO del auditor con el estado actualizado.
-     * @throws ResourceNotFoundException si el auditor no es encontrado.
+     * Activa o desactiva un auditor.
+     * <p>
+     * Este método invierte el estado actual del auditor y lo guarda. Si el auditor
+     * no
+     * se encuentra o está inactivo, lanza una {@link ResourceNotFoundException}.
+     * </p>
+     * 
+     * @param auditorId ID del auditor a modificar su estado
+     * @return {@link AuditorDTO} con los detalles del auditor con su nuevo estado
+     * @throws ResourceNotFoundException si no se encuentra el auditor
      */
     @Override
     @Transactional

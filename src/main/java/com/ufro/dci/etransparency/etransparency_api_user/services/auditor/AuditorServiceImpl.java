@@ -15,7 +15,17 @@ import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Servicio para operaciones relacionadas con los auditores.
+ * Servicio para la gestión de auditores en la aplicación.
+ * <p>
+ * Esta clase implementa el servicio {@link AuditorService} y proporciona
+ * métodos
+ * para acceder a la información de los auditores, incluyendo funcionalidades de
+ * paginación y filtrado.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -25,12 +35,23 @@ public class AuditorServiceImpl implements AuditorService {
     private final AuditorRepository auditorRepository;
 
     /**
-     * Obtiene una lista paginada de todos los auditores activos.
+     * Recupera todos los auditores con opciones de paginación, ordenamiento y
+     * filtrado por nombre.
+     * <p>
+     * Si se proporciona un nombre, se filtran los auditores cuyos nombres contienen
+     * esa cadena. De lo contrario, se devuelven todos los auditores.
+     * Solo se incluyen auditores activos en la respuesta.
+     * </p>
      *
-     * @param page Número de página.
-     * @param size Tamaño de la página.
-     * @return Un mapa que contiene la lista de auditores activos y el número total
-     *         de páginas.
+     * @param page          el número de página a recuperar (0 para la primera
+     *                      página)
+     * @param size          el tamaño de la página (número de auditores por página)
+     * @param sortDirection la dirección de ordenamiento, puede ser "asc" para
+     *                      ascendente o "desc" para descendente
+     * @param name          el nombre para filtrar auditores (puede ser nulo o
+     *                      vacío)
+     * @return un objeto que contiene la lista de auditores activos y el número
+     *         total de páginas
      */
     @Override
     @Cacheable(key = "'allAuditors_' + #page + '-' + #size + '-' + #sortDirection + '-' + #name")

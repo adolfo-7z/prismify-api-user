@@ -19,7 +19,18 @@ import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Servicio para la gestión de Administradores.
+ * Servicio para la gestión de administradores y el dashboard de administrador.
+ * <p>
+ * Esta clase implementa el servicio {@link AdministratorService} para obtener
+ * información
+ * sobre los administradores, así como para generar estadísticas y datos
+ * relevantes para el
+ * dashboard de un administrador.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -31,12 +42,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final ProcessRepository processRepository;
 
     /**
-     * Obtiene una lista paginada de todos los administradores.
-     *
-     * @param page el número de página a obtener.
-     * @param size el tamaño de la página.
-     * @return un objeto que contiene la lista de administradores y el número total
-     *         de páginas.
+     * Obtiene una lista paginada de administradores activos.
+     * <p>
+     * Este método retorna una lista de administradores activos con información
+     * paginada y también el número total de páginas.
+     * </p>
+     * 
+     * @param page el número de la página solicitada
+     * @param size el tamaño de cada página
+     * @return un objeto con la lista de administradores activos y el total de
+     *         páginas
      */
     @Override
     public Object getAllAdministrators(int page, int size) {
@@ -52,9 +67,13 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     /**
-     * Obtiene los datos del dashboard del administrador.
-     *
-     * @return un objeto que contiene diversos datos estadísticos para el dashboard.
+     * Genera los datos para el dashboard del administrador.
+     * <p>
+     * Este método retorna información relevante como el número de instituciones,
+     * procesos en curso, auditorías completadas, y el total de empleados encuestados.
+     * </p>
+     * 
+     * @return un objeto con los datos relevantes para el dashboard del administrador
      */
     @Override
     public Object getAdminDashboard() {

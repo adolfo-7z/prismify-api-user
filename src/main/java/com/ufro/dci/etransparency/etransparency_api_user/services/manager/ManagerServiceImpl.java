@@ -14,7 +14,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Implementación del servicio para la gestión de Managers.
+ * Implementación del servicio para la gestión de gestores.
+ * <p>
+ * Esta clase proporciona métodos para recuperar información sobre
+ * gestores
+ * desde el repositorio correspondiente. Se utiliza la anotación
+ * {@link Cacheable}
+ * para almacenar en caché los resultados de las consultas.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -24,12 +35,19 @@ public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
 
     /**
-     * Obtiene una lista paginada de todos los managers activos.
+     * Recupera una lista paginada de gestores activos.
+     * <p>
+     * Este método consulta el repositorio para obtener una página de
+     * gestores,
+     * filtra aquellos que están activos y los convierte a objetos
+     * {@link ManagerDTO}.
+     * Los resultados se almacenan en caché para mejorar el rendimiento.
+     * </p>
      *
-     * @param page Número de página (empezando desde 0).
-     * @param size Tamaño de la página (número de managers por página).
-     * @return Un mapa con la lista de managers activos y el número total de
-     *         páginas.
+     * @param page el número de página que se desea recuperar
+     * @param size el tamaño de la página (número de gestores por página)
+     * @return un objeto que contiene la lista de gestores activos y el total
+     *         de páginas
      */
     @Override
     @Cacheable(key = "'allManagers_' + #page + '-' + #size")

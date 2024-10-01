@@ -16,7 +16,17 @@ import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Servicio para la gestión de Gestores Institucionales.
+ * Implementación del servicio para la gestión CRUD de gestores.
+ * <p>
+ * Esta clase proporciona métodos para crear, obtener, actualizar y cambiar el
+ * estado de los gestores.
+ * Utiliza almacenamiento en caché para optimizar el rendimiento y la
+ * recuperación de datos.
+ * </p>
+ * 
+ * @author Adolfo Plaza
+ * @version 1.0
+ * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
@@ -24,15 +34,22 @@ import lombok.RequiredArgsConstructor;
 public class ManagerCrudServiceImpl implements ManagerCrudService {
 
     private final ManagerRepository managerRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * Obtiene un gestor por su ID.
+     * Obtiene un gestor por su identificador.
+     * <p>
+     * Este método busca un gestor activo en la base de datos. Si no se encuentra,
+     * lanza una excepción {@link ResourceNotFoundException}.
+     * Si el gestor tiene una institución asociada, también se convierte y se
+     * agrega al {@link ManagerDTO}.
+     * </p>
      *
-     * @param managerId ID del gestor.
-     * @return DTO del gestor.
-     * @throws ResourceNotFoundException si el gestor no es encontrado o está
-     *                                   inactivo.
+     * @param managerId el identificador del gestor a buscar
+     * @return el DTO del gestor correspondiente
+     * @throws ResourceNotFoundException si no se encuentra el gestor o si está
+     *                                   inactivo
      */
     @Override
     @Cacheable(key = "#managerId")
@@ -55,9 +72,14 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
 
     /**
      * Crea un nuevo gestor.
+     * <p>
+     * Este método codifica la contraseña del gestor y establece su rol antes de
+     * guardarlo en la base de datos.
+     * Luego, devuelve el {@link ManagerDTO} del gestor creado.
+     * </p>
      *
-     * @param managerDTO DTO del gestor a crear.
-     * @return DTO del gestor creado.
+     * @param managerDTO el DTO del gestor a crear
+     * @return el DTO del gestor creado
      */
     @Override
     @CacheEvict(allEntries = true)
@@ -71,12 +93,18 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
 
     /**
      * Actualiza un gestor existente.
+     * <p>
+     * Este método busca el gestor por su identificador. Si se encuentra y está
+     * activo,
+     * actualiza sus propiedades según el {@link ManagerUpdateDTO} proporcionado.
+     * Si se proporciona una nueva contraseña, también se codifica antes de guardar.
+     * </p>
      *
-     * @param managerId        ID del gestor a actualizar.
-     * @param managerUpdateDTO DTO con los datos a actualizar.
-     * @return DTO del gestor actualizado.
-     * @throws ResourceNotFoundException si el gestor no es encontrado o está
-     *                                   inactivo.
+     * @param managerId        el identificador del gestor a actualizar
+     * @param managerUpdateDTO el DTO con los nuevos datos del gestor
+     * @return el DTO del gestor actualizado
+     * @throws ResourceNotFoundException si no se encuentra el gestor o si está
+     *                                   inactivo
      */
     @Override
     @Transactional
@@ -97,11 +125,17 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
     }
 
     /**
-     * Alterna el estado de actividad de un gestor.
+     * Cambia el estado de un gestor (activo/inactivo).
+     * <p>
+     * Este método busca el gestor por su identificador. Si se encuentra, cambia su
+     * estado
+     * y lo guarda en la base de datos, devolviendo el DTO correspondiente.
+     * </p>
      *
-     * @param managerId ID del gestor.
-     * @return DTO del gestor con el estado actualizado.
-     * @throws ResourceNotFoundException si el gestor no es encontrado.
+     * @param managerId el identificador del gestor cuyo estado se cambiará
+     * @return el DTO del gestor con el nuevo estado
+     * @throws ResourceNotFoundException si no se encuentra el gestor o si está
+     *                                   inactivo
      */
     @Override
     @Transactional
