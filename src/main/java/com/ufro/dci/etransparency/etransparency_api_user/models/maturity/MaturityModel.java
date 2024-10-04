@@ -8,10 +8,11 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
 import lombok.*;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
 public class MaturityModel {
 
     @Id
@@ -47,5 +48,5 @@ public class MaturityModel {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private MaturityModelFile maturityModelFile;
-    
+
 }

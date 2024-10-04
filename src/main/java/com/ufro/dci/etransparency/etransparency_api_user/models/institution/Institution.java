@@ -14,6 +14,12 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Cacheable
+@Table(indexes = {
+    @Index(name = "idx_institution_manager", columnList = "manager"),
+        @Index(name = "idx_institution_auditor", columnList = "auditor"),
+        @Index(name = "idx_institution_level", columnList = "level"),
+        @Index(name = "idx_institution_name", columnList = "name")
+})
 public class Institution {
 
     @Id

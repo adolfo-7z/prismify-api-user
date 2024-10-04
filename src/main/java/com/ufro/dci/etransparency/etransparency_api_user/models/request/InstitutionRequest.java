@@ -10,6 +10,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
+@Table(indexes = {
+        @Index(name = "idx_institution_request_institution_name", columnList = "institutionName")
+})
 public class InstitutionRequest {
 
     public enum RequestStatus {

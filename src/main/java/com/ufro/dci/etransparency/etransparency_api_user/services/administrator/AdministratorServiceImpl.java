@@ -1,6 +1,10 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
@@ -8,13 +12,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.dimension.DimensionAverageDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
 import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
+import com.ufro.dci.etransparency.etransparency_api_user.models.result.SystemResult;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.institution.InstitutionRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.ProcessRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -37,9 +45,14 @@ import lombok.RequiredArgsConstructor;
 public class AdministratorServiceImpl implements AdministratorService {
 
     private final AdministratorRepository administratorRepository;
+
     private final InstitutionRepository institutionRepository;
+
     private final AuditorRepository auditorRepository;
+
     private final ProcessRepository processRepository;
+
+    private final SystemResultRepository systemResultRepository;
 
     /**
      * Obtiene una lista paginada de administradores activos.
@@ -70,10 +83,12 @@ public class AdministratorServiceImpl implements AdministratorService {
      * Genera los datos para el dashboard del administrador.
      * <p>
      * Este método retorna información relevante como el número de instituciones,
-     * procesos en curso, auditorías completadas, y el total de empleados encuestados.
+     * procesos en curso, auditorías completadas, y el total de empleados
+     * encuestados.
      * </p>
      * 
-     * @return un objeto con los datos relevantes para el dashboard del administrador
+     * @return un objeto con los datos relevantes para el dashboard del
+     *         administrador
      */
     @Override
     public Object getAdminDashboard() {
@@ -83,11 +98,28 @@ public class AdministratorServiceImpl implements AdministratorService {
         Long processesInProgress = processRepository.countByStatus(Process.ProcessStatus.IN_PROGRESS);
         Long totalCompletedAudits = processRepository.countByStatus(Process.ProcessStatus.FINISHED);
         Long peopleSurveyed = institutionRepository.findAll().stream().mapToLong(Institution::getNEmployees).sum();
+
+        SystemResult systemResult = systemResultRepository.findById(1L)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
+                        THE_RESOURCE_WAS_NOT_FOUND));
+        List<String> dimensionNames = systemResult.getDimensions();
+
+        List<DimensionAverageDTO> dimensionAverageDTOs = new ArrayList<>();
+
+        for (String dimensionName : dimensionNames) {
+            DimensionAverageDTO dimensionAverageDTO = new DimensionAverageDTO();
+            dimensionAverageDTO.setName(dimensionName);
+            dimensionAverageDTO
+                    .setAverage(systemResult.getDimensionsAverage().get(dimensionNames.indexOf(dimensionName)));
+            dimensionAverageDTOs.add(dimensionAverageDTO);
+        }
+
         response.put("numberOfInstitutions", institutionsCount);
         response.put("processesInProgress", processesInProgress);
         response.put("numberOfAuditors", auditorsCount);
         response.put("totalCompletedAudits", totalCompletedAudits);
         response.put("peopleSurveyed", peopleSurveyed);
+        response.put("allDimensionLevels", dimensionAverageDTOs);
         return response;
     }
 

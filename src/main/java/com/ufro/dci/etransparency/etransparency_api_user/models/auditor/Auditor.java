@@ -1,10 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.auditor;
 
 import java.util.*;
-
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,6 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(indexes = {
+    @Index(name = "idx_auditor_username", columnList = "username"),
+    @Index(name = "idx_auditor_email", columnList = "email")
+})
 public class Auditor extends UserEntity {
 
     @Id

@@ -18,6 +18,13 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Cacheable
+@Table(indexes = {
+        @Index(name = "idx_process_status", columnList = "status"),
+        @Index(name = "idx_process_request_status", columnList = "requestStatus"),
+        @Index(name = "idx_process_institution", columnList = "institution"),
+        @Index(name = "idx_process_maturity_model", columnList = "maturityModel"),
+        @Index(name = "idx_process_process_result", columnList = "processResult"),
+})
 public class Process {
 
     public enum ProcessStatus {
