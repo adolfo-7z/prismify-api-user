@@ -10,9 +10,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(indexes = {
-        @Index(name = "idx_process_result_process", columnList = "process")
-})
 public class ProcessResult {
 
     @Id

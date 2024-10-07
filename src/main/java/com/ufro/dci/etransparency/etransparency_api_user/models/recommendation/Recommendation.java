@@ -11,8 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(indexes = {
-        @Index(name = "idx_recommendation_dimension", columnList = "dimension"),
-        @Index(name = "idx_recommendation_current_level", columnList = "currentLevel")
+        @Index(name = "idx_recommendation_current_level", columnList = "currentLevel"),
+        @Index(name = "idx_recommendation_process", columnList = "process_id")
 })
 public class Recommendation {
 

@@ -12,9 +12,9 @@ import lombok.*;
 @ToString
 @Cacheable
 @Table(indexes = {
-        @Index(name = "idx_evidence_process", columnList = "process"),
         @Index(name = "idx_evidence_evidence_status", columnList = "evidenceStatus"),
-        @Index(name = "idx_evidence_dimension", columnList = "dimension")
+        @Index(name = "idx_evidence_dimension", columnList = "dimension_id"),
+        @Index(name = "idx_evidence_process", columnList = "process_id")
 })
 public class Evidence {
 

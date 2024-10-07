@@ -21,9 +21,9 @@ import lombok.*;
 @Table(indexes = {
         @Index(name = "idx_process_status", columnList = "status"),
         @Index(name = "idx_process_request_status", columnList = "requestStatus"),
-        @Index(name = "idx_process_institution", columnList = "institution"),
-        @Index(name = "idx_process_maturity_model", columnList = "maturityModel"),
-        @Index(name = "idx_process_process_result", columnList = "processResult"),
+        @Index(name = "idx_process_process_result", columnList = "process_result_id"),
+        @Index(name = "idx_process_institution", columnList = "institution_id"),
+        @Index(name = "idx_process_maturity_model", columnList = "maturity_model_id")
 })
 public class Process {
 
