@@ -18,7 +18,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('MANAGER')")
     public ResponseEntity<Object> getAllManagers(@RequestParam(name = "user") Long userId,
             @RequestParam(name = "role") UserRole userRole) {
         return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
