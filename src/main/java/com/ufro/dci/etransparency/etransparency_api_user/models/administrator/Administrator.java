@@ -23,4 +23,5 @@ public class Administrator extends UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
 }

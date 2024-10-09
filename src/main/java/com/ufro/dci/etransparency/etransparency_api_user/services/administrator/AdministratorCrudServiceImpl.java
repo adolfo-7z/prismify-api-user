@@ -1,6 +1,9 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
+import java.util.ArrayList;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +74,7 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
     public AdministratorDTO createAdministrator(AdministratorDTO administratorDTO) {
         administratorDTO.setPassword(passwordEncoder.encode(administratorDTO.getPassword()));
         administratorDTO.setRole(UserRole.ADMIN);
+        administratorDTO.setNotifications(new ArrayList<>());
         Administrator administrator = ConversionUtils.convertToEntity(administratorDTO, Administrator.class);
         Administrator savedAdministrator = administratorRepository.save(administrator);
         return ConversionUtils.convertToDTO(savedAdministrator, AdministratorDTO.class);

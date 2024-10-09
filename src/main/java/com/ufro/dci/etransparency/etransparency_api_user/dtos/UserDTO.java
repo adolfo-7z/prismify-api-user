@@ -1,11 +1,11 @@
 package com.ufro.dci.etransparency.etransparency_api_user.dtos;
 
+import java.util.*;
 import com.fasterxml.jackson.annotation.*;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.email.UniqueEmail;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.password.ValidPassword;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.username.UniqueUsername;
-
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -46,4 +46,7 @@ public class UserDTO {
 
     @JsonIgnore
     private UserRole role;
+
+    private List<String> notifications;
+
 }

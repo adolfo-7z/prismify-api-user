@@ -13,6 +13,8 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.Au
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -83,6 +85,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
         auditorDTO.setNAuditsPerformed(0L);
         auditorDTO.setCreatedAt(new Date());
         auditorDTO.setUpdatedAt(new Date());
+        auditorDTO.setNotifications(new ArrayList<>());
         Auditor auditor = ConversionUtils.convertToEntity(auditorDTO, Auditor.class);
         Auditor savedAuditor = auditorRepository.save(auditor);
         return ConversionUtils.convertToDTO(savedAuditor, AuditorDTO.class);

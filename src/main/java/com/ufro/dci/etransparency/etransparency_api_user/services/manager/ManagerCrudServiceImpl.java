@@ -1,6 +1,9 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.manager;
 
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
+import java.util.ArrayList;
+
 import org.springframework.cache.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,6 +89,7 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
     public ManagerDTO createManager(ManagerDTO managerDTO) {
         managerDTO.setPassword(passwordEncoder.encode(managerDTO.getPassword()));
         managerDTO.setRole(UserRole.MANAGER);
+        managerDTO.setNotifications(new ArrayList<>());
         Manager manager = ConversionUtils.convertToEntity(managerDTO, Manager.class);
         Manager savedManager = managerRepository.save(manager);
         return ConversionUtils.convertToDTO(savedManager, ManagerDTO.class);
