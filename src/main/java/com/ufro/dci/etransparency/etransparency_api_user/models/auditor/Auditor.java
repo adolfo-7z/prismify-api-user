@@ -43,4 +43,10 @@ public class Auditor extends UserEntity {
 
     @OneToMany(mappedBy = "auditor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval = false)
     private List<Institution> institutions;
+
+    @ElementCollection
+    @CollectionTable(name = "auditor_notifications", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "notifications")
+    private List<String> notifications;
+
 }

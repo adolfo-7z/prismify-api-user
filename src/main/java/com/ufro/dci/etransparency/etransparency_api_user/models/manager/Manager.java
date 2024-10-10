@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.manager;
 
+import java.util.*;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
 import jakarta.persistence.*;
@@ -32,4 +33,10 @@ public class Manager extends UserEntity {
 
     @OneToOne(mappedBy = "manager")
     private Institution institution;
+
+    @ElementCollection
+    @CollectionTable(name = "manager_notifications", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "notifications")
+    private List<String> notifications;
+    
 }

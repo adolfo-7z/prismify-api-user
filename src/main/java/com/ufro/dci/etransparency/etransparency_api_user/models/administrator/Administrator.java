@@ -1,12 +1,9 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.administrator;
 
+import java.util.*;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Builder
@@ -23,5 +20,10 @@ public class Administrator extends UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ElementCollection
+    @CollectionTable(name = "administrator_notifications", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "notifications")
+    private List<String> notifications;
     
 }
