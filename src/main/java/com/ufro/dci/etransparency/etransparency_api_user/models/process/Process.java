@@ -28,7 +28,7 @@ import lombok.*;
 public class Process {
 
     public enum ProcessStatus {
-        UNINITIATED, IN_PROGRESS, REJECTED, AUDIT, APPEALABLE, APPEAL, FINISHED
+        UNINITIATED, IN_PROGRESS, REJECTED, AUDIT, APPEALABLE, APPEAL, FINISHED, SURVEY_FINISHED
     }
 
     public enum RequestStatus {
