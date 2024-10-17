@@ -24,10 +24,26 @@ public class ProcessResult {
 
     private Long institutionLevel;
 
+    private Long daysPassed;
+
+    private Long daysLeft;
+
+    private Long answeredSurveys;
+
+    private Long surveyQuorum;
+
+    private Long totalSurveys;
+
+    private Date estimatedCompletionDate;
+
     @OneToOne(mappedBy = "processResult")
     private Process process;
 
     @OneToMany(mappedBy = "processResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ClusterResult> clusters;
+
+    @ElementCollection
+    @CollectionTable(name = "response_timestamps", joinColumns = @JoinColumn(name = "process_result_id"))
+    private List<ResponseAverage> responseAverages;
 
 }
