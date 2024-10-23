@@ -1,0 +1,29 @@
+{
+    "properties": [
+        {
+            "name": "jwt.secret.key",
+            "type": "java.lang.String",
+            "description": "A description for 'jwt.secret.key'"
+        },
+        {
+            "name": "jwt.expiration.time",
+            "type": "java.lang.String",
+            "description": "A description for 'jwt.expiration.time'"
+        },
+        {
+            "name": "spring.application.default-username",
+            "type": "java.lang.String",
+            "description": "A description for 'spring.application.default-username'"
+        },
+        {
+            "name": "spring.application.default-email",
+            "type": "java.lang.String",
+            "description": "A description for 'spring.application.default-email'"
+        },
+        {
+            "name": "spring.application.default-password",
+            "type": "java.lang.String",
+            "description": "A description for 'spring.application.default-password'"
+        }
+    ]
+}
