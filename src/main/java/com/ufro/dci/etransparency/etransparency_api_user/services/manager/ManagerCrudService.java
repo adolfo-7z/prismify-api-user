@@ -2,6 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.services.manager;
 
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.manager.ManagerDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.manager.ManagerUpdateDTO;
+
 public interface ManagerCrudService {
 
     public ManagerDTO getManager(Long managerId);

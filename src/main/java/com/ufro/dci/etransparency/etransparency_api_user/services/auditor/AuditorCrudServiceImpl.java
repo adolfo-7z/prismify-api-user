@@ -1,21 +1,21 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
 
+import java.util.*;
+
+import lombok.*;
+
 import org.springframework.cache.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorUpdateDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
-import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.services.auditor.utils.AuditorCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
-import lombok.RequiredArgsConstructor;
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Servicio para la gestión de auditores, que incluye la creación,
@@ -37,9 +37,9 @@ import java.util.Date;
 @CacheConfig(cacheNames = "auditors")
 public class AuditorCrudServiceImpl implements AuditorCrudService {
 
-    private final AuditorRepository auditorRepository;
-
     private final PasswordEncoder passwordEncoder;
+
+    private final AuditorCommonsUtils auditorCommonsUtils;
 
     /**
      * Obtiene un auditor por su ID, asegurándose de que esté activo.
@@ -57,11 +57,8 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     @Override
     @Cacheable(key = "#auditorId")
     public AuditorDTO getAuditor(Long auditorId) {
-        return auditorRepository.findById(auditorId)
-                .filter(Auditor::isActive)
-                .map(auditor -> ConversionUtils.convertToDTO(auditor, AuditorDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_AUDITOR_WITH_ID + auditorId + WAS_NOT_FOUND_OR_INACTIVE));
+        Auditor auditor = auditorCommonsUtils.findAuditorById(auditorId);
+        return ConversionUtils.convertToDTO(auditor, AuditorDTO.class);
     }
 
     /**
@@ -79,16 +76,16 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     @Override
     @CacheEvict(allEntries = true)
     public AuditorDTO createAuditor(AuditorDTO auditorDTO) {
-        auditorDTO.setPassword(passwordEncoder.encode(auditorDTO.getPassword()));
-        auditorDTO.setRole(UserRole.AUDITOR);
-        auditorDTO.setNAssignedInstitutions(0L);
-        auditorDTO.setNAuditsPerformed(0L);
-        auditorDTO.setCreatedAt(new Date());
-        auditorDTO.setUpdatedAt(new Date());
-        auditorDTO.setNotifications(new ArrayList<>());
         Auditor auditor = ConversionUtils.convertToEntity(auditorDTO, Auditor.class);
-        Auditor savedAuditor = auditorRepository.save(auditor);
-        return ConversionUtils.convertToDTO(savedAuditor, AuditorDTO.class);
+        auditor.setPassword(passwordEncoder.encode(auditorDTO.getPassword()));
+        auditor.setRole(UserRole.AUDITOR);
+        auditor.setNAssignedInstitutions(0L);
+        auditor.setNAuditsPerformed(0L);
+        auditor.setCreatedAt(new Date());
+        auditor.setUpdatedAt(new Date());
+        auditor.setNotifications(new ArrayList<>());
+
+        return auditorCommonsUtils.saveAndConvertDTO(auditor);
     }
 
     /**
@@ -110,10 +107,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     @Transactional
     @CacheEvict(key = "#auditorId", allEntries = true)
     public AuditorDTO updateAuditor(Long auditorId, AuditorUpdateDTO auditorUpdateDTO) {
-        Auditor auditor = auditorRepository.findById(auditorId)
-                .filter(Auditor::isActive)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_AUDITOR_WITH_ID + auditorId + WAS_NOT_FOUND_OR_INACTIVE));
+        Auditor auditor = auditorCommonsUtils.findAuditorById(auditorId);
 
         if (auditorUpdateDTO.getPassword() != null && !auditorUpdateDTO.getPassword().isEmpty()) {
             auditorUpdateDTO.setPassword(passwordEncoder.encode(auditorUpdateDTO.getPassword()));
@@ -121,8 +115,7 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
 
         ConversionUtils.copyNonNullProperties(auditorUpdateDTO, auditor);
         auditor.setUpdatedAt(new Date());
-        Auditor savedAuditor = auditorRepository.save(auditor);
-        return ConversionUtils.convertToDTO(savedAuditor, AuditorDTO.class);
+        return auditorCommonsUtils.saveAndConvertDTO(auditor);
     }
 
     /**
@@ -141,15 +134,10 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
     @Transactional
     @CacheEvict(key = "#auditorId", allEntries = true)
     public AuditorDTO toggleAuditorStatus(Long auditorId) {
-        return auditorRepository.findById(auditorId)
-                .map(existingAuditor -> {
-                    existingAuditor.setActive(!existingAuditor.isActive());
-                    existingAuditor.setUpdatedAt(new Date());
-                    Auditor savedAauditor = auditorRepository.save(existingAuditor);
-                    return ConversionUtils.convertToDTO(savedAauditor, AuditorDTO.class);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_AUDITOR_WITH_ID + auditorId + WAS_NOT_FOUND_OR_INACTIVE));
+        Auditor auditor = auditorCommonsUtils.findAuditorById(auditorId);
+        auditor.setActive(!auditor.isActive());
+        auditor.setUpdatedAt(new Date());
+        return auditorCommonsUtils.saveAndConvertDTO(auditor);
     }
 
 }

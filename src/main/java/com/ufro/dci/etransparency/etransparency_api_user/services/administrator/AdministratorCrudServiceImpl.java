@@ -1,7 +1,5 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
 import java.util.ArrayList;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +11,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.Resou
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils.AdminCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -33,9 +32,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdministratorCrudServiceImpl implements AdministratorCrudService {
 
-    private final AdministratorRepository administratorRepository;
-
     private final PasswordEncoder passwordEncoder;
+
+    private final AdminCommonsUtils adminCommonsUtils;
 
     /**
      * Obtiene un administrador por su ID.
@@ -52,11 +51,8 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
      */
     @Override
     public AdministratorDTO getAdministrator(Long adminId) {
-        return administratorRepository.findById(adminId)
-                .filter(Administrator::isActive)
-                .map(administrator -> ConversionUtils.convertToDTO(administrator, AdministratorDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        +adminId + WAS_NOT_FOUND_OR_INACTIVE));
+        Administrator administrator = adminCommonsUtils.findAdministratorById(adminId);
+        return ConversionUtils.convertToDTO(administrator, AdministratorDTO.class);
     }
 
     /**
@@ -72,12 +68,12 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
      */
     @Override
     public AdministratorDTO createAdministrator(AdministratorDTO administratorDTO) {
-        administratorDTO.setPassword(passwordEncoder.encode(administratorDTO.getPassword()));
-        administratorDTO.setRole(UserRole.ADMIN);
-        administratorDTO.setNotifications(new ArrayList<>());
         Administrator administrator = ConversionUtils.convertToEntity(administratorDTO, Administrator.class);
-        Administrator savedAdministrator = administratorRepository.save(administrator);
-        return ConversionUtils.convertToDTO(savedAdministrator, AdministratorDTO.class);
+        administrator.setPassword(passwordEncoder.encode(administratorDTO.getPassword()));
+        administrator.setRole(UserRole.ADMIN);
+        administrator.setNotifications(new ArrayList<>());
+
+        return adminCommonsUtils.saveAndConvertToDTO(administrator);
     }
 
     /**
@@ -99,16 +95,13 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
     @Override
     @Transactional
     public AdministratorDTO updateAdministrator(Long adminId, AdministratorUpdateDTO administratorUpdateDTO) {
-        Administrator administrator = administratorRepository.findById(adminId)
-                .filter(Administrator::isActive)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_ADMIN_WITH_ID + adminId + WAS_NOT_FOUND_OR_INACTIVE));
+        Administrator administrator = adminCommonsUtils.findAdministratorById(adminId);
         if (administratorUpdateDTO.getPassword() != null && !administratorUpdateDTO.getPassword().isEmpty()) {
             administratorUpdateDTO.setPassword(passwordEncoder.encode(administratorUpdateDTO.getPassword()));
         }
         ConversionUtils.copyNonNullProperties(administratorUpdateDTO, administrator);
-        Administrator savedAdministrator = administratorRepository.save(administrator);
-        return ConversionUtils.convertToDTO(savedAdministrator, AdministratorDTO.class);
+
+        return adminCommonsUtils.saveAndConvertToDTO(administrator);
     }
 
     /**
@@ -125,15 +118,10 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
      */
     @Override
     @Transactional
-    public AdministratorDTO toggleAdministratorStatus(Long adminId) {
-        return administratorRepository.findById(adminId)
-                .map(existingAdministrator -> {
-                    existingAdministrator.setActive(!existingAdministrator.isActive());
-                    Administrator savedAdministrator = administratorRepository.save(existingAdministrator);
-                    return ConversionUtils.convertToDTO(savedAdministrator, AdministratorDTO.class);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_ADMIN_WITH_ID + adminId + WAS_NOT_FOUND_OR_INACTIVE));
+    public AdministratorDTO toggleAdministratorStatus(Long administratorId) {
+        Administrator administrator = adminCommonsUtils.findAdministratorById(administratorId);
+        administrator.setActive(!administrator.isActive());
+        return adminCommonsUtils.saveAndConvertToDTO(administrator);
     }
 
 }

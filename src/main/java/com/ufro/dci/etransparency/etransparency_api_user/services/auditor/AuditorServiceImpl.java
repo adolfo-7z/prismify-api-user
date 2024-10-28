@@ -1,18 +1,22 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
 
 import java.util.*;
+
+import lombok.*;
+
 import java.util.stream.Collectors;
+
 import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Servicio para la gestión de auditores en la aplicación.

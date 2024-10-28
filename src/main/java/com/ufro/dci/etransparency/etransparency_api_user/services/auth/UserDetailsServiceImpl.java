@@ -1,6 +1,9 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.auth;
 
 import java.util.*;
+
+import lombok.*;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,8 +15,6 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.administra
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.manager.ManagerRepository;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * Servicio para la carga de detalles de usuario.
  */
@@ -22,7 +23,9 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
         private final AdministratorRepository administratorRepository;
+
         private final AuditorRepository auditorRepository;
+        
         private final ManagerRepository managerRepository;
 
         /**

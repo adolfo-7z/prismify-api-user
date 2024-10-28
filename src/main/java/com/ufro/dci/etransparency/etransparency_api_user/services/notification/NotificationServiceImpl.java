@@ -1,8 +1,14 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.notification;
 
 import java.util.*;
+
+import lombok.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
@@ -11,8 +17,6 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.manager.Manager;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.manager.ManagerRepository;
-import lombok.RequiredArgsConstructor;
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final AuditorRepository auditorRepository;
 
+    @Override
     @Transactional(readOnly = true)
     public Object getUserNotifications(Long userId, UserRole role) {
         Map<String, Object> response = new HashMap<>();
@@ -31,7 +36,7 @@ public class NotificationServiceImpl implements NotificationService {
         return response;
     }
 
-    public List<String> getNotificationsByIdAndRole(Long userId, UserRole role) {
+    private List<String> getNotificationsByIdAndRole(Long userId, UserRole role) {
         if (role.equals(UserRole.ADMIN)) {
             Administrator admin = administratorRepository.findById(userId)
                     .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,

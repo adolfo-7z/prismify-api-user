@@ -1,15 +1,19 @@
 package com.ufro.dci.etransparency.etransparency_api_user.controllers.administrator;
 
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+import lombok.*;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorUpdateDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.handler.ResponseHandler;
 import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.AdministratorCrudService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("admins")
