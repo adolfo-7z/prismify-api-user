@@ -26,7 +26,7 @@ public class Recommendation {
     private Long targetLevel;
 
     @Column(columnDefinition = "TEXT")
-    private String recommendation;
+    private String description;
 
     private Date createdAt;
 
