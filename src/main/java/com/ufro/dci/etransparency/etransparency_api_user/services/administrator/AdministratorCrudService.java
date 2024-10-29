@@ -5,12 +5,12 @@ import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.Admi
 
 public interface AdministratorCrudService {
 
-    public AdministratorDTO getAdministrator(Long adminId);
+    public AdministratorDTO getAdministrator(Long administratorId);
 
     public AdministratorDTO createAdministrator(AdministratorDTO administratorDTO);
 
-    public AdministratorDTO updateAdministrator(Long adminId, AdministratorUpdateDTO administratorUpdateDTO);
+    public AdministratorDTO updateAdministrator(Long administratorId, AdministratorUpdateDTO administratorUpdateDTO);
 
-    public AdministratorDTO toggleAdministratorStatus(Long adminId);
+    public AdministratorDTO toggleAdministratorStatus(Long administratorId);
 
 }
