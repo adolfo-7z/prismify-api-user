@@ -7,6 +7,8 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
+        // Este método se deja intencionalmente vacío porque la lógica de inicialización
+        // no es necesaria para este validador.
     }
 
     @Override

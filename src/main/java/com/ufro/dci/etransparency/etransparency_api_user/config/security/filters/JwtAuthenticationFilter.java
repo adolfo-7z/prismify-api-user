@@ -1,37 +1,41 @@
 package com.ufro.dci.etransparency.etransparency_api_user.config.security.filters;
 
+import java.util.*;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.AuthenticationException;
 
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.http.*;
+
+import org.springframework.security.authentication.*;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+
 import com.ufro.dci.etransparency.etransparency_api_user.config.security.models.CustomUserDetails;
 import com.ufro.dci.etransparency.etransparency_api_user.config.security.utils.JwtUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
 import com.ufro.dci.etransparency.etransparency_api_user.models.manager.Manager;
-import io.jsonwebtoken.io.IOException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private JwtUtils jwtUtils;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public JwtAuthenticationFilter(JwtUtils jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
+    private final JwtUtils jwtUtils;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -44,7 +48,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             username = user.getUsername();
             password = user.getPassword();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new AuthenticationServiceException("Unable to authenticate user", e);
         }
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -54,8 +58,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             FilterChain filter, Authentication auth)
-            throws IOException, ServletException, JsonProcessingException, java.io.IOException {
-
+            throws ServletException, IOException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
         UserEntity userEntity = customUserDetails.getUserEntity();
 
@@ -76,12 +80,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private Long getUserId(UserEntity userEntity) {
-        if (userEntity instanceof Administrator) {
-            return ((Administrator) userEntity).getId();
-        } else if (userEntity instanceof Auditor) {
-            return ((Auditor) userEntity).getId();
-        } else if (userEntity instanceof Manager) {
-            return ((Manager) userEntity).getId();
+        if (userEntity instanceof Administrator administrator) {
+            return administrator.getId();
+        } else if (userEntity instanceof Auditor auditor) {
+            return auditor.getId();
+        } else if (userEntity instanceof Manager manager) {
+            return manager.getId();
         }
         return null;
     }

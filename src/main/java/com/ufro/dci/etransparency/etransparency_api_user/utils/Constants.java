@@ -24,6 +24,7 @@ public class Constants {
     public static final String NO_RESULTS_FOR_PROCESS = "No process result found for process ";
     public static final String NO_LEVEL_AVERAGES_FOR_PROCESS = "No average levels found for process ";
     public static final String THE_EVIDENCE_WITH_ID = "The evidence with ID ";
+    public static final String RESOURCE_CONVERSION = "The conversion of the resource failed";
 
     // CONFLICTOS
     public static final String THE_RESOURCE_WAS_NOT_FOUND = "The resource was not found";
@@ -39,6 +40,8 @@ public class Constants {
     public static final String PROCESS_REJECTED = "Process Rejected";
     public static final String INVALID_REJECTION_CONDITION = "Invalid rejection condition";
     public static final String INVALID_ACCEPTING_CONDITION = "Invalid accepting condition";
+    public static final String EVIDENCE_NOT_REJECTED = "Evidence is not in rejected status and cannot be appealed";
+    public static final String PROCESS_NOT_AUDIT = "This process is not being audited";
 
     // HITOS
     public static final String PROCESS_REQUESTED = "Se ha solicitado proceso";
@@ -47,12 +50,12 @@ public class Constants {
     public static final String SURVEY_FINISHED1 = "Ha concluido proceso de encuesta con un";
     public static final String SURVEY_FINISHED2 = "% de respuestas";
     public static final String AUDIT_STARTED = "Se ha iniciado auditoría del proceso";
-    public static final String EVIDENCE_REJECTED = "Se ha rechazado evidencia del proceso";
+    public static final String PROCESS_SURVEY_REJECTED = "Se ha rechazado el proceso";
     public static final String EVIDENCE_APPEALED = "Se apeló el rechazo";
     public static final String PROCESS_FINISHED = "Proceso finalizado";
 
     // HTTP
-    public static final String NOT_FOUND = "NOT FOUND";
+    public static final String NOT_FOUND = "Not found";
     public static final String OPERATION_FAILED = "Operation failed";
     public static final String OPERATION_SUCCESSFUL = "Operation successful";
 
@@ -60,10 +63,14 @@ public class Constants {
     public static final String FILE_NOT_NULL = "File must not be null or empty";
     public static final String FILE_SIZE_EXCEEDED = "File size exceeds the maximum allowed size of ";
     public static final String FILE_TYPE_NOT_SUPPORTED = "File type is not supported";
-    public static final String DIMENSION_CAPACITY_EXCEEDED = "Cannot upload more than 3 files per dimension for this process";
+    public static final String FILE_CAPACITY_EXCEEDED = "Cannot upload more than 3 files per dimension for this process";
     public static final String FILE_PROCESSING_FAILED = "File processing operation failed";
-    public static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
-    public static final long MAX_REQUEST_SIZE = 55 * 1024 * 1024;
+    public static final String FILE_COLUMNS_NOT_FOUND = "Required columns not found in the file";
+    public static final long MAX_FILE_SIZE = (long) 50 * 1024 * 1024;
+    public static final long MAX_REQUEST_SIZE = (long) 55 * 1024 * 1024;
+
+    //MAIL
+    public static final String FAILED_EMAIL = "Failed to send email to the recipient";
 
     // RESPUESTAS
     public static final double APPROVAL_PERCENTAGE = 0.75;

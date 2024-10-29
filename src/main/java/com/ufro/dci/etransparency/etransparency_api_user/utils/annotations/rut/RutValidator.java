@@ -7,6 +7,8 @@ public class RutValidator implements ConstraintValidator<ValidRut, String> {
 
     @Override
     public void initialize(ValidRut constraintAnnotation) {
+        // Este método se deja intencionalmente vacío porque la lógica de inicialización
+        // no es necesaria para este validador.
     }
 
     @Override
@@ -24,7 +26,8 @@ public class RutValidator implements ConstraintValidator<ValidRut, String> {
 
             char dv = rut.charAt(rut.length() - 1);
 
-            int m = 0, s = 1;
+            int m = 0;
+            int s = 1;
             for (; rutAux != 0; rutAux /= 10) {
                 s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
             }

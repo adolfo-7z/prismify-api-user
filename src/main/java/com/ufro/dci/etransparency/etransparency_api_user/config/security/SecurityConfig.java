@@ -61,12 +61,12 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain websiteSecurityFilterChain(HttpSecurity http,
             AuthenticationManager authenticationManager) throws Exception {
-                
+
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
         jwtAuthenticationFilter.setFilterProcessesUrl("/v1/api/auth/login");
 
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable()) // La aplicación utiliza JWT por lo que se desactiva el CSRF
                 .cors(cors -> cors.configurationSource(websiteConfigurationSource()))
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(new AntPathRequestMatcher("/v1/api/institutions/requests"))
@@ -75,9 +75,7 @@ public class SecurityConfig {
                 })
                 .exceptionHandling(handling -> handling
                         .accessDeniedHandler(customAccessDeniedHandler))
-                .sessionManagement(session -> {
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -1,8 +1,13 @@
 package com.ufro.dci.etransparency.etransparency_api_user.utils;
 
 import java.util.*;
+
 import org.springframework.beans.*;
+
 import java.beans.PropertyDescriptor;
+
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.CustomConversionException;
 
 public class ConversionUtils {
 
@@ -30,7 +35,7 @@ public class ConversionUtils {
             dtoInstance = dtoClass.getDeclaredConstructor().newInstance();
             BeanUtils.copyProperties(entity, dtoInstance);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CustomConversionException(OPERATION_FAILED, RESOURCE_CONVERSION);
         }
         return dtoInstance;
     }
@@ -50,7 +55,7 @@ public class ConversionUtils {
             entityInstance = entityClass.getDeclaredConstructor().newInstance();
             BeanUtils.copyProperties(dto, entityInstance);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CustomConversionException(OPERATION_FAILED, RESOURCE_CONVERSION);
         }
         return entityInstance;
     }

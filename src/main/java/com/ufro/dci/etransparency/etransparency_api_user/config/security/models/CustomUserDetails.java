@@ -9,7 +9,7 @@ import java.util.*;
 public class CustomUserDetails implements UserDetails {
 
     private static final long serialVersionUID = 1L;
-    private final UserEntity userEntity;
+    private final transient UserEntity userEntity;
     private final Set<SimpleGrantedAuthority> authorities;
 
 

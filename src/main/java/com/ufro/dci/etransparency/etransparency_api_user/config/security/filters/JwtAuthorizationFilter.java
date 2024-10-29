@@ -1,28 +1,31 @@
 package com.ufro.dci.etransparency.etransparency_api_user.config.security.filters;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.io.IOException;
+
+import lombok.RequiredArgsConstructor;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import com.ufro.dci.etransparency.etransparency_api_user.config.security.utils.JwtUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.services.auth.UserDetailsServiceImpl;
-import io.jsonwebtoken.io.IOException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -35,9 +38,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (jwtUtils.isTokenValid(token)) {
                 String username = jwtUtils.getUsernameFromToken(token);
-                UserDetails UserDetails = userDetailsServiceImpl.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        username, null, UserDetails.getAuthorities());
+                        username, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }

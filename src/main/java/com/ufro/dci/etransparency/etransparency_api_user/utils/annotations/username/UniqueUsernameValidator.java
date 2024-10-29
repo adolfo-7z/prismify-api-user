@@ -14,7 +14,6 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     private final ManagerRepository managerRepository;
 
-
     public UniqueUsernameValidator(AdministratorRepository administratorRepository, AuditorRepository auditorRepository,
             ManagerRepository managerRepository) {
         this.administratorRepository = administratorRepository;
@@ -24,6 +23,8 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public void initialize(UniqueUsername constraintAnnotation) {
+        // Este método se deja intencionalmente vacío porque la lógica de inicialización
+        // no es necesaria para este validador.
     }
 
     @Override
