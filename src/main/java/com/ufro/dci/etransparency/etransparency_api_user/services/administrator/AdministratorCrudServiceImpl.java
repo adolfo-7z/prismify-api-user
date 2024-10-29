@@ -50,8 +50,8 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
      *                                   inactivo
      */
     @Override
-    public AdministratorDTO getAdministrator(Long adminId) {
-        Administrator administrator = adminCommonsUtils.findAdministratorById(adminId);
+    public AdministratorDTO getAdministrator(Long administratorId) {
+        Administrator administrator = adminCommonsUtils.findAdministratorById(administratorId);
         return ConversionUtils.convertToDTO(administrator, AdministratorDTO.class);
     }
 
@@ -94,8 +94,8 @@ public class AdministratorCrudServiceImpl implements AdministratorCrudService {
      */
     @Override
     @Transactional
-    public AdministratorDTO updateAdministrator(Long adminId, AdministratorUpdateDTO administratorUpdateDTO) {
-        Administrator administrator = adminCommonsUtils.findAdministratorById(adminId);
+    public AdministratorDTO updateAdministrator(Long administratorId, AdministratorUpdateDTO administratorUpdateDTO) {
+        Administrator administrator = adminCommonsUtils.findAdministratorById(administratorId);
         if (administratorUpdateDTO.getPassword() != null && !administratorUpdateDTO.getPassword().isEmpty()) {
             administratorUpdateDTO.setPassword(passwordEncoder.encode(administratorUpdateDTO.getPassword()));
         }
