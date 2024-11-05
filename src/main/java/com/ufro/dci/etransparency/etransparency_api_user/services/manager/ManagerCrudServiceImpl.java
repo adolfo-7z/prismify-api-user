@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.institution.InstitutionDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.manager.ManagerDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.manager.ManagerUpdateDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
@@ -57,7 +58,15 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
     @Cacheable(key = "#managerId")
     public ManagerDTO getManager(Long managerId) {
         Manager manager = managerCommonsUtils.findManagerById(managerId);
-        return ConversionUtils.convertToDTO(manager, ManagerDTO.class);
+        ManagerDTO managerDTO = ConversionUtils.convertToDTO(manager, ManagerDTO.class);
+
+        if (manager.getInstitution() != null) {
+            InstitutionDTO institutionDTO = ConversionUtils.convertToDTO(manager.getInstitution(),
+                    InstitutionDTO.class);
+            managerDTO.setInstitution(institutionDTO);
+        }
+
+        return managerDTO;
     }
 
     /**
