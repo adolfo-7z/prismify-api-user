@@ -1,8 +1,12 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models.result;
 
+import java.util.Date;
+
 import jakarta.persistence.Embeddable;
-import lombok.*;
-import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
 @Getter

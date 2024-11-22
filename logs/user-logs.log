@@ -1,98 +1,33 @@
-2024-11-05 14:45:37 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-11-05 14:45:37 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Starting TransparencyApiUserApplication using Java 21.0.4 with PID 12424 (C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user\target\classes started by adolf in C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user)
-2024-11-05 14:45:37 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - No active profile set, falling back to 1 default profile: "default"
-2024-11-05 14:45:37 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-11-05 14:45:37 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-11-05 14:45:39 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-11-05 14:45:39 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 145 ms. Found 7 JPA repository interfaces.
-2024-11-05 14:45:40 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2024-11-05 14:45:40 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:45:40 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-11-05 14:45:40 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-11-05 14:45:40 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-11-05 14:45:40 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2922 ms
-2024-11-05 14:45:40 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-11-05 14:45:41 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@222143f6
-2024-11-05 14:45:41 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-11-05 14:45:41 INFO  [restartedMain] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/transparencia_db'
-2024-11-05 14:45:41 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-11-05 14:45:41 INFO  [restartedMain] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.10.Final
-2024-11-05 14:45:41 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-11-05 14:45:41 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-11-05 14:45:43 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-11-05 14:45:44 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05 14:45:44 INFO  [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-11-05 14:45:45 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-11-05 14:45:46 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ff804e0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2ddae61, org.springframework.security.web.context.SecurityContextHolderFilter@3a30fd50, org.springframework.security.web.header.HeaderWriterFilter@1467d0dd, org.springframework.web.filter.CorsFilter@7279c834, org.springframework.security.web.authentication.logout.LogoutFilter@633429cd, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthorizationFilter@6098875f, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthenticationFilter@5058ee5d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@438dcc0b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3047260d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4f982fb2, org.springframework.security.web.session.SessionManagementFilter@26bcb619, org.springframework.security.web.access.ExceptionTranslationFilter@3ad38fce, org.springframework.security.web.access.intercept.AuthorizationFilter@76f571b7]
-2024-11-05 14:45:46 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-11-05 14:45:46 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:45:46 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
-2024-11-05 14:45:46 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Started TransparencyApiUserApplication in 9.754 seconds (process running for 10.893)
-2024-11-05 14:46:52 INFO  [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-11-05 14:46:52 INFO  [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2024-11-05 14:46:52 INFO  [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
-2024-11-05 14:47:36 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-11-05 14:47:36 INFO  [Thread-5] o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:36 INFO  [Thread-5] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05 14:47:36 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-11-05 14:47:36 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-11-05 14:47:36 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Starting TransparencyApiUserApplication using Java 21.0.4 with PID 12424 (C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user\target\classes started by adolf in C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user)
-2024-11-05 14:47:36 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - No active profile set, falling back to 1 default profile: "default"
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 145 ms. Found 7 JPA repository interfaces.
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2024-11-05 14:47:37 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:37 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-11-05 14:47:37 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-11-05 14:47:37 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 937 ms
-2024-11-05 14:47:37 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
-2024-11-05 14:47:37 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@6e981e0c
-2024-11-05 14:47:37 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/transparencia_db'
-2024-11-05 14:47:37 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-11-05 14:47:37 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-11-05 14:47:37 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-11-05 14:47:38 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-11-05 14:47:38 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05 14:47:39 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-11-05 14:47:39 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4852bee3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@394196b3, org.springframework.security.web.context.SecurityContextHolderFilter@205e3062, org.springframework.security.web.header.HeaderWriterFilter@ff0a15b, org.springframework.web.filter.CorsFilter@315ad43c, org.springframework.security.web.authentication.logout.LogoutFilter@1be0b99, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthorizationFilter@21358987, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthenticationFilter@35e182aa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@18966cfb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1266fccb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@68998753, org.springframework.security.web.session.SessionManagementFilter@413074de, org.springframework.security.web.access.ExceptionTranslationFilter@37b1e82a, org.springframework.security.web.access.intercept.AuthorizationFilter@f416fc2]
-2024-11-05 14:47:39 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-11-05 14:47:39 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:39 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
-2024-11-05 14:47:39 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Started TransparencyApiUserApplication in 2.821 seconds (process running for 123.677)
-2024-11-05 14:47:39 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
-2024-11-05 14:47:43 INFO  [http-nio-8081-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-11-05 14:47:43 INFO  [http-nio-8081-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2024-11-05 14:47:43 INFO  [http-nio-8081-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2024-11-05 14:47:51 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-11-05 14:47:51 INFO  [Thread-7] o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:51 INFO  [Thread-7] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05 14:47:51 INFO  [Thread-7] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
-2024-11-05 14:47:51 INFO  [Thread-7] com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
-2024-11-05 14:47:51 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Starting TransparencyApiUserApplication using Java 21.0.4 with PID 12424 (C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user\target\classes started by adolf in C:\Users\adolf\Downloads\transparencia\repository\etransparency-api-user)
-2024-11-05 14:47:51 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - No active profile set, falling back to 1 default profile: "default"
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 76 ms. Found 7 JPA repository interfaces.
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2024-11-05 14:47:52 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:52 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-11-05 14:47:52 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-11-05 14:47:52 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 796 ms
-2024-11-05 14:47:52 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
-2024-11-05 14:47:52 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@7f223884
-2024-11-05 14:47:52 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/transparencia_db'
-2024-11-05 14:47:52 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-11-05 14:47:52 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-11-05 14:47:52 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-11-05 14:47:53 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-11-05 14:47:53 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05 14:47:54 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-11-05 14:47:54 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@62dd46c3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@cae3eff, org.springframework.security.web.context.SecurityContextHolderFilter@15485d29, org.springframework.security.web.header.HeaderWriterFilter@47b8937, org.springframework.web.filter.CorsFilter@5f3ab5d6, org.springframework.security.web.authentication.logout.LogoutFilter@66d1099e, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthorizationFilter@75b6a10a, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthenticationFilter@64f72bd9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1fad21f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5990d126, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6c1482da, org.springframework.security.web.session.SessionManagementFilter@1eaece2c, org.springframework.security.web.access.ExceptionTranslationFilter@68ff9b24, org.springframework.security.web.access.intercept.AuthorizationFilter@6eaaab9b]
-2024-11-05 14:47:54 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-11-05 14:47:54 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2024-11-05 14:47:54 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
-2024-11-05 14:47:54 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Started TransparencyApiUserApplication in 2.686 seconds (process running for 138.66)
-2024-11-05 14:47:54 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-11-15 10:29:37 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-11-15 10:29:37 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Starting TransparencyApiUserApplication using Java 21.0.4 with PID 8604 (C:\Users\works\OneDrive\Documents\workspace\repository\etransparency-api-user\target\classes started by works in C:\Users\works\OneDrive\Documents\workspace\repository\etransparency-api-user)
+2024-11-15 10:29:37 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-15 10:29:37 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-11-15 10:29:37 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-11-15 10:29:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-15 10:29:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 132 ms. Found 7 JPA repository interfaces.
+2024-11-15 10:29:40 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2024-11-15 10:29:40 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2024-11-15 10:29:40 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-15 10:29:40 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-11-15 10:29:40 INFO  [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-15 10:29:40 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2882 ms
+2024-11-15 10:29:40 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-15 10:29:40 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@77451808
+2024-11-15 10:29:40 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-15 10:29:40 INFO  [restartedMain] o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/transparencia_db'
+2024-11-15 10:29:40 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-15 10:29:40 INFO  [restartedMain] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.10.Final
+2024-11-15 10:29:41 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-15 10:29:41 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-15 10:29:43 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-15 10:29:43 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-15 10:29:44 INFO  [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-15 10:29:45 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-15 10:29:45 INFO  [restartedMain] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@38d3f675, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@215ce7be, org.springframework.security.web.context.SecurityContextHolderFilter@317a338a, org.springframework.security.web.header.HeaderWriterFilter@20f9fec2, org.springframework.web.filter.CorsFilter@458cb6ed, org.springframework.security.web.authentication.logout.LogoutFilter@472d2b1c, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthorizationFilter@11c9841a, com.ufro.dci.etransparency.etransparency_api_user.config.security.filters.JwtAuthenticationFilter@f9d710c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@70501d99, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@28b27fd2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@285a5ed4, org.springframework.security.web.session.SessionManagementFilter@53c8440e, org.springframework.security.web.access.ExceptionTranslationFilter@38deecf0, org.springframework.security.web.access.intercept.AuthorizationFilter@39d40851]
+2024-11-15 10:29:46 WARN  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - Unable to start LiveReload server
+2024-11-15 10:29:46 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2024-11-15 10:29:46 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+2024-11-15 10:29:46 INFO  [restartedMain] c.u.d.e.e.TransparencyApiUserApplication - Started TransparencyApiUserApplication in 9.726 seconds (process running for 10.455)
+2024-11-15 10:31:00 INFO  [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-15 10:31:00 INFO  [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-11-15 10:31:00 INFO  [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
