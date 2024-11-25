@@ -1,53 +1,114 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
-/*package com.ufro.dci.transparency.transparency_api.services.auditor;
 
-import com.ufro.dci.transparency.transparency_api.models.auditor.Auditor;
-import com.ufro.dci.transparency.transparency_api.repositories.auditor.AuditorRepository;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
+import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
 class AuditorServiceImplTest {
 
     @Mock
     private AuditorRepository auditorRepository;
 
     @InjectMocks
-    private AuditorServiceImpl auditorService;
+    private AuditorServiceImpl service;
 
-    private Auditor auditor;
+    private Auditor activeAuditor;
+    private Auditor inactiveAuditor;
 
     @BeforeEach
     void setUp() {
-        auditor = new Auditor();
-        auditor.setActive(true);
+        MockitoAnnotations.openMocks(this);
+
+        activeAuditor = new Auditor();
+        activeAuditor.setId(1L);
+        activeAuditor.setUsername("activeAuditor");
+        activeAuditor.setEmail("active@example.com");
+        activeAuditor.setActive(true);
+
+        inactiveAuditor = new Auditor();
+        inactiveAuditor.setId(2L);
+        inactiveAuditor.setUsername("inactiveAuditor");
+        inactiveAuditor.setEmail("inactive@example.com");
+        inactiveAuditor.setActive(false);
     }
 
     @Test
-    void getAllAuditors_ShouldReturnActiveAuditors() {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Auditor> auditorPage = new PageImpl<>(List.of(auditor));
-        when(auditorRepository.findAll(pageable)).thenReturn(auditorPage);
+    void testGetAllAuditorsSuccess() {
+        Page<Auditor> auditorPage = new PageImpl<>(List.of(activeAuditor, inactiveAuditor));
+        when(auditorRepository.findAll(any(PageRequest.class))).thenReturn(auditorPage);
 
-        Map<String, Object> response = (Map<String, Object>) auditorService.getAllAuditors(0, 10, "asc", "id");
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            mockedStatic.when(() -> ConversionUtils.convertToDTO(activeAuditor, AuditorDTO.class))
+                    .thenReturn(new AuditorDTO());
 
-        assertNotNull(response);
-        assertEquals(1, ((List<?>) response.get("auditors")).size());
-        assertEquals(1, response.get("totalPages"));
+            Map<String, Object> result = (Map<String, Object>) service.getAllAuditors(0, 10, "asc", null);
+
+            assertNotNull(result);
+            assertEquals(1, ((List<?>) result.get("auditors")).size());
+            assertEquals(1, result.get("totalPages"));
+        }
     }
-}*/
+
+    @Test
+    void testGetAllAuditorsWithNameFilter() {
+        Page<Auditor> auditorPage = new PageImpl<>(List.of(activeAuditor));
+        when(auditorRepository.findByUsernameContainingIgnoreCase(eq("active"), any(PageRequest.class)))
+                .thenReturn(auditorPage);
+
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            mockedStatic.when(() -> ConversionUtils.convertToDTO(activeAuditor, AuditorDTO.class))
+                    .thenReturn(new AuditorDTO());
+
+            Map<String, Object> result = (Map<String, Object>) service.getAllAuditors(0, 10, "asc", "active");
+
+            assertNotNull(result);
+            assertEquals(1, ((List<?>) result.get("auditors")).size());
+            assertEquals(1, result.get("totalPages"));
+        }
+    }
+
+    @Test
+    void testGetAllAuditorsWithDescendingSort() {
+        Page<Auditor> auditorPage = new PageImpl<>(List.of(activeAuditor));
+        when(auditorRepository.findAll(any(PageRequest.class))).thenReturn(auditorPage);
+
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            mockedStatic.when(() -> ConversionUtils.convertToDTO(activeAuditor, AuditorDTO.class))
+                    .thenReturn(new AuditorDTO());
+
+            Map<String, Object> result = (Map<String, Object>) service.getAllAuditors(0, 10, "desc", null);
+
+            assertNotNull(result);
+            assertEquals(1, ((List<?>) result.get("auditors")).size());
+            assertEquals(1, result.get("totalPages"));
+        }
+    }
+
+    @Test
+    void testGetAllAuditorsWithEmptyResult() {
+        Page<Auditor> emptyPage = new PageImpl<>(Collections.emptyList());
+        when(auditorRepository.findAll(any(PageRequest.class))).thenReturn(emptyPage);
+
+        Map<String, Object> result = (Map<String, Object>) service.getAllAuditors(0, 10, "asc", null);
+
+        assertNotNull(result);
+        assertTrue(((List<?>) result.get("auditors")).isEmpty());
+        assertEquals(1, result.get("totalPages"));
+    }
+}

@@ -1,140 +1,128 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
 
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorUpdateDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
-import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
+import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
-import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
-import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.AdministratorCrudServiceImpl;
+import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils.AdminCommonsUtils;
+import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
 class AdministratorCrudServiceImplTest {
-
-    @Mock
-    private AdministratorRepository administratorRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AdminCommonsUtils adminCommonsUtils;
+
     @InjectMocks
-    private AdministratorCrudServiceImpl administratorCrudService;
+    private AdministratorCrudServiceImpl service;
 
     private Administrator administrator;
+
     private AdministratorDTO administratorDTO;
+
     private AdministratorUpdateDTO administratorUpdateDTO;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         administrator = new Administrator();
         administrator.setId(1L);
-        administrator.setUsername("admin");
+        administrator.setUsername("adminUser");
+        administrator.setEmail("admin@example.com");
+        administrator.setPassword("password");
+        administrator.setRole(UserEntity.UserRole.ADMIN);
         administrator.setActive(true);
+        administrator.setNotifications(new ArrayList<>());
 
         administratorDTO = new AdministratorDTO();
-        administratorDTO.setId(1L);
-        administratorDTO.setUsername("admin");
+        administratorDTO.setUsername("adminUser");
+        administratorDTO.setEmail("admin@example.com");
         administratorDTO.setPassword("password");
-        administratorDTO.setRole(UserRole.ADMIN);
 
         administratorUpdateDTO = new AdministratorUpdateDTO();
+        administratorUpdateDTO.setUsername("updatedAdminUser");
     }
 
     @Test
-    void getAdministrator_WhenAdministratorIsActive_ShouldReturnAdministratorDTO() {
-        when(administratorRepository.findById(1L)).thenReturn(Optional.of(administrator));
+    void testGetAdministratorSuccess() {
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            when(adminCommonsUtils.findAdministratorById(1L)).thenReturn(administrator);
+            mockedStatic.when(() -> ConversionUtils.convertToDTO(administrator, AdministratorDTO.class))
+                    .thenReturn(administratorDTO);
 
-        AdministratorDTO result = administratorCrudService.getAdministrator(1L);
+            AdministratorDTO result = service.getAdministrator(1L);
 
-        assertNotNull(result);
-        assertEquals("admin", result.getUsername());
-        verify(administratorRepository, times(1)).findById(1L);
+            assertEquals("adminUser", result.getUsername());
+            assertEquals("admin@example.com", result.getEmail());
+        }
     }
 
     @Test
-    void getAdministrator_WhenAdministratorIsInactive_ShouldThrowException() {
-        administrator.setActive(false);
-        when(administratorRepository.findById(1L)).thenReturn(Optional.of(administrator));
+    void testGetAdministratorNotFound() {
+        when(adminCommonsUtils.findAdministratorById(1L)).thenThrow(new ResourceNotFoundException("Admin not found", "404"));
 
-        assertThrows(ResourceNotFoundException.class, () -> administratorCrudService.getAdministrator(1L));
-
-        verify(administratorRepository, times(1)).findById(1L);
+        assertThrows(ResourceNotFoundException.class, () -> service.getAdministrator(1L));
     }
 
     @Test
-    void createAdministrator_ShouldReturnCreatedAdministratorDTO() {
-        when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
-        when(administratorRepository.save(any(Administrator.class))).thenAnswer(invocation -> {
-            Administrator admin = invocation.getArgument(0);
-            admin.setId(1L); // Asigna un ID al administrador simulado
-            return admin;
-        });
+    void testCreateAdministratorSuccess() {
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            mockedStatic.when(() -> ConversionUtils.convertToEntity(administratorDTO, Administrator.class))
+                    .thenReturn(administrator);
 
-        AdministratorDTO result = administratorCrudService.createAdministrator(administratorDTO);
+            when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+            when(adminCommonsUtils.saveAndConvertToDTO(any(Administrator.class))).thenReturn(administratorDTO);
 
-        assertNotNull(result);
-        assertEquals(UserRole.ADMIN, result.getRole()); // Verifica que el rol sea ADMIN
-        verify(administratorRepository, times(1)).save(any(Administrator.class));
-    }
+            AdministratorDTO result = service.createAdministrator(administratorDTO);
 
-
-    @Test
-    void updateAdministrator_WhenAdministratorIsActive_ShouldReturnUpdatedAdministratorDTO() {
-        when(administratorRepository.findById(1L)).thenReturn(Optional.of(administrator));
-        when(administratorRepository.save(any(Administrator.class))).thenReturn(administrator);
-
-        AdministratorDTO result = administratorCrudService.updateAdministrator(1L, administratorUpdateDTO);
-
-        assertNotNull(result);
-        assertEquals("admin", result.getUsername());
-        verify(administratorRepository, times(1)).findById(1L);
-        verify(administratorRepository, times(1)).save(any(Administrator.class));
+            assertEquals("adminUser", result.getUsername());
+            assertEquals("encodedPassword", administrator.getPassword());
+        }
     }
 
     @Test
-    void updateAdministrator_WhenAdministratorIsInactive_ShouldThrowException() {
-        administrator.setActive(false);
-        when(administratorRepository.findById(1L)).thenReturn(Optional.of(administrator));
+    void testUpdateAdministratorSuccess() {
+        when(adminCommonsUtils.findAdministratorById(1L)).thenReturn(administrator);
+        when(adminCommonsUtils.saveAndConvertToDTO(administrator)).thenReturn(administratorDTO);
 
-        assertThrows(ResourceNotFoundException.class,
-                () -> administratorCrudService.updateAdministrator(1L, administratorUpdateDTO));
+        AdministratorDTO result = service.updateAdministrator(1L, administratorUpdateDTO);
 
-        verify(administratorRepository, times(1)).findById(1L);
+        assertEquals("adminUser", result.getUsername());
     }
 
     @Test
-    void toggleAdministratorStatus_ShouldReturnAdministratorWithToggledStatus() {
-        when(administratorRepository.findById(1L)).thenReturn(Optional.of(administrator));
-        when(administratorRepository.save(any(Administrator.class))).thenReturn(administrator);
+    void testToggleAdministratorStatusSuccess() {
+        administrator.setActive(true);
+        when(adminCommonsUtils.findAdministratorById(1L)).thenReturn(administrator);
+        when(adminCommonsUtils.saveAndConvertToDTO(administrator)).thenReturn(administratorDTO);
 
-        AdministratorDTO result = administratorCrudService.toggleAdministratorStatus(1L);
+        AdministratorDTO result = service.toggleAdministratorStatus(1L);
 
-        assertNotNull(result);
-        assertFalse(result.isActive());
-        verify(administratorRepository, times(1)).findById(1L);
-        verify(administratorRepository, times(1)).save(any(Administrator.class));
+        assertFalse(administrator.isActive());
+        assertEquals("adminUser", result.getUsername());
     }
 
     @Test
-    void toggleAdministratorStatus_WhenAdministratorNotFound_ShouldThrowException() {
-        when(administratorRepository.findById(1L)).thenReturn(Optional.empty());
+    void testToggleAdministratorStatusNotFound() {
+        when(adminCommonsUtils.findAdministratorById(1L)).thenThrow(new ResourceNotFoundException("Admin not found", "404"));
 
-        assertThrows(ResourceNotFoundException.class, () -> administratorCrudService.toggleAdministratorStatus(1L));
-
-        verify(administratorRepository, times(1)).findById(1L);
+        assertThrows(ResourceNotFoundException.class, () -> service.toggleAdministratorStatus(1L));
     }
 }
