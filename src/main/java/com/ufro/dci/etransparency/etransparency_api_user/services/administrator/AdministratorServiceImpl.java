@@ -1,16 +1,16 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.dimension.DimensionAverageDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
@@ -23,7 +23,10 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.Au
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.institution.InstitutionRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.ProcessRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.NOT_FOUND;
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.THE_RESOURCE_WAS_NOT_FOUND;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -109,8 +112,12 @@ public class AdministratorServiceImpl implements AdministratorService {
         for (String dimensionName : dimensionNames) {
             DimensionAverageDTO dimensionAverageDTO = new DimensionAverageDTO();
             dimensionAverageDTO.setName(dimensionName);
-            dimensionAverageDTO
-                    .setAverage(systemResult.getDimensionsAverage().get(dimensionNames.indexOf(dimensionName)));
+            if (systemResult.getDimensionsAverage().isEmpty()) {
+                dimensionAverageDTO.setAverage(0D);
+            } else {
+                dimensionAverageDTO
+                        .setAverage(systemResult.getDimensionsAverage().get(dimensionNames.indexOf(dimensionName)));
+            }
             dimensionAverageDTOs.add(dimensionAverageDTO);
         }
 
