@@ -1,33 +1,34 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.util.*;
+
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.administrator.AdministratorDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.dimension.DimensionAverageDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
 import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
+import com.ufro.dci.etransparency.etransparency_api_user.models.result.SystemResult;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.institution.InstitutionRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.ProcessRepository;
-import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.AdministratorServiceImpl;
+import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
 class AdministratorServiceImplTest {
 
     @Mock
@@ -42,55 +43,81 @@ class AdministratorServiceImplTest {
     @Mock
     private ProcessRepository processRepository;
 
+    @Mock
+    private SystemResultRepository systemResultRepository;
+
     @InjectMocks
-    private AdministratorServiceImpl administratorService;
+    private AdministratorServiceImpl service;
 
     private Administrator administrator;
+
     private Institution institution;
-    private Process process;
+
+    private SystemResult systemResult;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         administrator = new Administrator();
+        administrator.setId(1L);
         administrator.setActive(true);
+        administrator.setUsername("adminUser");
+        administrator.setEmail("admin@example.com");
 
         institution = new Institution();
-        institution.setNEmployees(100L);
+        institution.setId(1L);
+        institution.setName("Test Institution");
+        institution.setNEmployees(50L);
 
-        process = new Process();
+        systemResult = new SystemResult();
+        systemResult.setDimensions(List.of("Dimension 1", "Dimension 2"));
+        systemResult.setDimensionsAverage(List.of(3.5, 4.0));
     }
 
     @Test
-    void getAllAdministrators_ShouldReturnActiveAdministrators() {
-        Pageable pageable = PageRequest.of(0, 10);
+    void testGetAllAdministratorsSuccess() {
         Page<Administrator> adminPage = new PageImpl<>(List.of(administrator));
-        when(administratorRepository.findAll(pageable)).thenReturn(adminPage);
-        Map<String, Object> response = (Map<String, Object>) administratorService.getAllAdministrators(0, 10);
+        when(administratorRepository.findAll(PageRequest.of(0, 10))).thenReturn(adminPage);
 
-        assertNotNull(response);
-        assertEquals(1, ((List<?>) response.get("administrators")).size());
-        assertEquals(1, response.get("totalPages"));
-        verify(administratorRepository, times(1)).findAll(pageable);
+        try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
+            mockedStatic.when(() -> ConversionUtils.convertToDTO(administrator, AdministratorDTO.class))
+                    .thenReturn(new AdministratorDTO());
+
+            Map<String, Object> result = (Map<String, Object>) service.getAllAdministrators(0, 10);
+
+            assertNotNull(result);
+            assertEquals(1, ((List<?>) result.get("administrators")).size());
+            assertEquals(1, result.get("totalPages"));
+        }
     }
 
     @Test
-    void getAdminDashboard_ShouldReturnDashboardData() {
-        when(institutionRepository.findAll()).thenReturn(Collections.singletonList(institution));
-        when(auditorRepository.findAll()).thenReturn(Collections.emptyList());
+    void testGetAdminDashboardSuccess() {
+        when(institutionRepository.findAll()).thenReturn(List.of(institution));
         when(processRepository.countByStatus(Process.ProcessStatus.IN_PROGRESS)).thenReturn(5L);
-        when(processRepository.countByStatus(Process.ProcessStatus.FINISHED)).thenReturn(10L);
+        when(processRepository.countByStatus(Process.ProcessStatus.FINISHED)).thenReturn(3L);
+        when(systemResultRepository.findById(1L)).thenReturn(Optional.of(systemResult));
 
-        Map<String, Object> response = (Map<String, Object>) administratorService.getAdminDashboard();
+        Map<String, Object> result = (Map<String, Object>) service.getAdminDashboard();
 
-        assertNotNull(response);
-        assertEquals(1L, response.get("numberOfInstitutions"));
-        assertEquals(0L, response.get("numberOfAuditors"));
-        assertEquals(5L, response.get("processesInProgress"));
-        assertEquals(10L, response.get("totalCompletedAudits"));
-        assertEquals(100L, response.get("peopleSurveyed"));
-        verify(institutionRepository, times(2)).findAll();
-        verify(auditorRepository, times(1)).findAll();
-        verify(processRepository, times(1)).countByStatus(Process.ProcessStatus.IN_PROGRESS);
-        verify(processRepository, times(1)).countByStatus(Process.ProcessStatus.FINISHED);
+        assertNotNull(result);
+        assertEquals(1L, result.get("numberOfInstitutions"));
+        assertEquals(5L, result.get("processesInProgress"));
+        assertEquals(3L, result.get("totalCompletedAudits"));
+        assertEquals(50L, result.get("peopleSurveyed"));
+
+        List<DimensionAverageDTO> dimensions = (List<DimensionAverageDTO>) result.get("allDimensionLevels");
+        assertEquals(2, dimensions.size());
+        assertEquals("Dimension 1", dimensions.get(0).getName());
+        assertEquals(3.5, dimensions.get(0).getAverage());
+    }
+
+    @Test
+    void testGetAdminDashboardSystemResultNotFound() {
+        when(institutionRepository.findAll()).thenReturn(List.of(institution));
+        when(systemResultRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> service.getAdminDashboard());
     }
 }
