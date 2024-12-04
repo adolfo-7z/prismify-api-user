@@ -23,6 +23,8 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.Au
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.institution.InstitutionRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.ProcessRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils.AdminCommonsUtils;
+
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.NOT_FOUND;
 import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.THE_RESOURCE_WAS_NOT_FOUND;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
@@ -56,6 +58,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final ProcessRepository processRepository;
 
     private final SystemResultRepository systemResultRepository;
+
+    private final AdminCommonsUtils adminCommonsUtils;
 
     /**
      * Obtiene una lista paginada de administradores activos.
@@ -127,6 +131,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         response.put("totalCompletedAudits", totalCompletedAudits);
         response.put("peopleSurveyed", peopleSurveyed);
         response.put("allDimensionLevels", dimensionAverageDTOs);
+        response.put("top", adminCommonsUtils.admingetTopInstitutions());
         return response;
     }
 
