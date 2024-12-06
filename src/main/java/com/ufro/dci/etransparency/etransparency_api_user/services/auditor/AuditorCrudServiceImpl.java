@@ -55,7 +55,6 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
      *                                   inactivo
      */
     @Override
-    @Cacheable(key = "#auditorId")
     public AuditorDTO getAuditor(Long auditorId) {
         Auditor auditor = auditorCommonsUtils.findAuditorById(auditorId);
         return ConversionUtils.convertToDTO(auditor, AuditorDTO.class);

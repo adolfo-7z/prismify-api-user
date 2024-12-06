@@ -58,7 +58,6 @@ public class AuditorServiceImpl implements AuditorService {
      *         total de páginas
      */
     @Override
-    @Cacheable(key = "'allAuditors_' + #page + '-' + #size + '-' + #sortDirection + '-' + #name")
     public Object getAllAuditors(int page, int size, String sortDirection, String name) {
         Sort sort = sortDirection.equalsIgnoreCase("asc") ? Sort.by("updatedAt").ascending()
                 : Sort.by("updatedAt").descending();

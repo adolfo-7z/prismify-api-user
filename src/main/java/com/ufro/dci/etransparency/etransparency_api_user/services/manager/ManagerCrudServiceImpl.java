@@ -55,7 +55,6 @@ public class ManagerCrudServiceImpl implements ManagerCrudService {
      *                                   inactivo
      */
     @Override
-    @Cacheable(key = "#managerId")
     public ManagerDTO getManager(Long managerId) {
         Manager manager = managerCommonsUtils.findManagerById(managerId);
         ManagerDTO managerDTO = ConversionUtils.convertToDTO(manager, ManagerDTO.class);
