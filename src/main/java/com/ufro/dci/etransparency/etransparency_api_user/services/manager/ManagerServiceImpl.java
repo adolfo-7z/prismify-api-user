@@ -54,7 +54,6 @@ public class ManagerServiceImpl implements ManagerService {
      *         de páginas
      */
     @Override
-    @Cacheable(key = "'allManagers_' + #page + '-' + #size")
     public Object getAllManagers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Manager> managerPage = managerRepository.findAll(pageable);
