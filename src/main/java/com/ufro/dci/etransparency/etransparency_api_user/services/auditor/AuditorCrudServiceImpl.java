@@ -4,6 +4,7 @@ import java.util.*;
 
 import lombok.*;
 
+import org.slf4j.*;
 import org.springframework.cache.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorUpd
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
+import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.services.auditor.utils.AuditorCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
@@ -36,6 +38,10 @@ import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "auditors")
 public class AuditorCrudServiceImpl implements AuditorCrudService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuditorCrudServiceImpl.class);
+
+    private final AuditorRepository auditorRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -111,6 +117,16 @@ public class AuditorCrudServiceImpl implements AuditorCrudService {
         if (auditorUpdateDTO.getPassword() != null && !auditorUpdateDTO.getPassword().isEmpty()) {
             auditorUpdateDTO.setPassword(passwordEncoder.encode(auditorUpdateDTO.getPassword()));
         }
+
+        List<String> notifications = auditor.getNotifications();
+        if (notifications.size() >= 10) {
+            notifications.remove(0);
+        }
+        notifications.add(
+                "Se ha actualizado la información de tu perfil");
+        auditor.setNotifications(notifications);
+        auditorRepository.save(auditor);
+        logger.info("Auditor {} notified about the update on the profile", auditor.getUsername());
 
         ConversionUtils.copyNonNullProperties(auditorUpdateDTO, auditor);
         auditor.setUpdatedAt(new Date());
