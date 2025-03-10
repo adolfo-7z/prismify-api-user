@@ -12,6 +12,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.Assig
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.CustomConversionException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.CustomErrorResponse;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.DimensionEvidenceCapacityException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.EmailSendException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileProcessingException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileSizeExceededException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileTypeNotSupportedException;
@@ -160,6 +161,14 @@ public class GlobalExceptionHandler {
                 CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
                                 HttpStatus.INTERNAL_SERVER_ERROR.value());
                 logger.error("Error converting resource: {}", exception.getMessage(), exception);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        @ExceptionHandler(EmailSendException.class)
+        public ResponseEntity<CustomErrorResponse> handleEmailSendException(EmailSendException exception) {
+                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value());
+                logger.error("Error sending mail: {}", exception.getMessage(), exception);
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
