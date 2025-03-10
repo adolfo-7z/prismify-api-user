@@ -7,9 +7,16 @@ import org.springframework.stereotype.Repository;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
 
 @Repository
-public interface AuditorRepository extends JpaRepository<Auditor, Long>{
+public interface AuditorRepository extends JpaRepository<Auditor, Long> {
+
     boolean existsByEmail(String email);
+
     boolean existsByUsername(String username);
+
     Optional<Auditor> findByUsername(String username);
+
+    Optional<Auditor> findByEmail(String email);
+
     Page<Auditor> findByUsernameContainingIgnoreCase(String username, Pageable pageable);
+
 }

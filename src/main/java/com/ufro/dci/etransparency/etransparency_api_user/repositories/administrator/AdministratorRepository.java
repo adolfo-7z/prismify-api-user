@@ -7,7 +7,13 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Ad
 
 @Repository
 public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
+    
     boolean existsByEmail(String email);
+
     boolean existsByUsername(String username);
+
     Optional<Administrator> findByUsername(String username);
+
+    Optional<Administrator> findByEmail(String email);
+
 }
