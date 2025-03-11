@@ -73,6 +73,10 @@ public class SecurityConfig {
                             .permitAll();
                     authorize.requestMatchers(new AntPathRequestMatcher("/v1/api/recovery/code"))
                             .permitAll();
+                    authorize.requestMatchers(new AntPathRequestMatcher("/v1/api/recovery/validate"))
+                            .permitAll();
+                    authorize.requestMatchers(new AntPathRequestMatcher("/v1/api/recovery/password"))
+                            .permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .exceptionHandling(handling -> handling

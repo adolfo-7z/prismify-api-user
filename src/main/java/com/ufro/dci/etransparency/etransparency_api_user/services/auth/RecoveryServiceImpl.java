@@ -6,9 +6,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import org.slf4j.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.EmailSendException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidPasswordException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidRecoveryCodeException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
@@ -19,6 +22,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.Au
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.manager.ManagerRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.services.email.EmailService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class RecoveryServiceImpl implements RecoveryService {
 
     private static final Logger logger = LoggerFactory.getLogger(RecoveryServiceImpl.class);
+
+    private final PasswordEncoder passwordEncoder;
 
     private final AdministratorRepository administratorRepository;
 
@@ -35,6 +41,8 @@ public class RecoveryServiceImpl implements RecoveryService {
 
     private final EmailService emailService;
 
+    @Override
+    @Transactional
     public String sendRecoveryCode(String email) {
         UserEntity user = findUserByEmail(email);
 
@@ -42,16 +50,9 @@ public class RecoveryServiceImpl implements RecoveryService {
         user.setRecoveryCode(recoveryCode);
         user.setRecoveryCodeExpiration(LocalDateTime.now().plusMinutes(15));
         String messageContent = String.format(
-                """
-                        Estimado(a) %s,
+                RECOVERY_CODE_MAIL, user.getUsername(), recoveryCode);
 
-                        Su código de recuperación es: %s
-
-                        Este código expirará en 15 minutos.
-
-                        Atentamente,
-                        Equipo de e-Transparencia
-                        """, user.getUsername(), recoveryCode);
+        saveUser(user);
 
         try {
             emailService.sendHtmlEmail(user.getEmail(), "Código de recuperación",
@@ -71,21 +72,18 @@ public class RecoveryServiceImpl implements RecoveryService {
         Optional<Administrator> adminOpt = administratorRepository.findByEmail(email);
         if (adminOpt.isPresent()) {
             Administrator admin = adminOpt.get();
-            System.out.println("Administrador encontrado");
             return admin;
         }
 
         Optional<Manager> managerOpt = managerRepository.findByEmail(email);
         if (managerOpt.isPresent()) {
             Manager manager = managerOpt.get();
-            System.out.println("Gestor encontrado");
             return manager;
         }
 
         Optional<Auditor> auditorOpt = auditorRepository.findByEmail(email);
         if (auditorOpt.isPresent()) {
             Auditor auditor = auditorOpt.get();
-            System.out.println("Auditor encontrado");
             return auditor;
         }
 
@@ -93,12 +91,60 @@ public class RecoveryServiceImpl implements RecoveryService {
 
     }
 
-    public String validateRecoveryCode(String recoveryCode) {
-        return null;
+    private void saveUser(UserEntity user) {
+        if (user instanceof Administrator admin) {
+            administratorRepository.save(admin);
+        } else if (user instanceof Manager manager) {
+            managerRepository.save(manager);
+        } else if (user instanceof Auditor auditor) {
+            auditorRepository.save(auditor);
+        } else {
+            throw new IllegalArgumentException("Unknown user type: cannot save.");
+        }
     }
 
-    public String validateNewPassword(String password, String validationPassword) {
-        return null;
+    @Override
+    public String validateRecoveryCode(String email, String recoveryCode) {
+        UserEntity user = findUserByEmail(email);
+
+        String userRecoveryCode = user.getRecoveryCode();
+        if (userRecoveryCode == null || userRecoveryCode.isEmpty()) {
+            throw new InvalidRecoveryCodeException(OPERATION_FAILED, "No recovery code found for this user.");
+        }
+
+        LocalDateTime expiration = user.getRecoveryCodeExpiration();
+        if (expiration == null || expiration.isBefore(LocalDateTime.now())) {
+            throw new InvalidRecoveryCodeException(OPERATION_FAILED, "The recovery code has expired.");
+        }
+
+        if (!userRecoveryCode.equals(recoveryCode)) {
+            throw new InvalidRecoveryCodeException(OPERATION_FAILED, "Invalid recovery code provided.");
+        }
+
+        return "Código de recuperación validado éxitosamente";
+    }
+
+    @Override
+    @Transactional
+    public String validateNewPassword(String email, String password, String validationPassword) {
+        UserEntity user = findUserByEmail(email);
+
+        if (!password.equals(validationPassword)) {
+            throw new InvalidPasswordException(OPERATION_FAILED, "Received passwords do not match");
+        }
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidPasswordException(OPERATION_FAILED,
+                    "New password can not be the same as previous password");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(password);
+        user.setPassword(encodedNewPassword);
+        saveUser(user);
+
+        logger.info("Password updated successfully for user {}", user.getUsername());
+
+        return "Contraseña actualizada exitosamente.";
     }
 
 }

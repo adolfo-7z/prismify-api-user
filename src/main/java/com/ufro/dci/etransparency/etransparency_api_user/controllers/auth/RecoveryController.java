@@ -26,8 +26,25 @@ public class RecoveryController {
     @PostMapping("/code")
     public ResponseEntity<Object> requestRecoveryCode(@RequestBody Map<String, String> body) {
         String email = body.get("email");
-        return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.CREATED,
+        return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
                 recoveryService.sendRecoveryCode(email));
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Object> validateRecoveryCode(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String recoveryCode = body.get("recoveryCode");
+        return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
+                recoveryService.validateRecoveryCode(email, recoveryCode));
+    }
+
+    @PostMapping("/password")
+    public ResponseEntity<Object> validateNewPassword(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        String validationPassword = body.get("validationPassword");
+        return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
+                recoveryService.validateNewPassword(email, password, validationPassword));
     }
 
 }
