@@ -64,7 +64,7 @@ public class RecoveryServiceImpl implements RecoveryService {
             throw new EmailSendException(OPERATION_FAILED, FAILED_EMAIL);
         }
 
-        return "Código de recuperación enviado";
+        return "Recovery code sent";
     }
 
     private UserEntity findUserByEmail(String email) {
@@ -121,7 +121,7 @@ public class RecoveryServiceImpl implements RecoveryService {
             throw new InvalidRecoveryCodeException(OPERATION_FAILED, "Invalid recovery code provided.");
         }
 
-        return "Código de recuperación validado éxitosamente";
+        return "Recovery code successfully validated";
     }
 
     @Override
@@ -144,7 +144,7 @@ public class RecoveryServiceImpl implements RecoveryService {
 
         logger.info("Password updated successfully for user {}", user.getUsername());
 
-        return "Contraseña actualizada exitosamente.";
+        return "Password successfully updated";
     }
 
 }

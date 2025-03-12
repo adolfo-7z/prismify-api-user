@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufro.dci.etransparency.etransparency_api_user.dtos.PasswordResetRequestDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.handler.ResponseHandler;
 import com.ufro.dci.etransparency.etransparency_api_user.services.auth.RecoveryService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -39,12 +41,10 @@ public class RecoveryController {
     }
 
     @PostMapping("/password")
-    public ResponseEntity<Object> validateNewPassword(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-        String validationPassword = body.get("validationPassword");
+    public ResponseEntity<Object> validateNewPassword(@Valid @RequestBody PasswordResetRequestDTO request) {
         return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
-                recoveryService.validateNewPassword(email, password, validationPassword));
+                recoveryService.validateNewPassword(request.getEmail(), request.getPassword(),
+                        request.getValidationPassword()));
     }
 
 }
