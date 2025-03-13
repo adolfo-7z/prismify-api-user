@@ -11,6 +11,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorUpd
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
+import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.services.auditor.utils.AuditorCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
@@ -29,6 +30,9 @@ class AuditorCrudServiceImplTest {
 
     @Mock
     private AuditorCommonsUtils auditorCommonsUtils;
+
+    @Mock
+    private AuditorRepository auditorRepository;
 
     @InjectMocks
     private AuditorCrudServiceImpl service;
