@@ -1,5 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -30,6 +32,11 @@ public class UserEntity {
 
     @Column(length = 15)
     private String phoneNumber;
+
+    @Column(length = 6)
+    private String recoveryCode;
+
+    private LocalDateTime recoveryCodeExpiration;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;

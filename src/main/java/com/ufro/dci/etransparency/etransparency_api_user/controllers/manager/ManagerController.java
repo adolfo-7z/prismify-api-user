@@ -10,6 +10,7 @@ import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.
 
 import com.ufro.dci.etransparency.etransparency_api_user.handler.ResponseHandler;
 import com.ufro.dci.etransparency.etransparency_api_user.services.manager.ManagerService;
+
 @RestController
 @RequestMapping("managers")
 @RequiredArgsConstructor
