@@ -12,14 +12,8 @@ import org.springframework.stereotype.Service;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.EmailSendException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidPasswordException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidRecoveryCodeException;
-import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
-import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
-import com.ufro.dci.etransparency.etransparency_api_user.models.auditor.Auditor;
-import com.ufro.dci.etransparency.etransparency_api_user.models.manager.Manager;
-import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
-import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.AuditorRepository;
-import com.ufro.dci.etransparency.etransparency_api_user.repositories.manager.ManagerRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.services.auth.utils.RecoveryCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.services.email.EmailService;
 
 import jakarta.transaction.Transactional;
@@ -33,18 +27,14 @@ public class RecoveryServiceImpl implements RecoveryService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AdministratorRepository administratorRepository;
-
-    private final ManagerRepository managerRepository;
-
-    private final AuditorRepository auditorRepository;
+    private final RecoveryCommonsUtils recoveryCommonsUtils;
 
     private final EmailService emailService;
 
     @Override
     @Transactional
     public String sendRecoveryCode(String email) {
-        UserEntity user = findUserByEmail(email);
+        UserEntity user = recoveryCommonsUtils.findUserByEmail(email);
 
         String recoveryCode = UUID.randomUUID().toString().substring(0, 6);
         user.setRecoveryCode(recoveryCode);
@@ -52,7 +42,7 @@ public class RecoveryServiceImpl implements RecoveryService {
         String messageContent = String.format(
                 RECOVERY_CODE_MAIL, user.getUsername(), recoveryCode);
 
-        saveUser(user);
+        recoveryCommonsUtils.saveUser(user);
 
         try {
             emailService.sendHtmlEmail(user.getEmail(), "Código de recuperación",
@@ -67,45 +57,9 @@ public class RecoveryServiceImpl implements RecoveryService {
         return "Recovery code sent";
     }
 
-    private UserEntity findUserByEmail(String email) {
-        System.out.println("Email: " + email);
-        Optional<Administrator> adminOpt = administratorRepository.findByEmail(email);
-        if (adminOpt.isPresent()) {
-            Administrator admin = adminOpt.get();
-            return admin;
-        }
-
-        Optional<Manager> managerOpt = managerRepository.findByEmail(email);
-        if (managerOpt.isPresent()) {
-            Manager manager = managerOpt.get();
-            return manager;
-        }
-
-        Optional<Auditor> auditorOpt = auditorRepository.findByEmail(email);
-        if (auditorOpt.isPresent()) {
-            Auditor auditor = auditorOpt.get();
-            return auditor;
-        }
-
-        throw new ResourceNotFoundException(NOT_FOUND, "The user with the present email was not found");
-
-    }
-
-    private void saveUser(UserEntity user) {
-        if (user instanceof Administrator admin) {
-            administratorRepository.save(admin);
-        } else if (user instanceof Manager manager) {
-            managerRepository.save(manager);
-        } else if (user instanceof Auditor auditor) {
-            auditorRepository.save(auditor);
-        } else {
-            throw new IllegalArgumentException("Unknown user type: cannot save.");
-        }
-    }
-
     @Override
     public String validateRecoveryCode(String email, String recoveryCode) {
-        UserEntity user = findUserByEmail(email);
+        UserEntity user = recoveryCommonsUtils.findUserByEmail(email);
 
         String userRecoveryCode = user.getRecoveryCode();
         if (userRecoveryCode == null || userRecoveryCode.isEmpty()) {
@@ -127,7 +81,7 @@ public class RecoveryServiceImpl implements RecoveryService {
     @Override
     @Transactional
     public String validateNewPassword(String email, String password, String validationPassword) {
-        UserEntity user = findUserByEmail(email);
+        UserEntity user = recoveryCommonsUtils.findUserByEmail(email);
 
         if (!password.equals(validationPassword)) {
             throw new InvalidPasswordException(OPERATION_FAILED, "Received passwords do not match");
@@ -140,7 +94,7 @@ public class RecoveryServiceImpl implements RecoveryService {
 
         String encodedNewPassword = passwordEncoder.encode(password);
         user.setPassword(encodedNewPassword);
-        saveUser(user);
+        recoveryCommonsUtils.saveUser(user);
 
         logger.info("Password updated successfully for user {}", user.getUsername());
 
