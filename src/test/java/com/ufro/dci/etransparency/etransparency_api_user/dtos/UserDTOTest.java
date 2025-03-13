@@ -3,6 +3,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity.UserRole;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 class UserDTOTest {
 
+    @Mock
     private Validator validator;
 
     @BeforeEach

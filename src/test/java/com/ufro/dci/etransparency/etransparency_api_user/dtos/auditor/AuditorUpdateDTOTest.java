@@ -3,7 +3,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.mockito.Mock;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -11,6 +11,7 @@ import jakarta.validation.ValidatorFactory;
 
 class AuditorUpdateDTOTest {
 
+    @Mock
     private Validator validator;
 
     @BeforeEach
