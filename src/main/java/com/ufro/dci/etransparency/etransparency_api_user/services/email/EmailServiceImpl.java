@@ -1,7 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.email;
 
 import java.io.IOException;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -62,9 +61,6 @@ public class EmailServiceImpl implements EmailService {
 
         String htmlContent = templateEngine.process("email-template2.html", context);
         helper.setText(htmlContent, true);
-
-        ClassPathResource logoImage = new ClassPathResource("static/images/Logo-jpg-v2.jpg");
-        helper.addInline("transparencyLogo", logoImage);
 
         javaMailSender.send(mimeMessage);
     }
