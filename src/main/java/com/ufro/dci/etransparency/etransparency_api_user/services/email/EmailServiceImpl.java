@@ -60,7 +60,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("subject", subject);
         context.setVariable("message", message);
 
-        String htmlContent = templateEngine.process("email-template.html", context);
+        String htmlContent = templateEngine.process("email-template2.html", context);
         helper.setText(htmlContent, true);
 
         ClassPathResource logoImage = new ClassPathResource("static/images/Logo-jpg-v2.jpg");
