@@ -29,4 +29,6 @@ public class Survey {
     private Process process;
 
     private int responseCount=0;
+
+    private int consent=0;
 }
