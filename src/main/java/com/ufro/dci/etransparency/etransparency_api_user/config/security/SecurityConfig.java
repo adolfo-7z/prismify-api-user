@@ -1,6 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.config.security;
 
 import java.util.Arrays;
+
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -89,7 +91,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource websiteConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://142.132.176.154","http://142.132.176.154:8088", "https://etransparencia.cl","https://www.etransparencia.cl"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setAllowCredentials(true);
