@@ -69,8 +69,19 @@ public class Constants {
     public static final long MAX_FILE_SIZE = (long) 50 * 1024 * 1024;
     public static final long MAX_REQUEST_SIZE = (long) 55 * 1024 * 1024;
 
-    //MAIL
+    // MAIL
     public static final String FAILED_EMAIL = "Failed to send email to the recipient";
+
+    public static final String RECOVERY_CODE_MAIL = """
+            Estimado(a) %s,
+
+            Su código de recuperación es: %s
+
+            Este código expirará en 15 minutos.
+
+            Atentamente,
+            Equipo de e-Transparencia
+            """;
 
     // RESPUESTAS
     public static final double APPROVAL_PERCENTAGE = 0.75;

@@ -12,9 +12,12 @@ import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.Assig
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.CustomConversionException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.CustomErrorResponse;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.DimensionEvidenceCapacityException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.EmailSendException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileProcessingException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileSizeExceededException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.FileTypeNotSupportedException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidPasswordException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidRecoveryCodeException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.RejectedProcessException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
 import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.TimeOutException;
@@ -160,6 +163,30 @@ public class GlobalExceptionHandler {
                 CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
                                 HttpStatus.INTERNAL_SERVER_ERROR.value());
                 logger.error("Error converting resource: {}", exception.getMessage(), exception);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        @ExceptionHandler(EmailSendException.class)
+        public ResponseEntity<CustomErrorResponse> handleEmailSendException(EmailSendException exception) {
+                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value());
+                logger.error("Error sending mail: {}", exception.getMessage(), exception);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        @ExceptionHandler(InvalidRecoveryCodeException.class)
+        public ResponseEntity<CustomErrorResponse> handleInvalidRecoveryCodeException(InvalidRecoveryCodeException exception) {
+                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value());
+                logger.error("Error validating recovery code: {}", exception.getMessage(), exception);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        @ExceptionHandler(InvalidPasswordException.class)
+        public ResponseEntity<CustomErrorResponse> handleInvalidPasswordException(InvalidPasswordException exception) {
+                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value());
+                logger.error("Error validating password: {}", exception.getMessage(), exception);
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

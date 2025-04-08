@@ -6,8 +6,14 @@ import org.springframework.stereotype.Repository;
 import com.ufro.dci.etransparency.etransparency_api_user.models.manager.Manager;
 
 @Repository
-public interface ManagerRepository extends JpaRepository<Manager, Long>{
+public interface ManagerRepository extends JpaRepository<Manager, Long> {
+
     boolean existsByEmail(String email);
+
     boolean existsByUsername(String username);
+
     Optional<Manager> findByUsername(String username);
+
+    Optional<Manager> findByEmail(String email);
+    
 }

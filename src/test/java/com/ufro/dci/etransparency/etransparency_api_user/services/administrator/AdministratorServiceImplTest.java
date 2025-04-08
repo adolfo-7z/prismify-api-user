@@ -17,6 +17,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.auditor.Au
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.institution.InstitutionRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.ProcessRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils.AdminCommonsUtils;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,9 @@ class AdministratorServiceImplTest {
     private Institution institution;
 
     private SystemResult systemResult;
+
+    @Mock
+    private AdminCommonsUtils adminCommonsUtils;
 
     @BeforeEach
     void setUp() {
