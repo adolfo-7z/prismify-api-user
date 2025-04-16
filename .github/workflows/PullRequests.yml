@@ -46,6 +46,15 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USER_NAME }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          EXP_TIME: ${{vars.EXP_TIME}}
+          SERVER_PORT: ${{vars.SERVER_PORT}}
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube Scan
