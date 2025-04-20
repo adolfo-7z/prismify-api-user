@@ -25,8 +25,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.repositories.process.Pr
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.result.SystemResultRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils.AdminCommonsUtils;
 
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.NOT_FOUND;
-import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.THE_RESOURCE_WAS_NOT_FOUND;
+import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.*;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.ConversionUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -106,9 +105,9 @@ public class AdministratorServiceImpl implements AdministratorService {
         Long totalCompletedAudits = processRepository.countByStatus(Process.ProcessStatus.FINISHED);
         Long peopleSurveyed = institutionRepository.findAll().stream().mapToLong(Institution::getNEmployees).sum();
 
-        SystemResult systemResult = systemResultRepository.findById(1L)
+        SystemResult systemResult = systemResultRepository.findTopByOrderByIdDesc()
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND,
-                        THE_RESOURCE_WAS_NOT_FOUND));
+                        "System results were not found"));
         List<String> dimensionNames = systemResult.getDimensions();
 
         List<DimensionAverageDTO> dimensionAverageDTOs = new ArrayList<>();
