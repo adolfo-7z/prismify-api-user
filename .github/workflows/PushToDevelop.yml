@@ -3,7 +3,7 @@ name: Release and Docker Build
 on:
   push:
     branches:
-      - semantic-release
+      - develop
 
 permissions:
   contents: write
@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version: ${{ steps.set-version.outputs.VERSION }}
-      released: ${{ steps.set-version.outputs.RELEASED }}
+      version: ${{ steps.semantic.outputs.next-release-version }}
+      released: ${{ steps.semantic.outputs.released }}
 
     steps:
       - name: Checkout code
@@ -37,26 +37,22 @@ jobs:
             @semantic-release/release-notes-generator \
             conventional-changelog-conventionalcommits
 
-      - name: Run semantic-release dry-run to get version
+      - name: Run semantic-release
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set +e
-          semantic-release --dry-run > semantic_output.txt
-          echo "Semantic release dry-run finished"
-          cat semantic_output.txt
+          npx semantic-release --branches develop --debug
+        continue-on-error: true
 
-      - name: Extract version and detect release
+      - name: Set version output
         id: set-version
         run: |
-          VERSION=$(grep -oP '(?<=The next release version is )[^ ]+' semantic_output.txt || echo "")
-          if [ -n "$VERSION" ]; then
-            echo "Detected new release version: $VERSION"
+          if [ -f ".version" ]; then
+            VERSION=$(cat .version)
             echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
             echo "RELEASED=true" >> $GITHUB_OUTPUT
           else
-            echo "No new version detected"
             echo "VERSION=none" >> $GITHUB_OUTPUT
             echo "RELEASED=false" >> $GITHUB_OUTPUT
           fi
