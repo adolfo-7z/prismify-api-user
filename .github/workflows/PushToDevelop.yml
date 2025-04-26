@@ -3,7 +3,7 @@ name: Release and Docker Build
 on:
   push:
     branches:
-      - develop
+      - semantic-release
 
 permissions:
   contents: write
