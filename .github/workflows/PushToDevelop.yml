@@ -1,0 +1,84 @@
+name: Release and Docker Build
+
+on:
+  push:
+    branches:
+      - semantic-release
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.set-version.outputs.VERSION }}
+      released: ${{ steps.set-version.outputs.RELEASED }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install semantic-release and plugins
+        run: |
+          npm install -g semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/github @semantic-release/commit-analyzer @semantic-release/release-notes-generator
+
+      - name: Run semantic-release dry-run to get version
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          semantic-release --dry-run > semantic_output.txt
+          echo "Semantic release dry-run finished"
+          cat semantic_output.txt
+
+      - name: Extract version and detect release
+        id: set-version
+        run: |
+          VERSION=$(grep -oP '(?<=The next release version is )[^ ]+' semantic_output.txt || echo "")
+          if [ -n "$VERSION" ]; then
+            echo "Detected new release version: $VERSION"
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "RELEASED=true" >> $GITHUB_OUTPUT
+          else
+            echo "No new version detected"
+            echo "VERSION=none" >> $GITHUB_OUTPUT
+            echo "RELEASED=false" >> $GITHUB_OUTPUT
+          fi
+
+  build_and_push_docker:
+    needs: release
+    runs-on: ubuntu-latest
+    if: needs.release.outputs.released == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        env:
+          VERSION: ${{ needs.release.outputs.version }}
+        run: |
+          echo "Building Docker image with version: $VERSION"
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
