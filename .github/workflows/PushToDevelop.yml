@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version: ${{ steps.semantic.outputs.next-release-version }}
-      released: ${{ steps.semantic.outputs.released }}
+      version: ${{ steps.get_version.outputs.VERSION }}
 
     steps:
       - name: Checkout code
@@ -45,22 +44,21 @@ jobs:
           npx semantic-release --branches semantic-release --debug
         continue-on-error: true
 
-      - name: Set version output
-        id: set-version
+      - name: Get latest version
+        id: get_version
         run: |
-          if [ -f ".version" ]; then
-            VERSION=$(cat .version)
-            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-            echo "RELEASED=true" >> $GITHUB_OUTPUT
+          VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "Latest Git tag: $VERSION"
+          if [ -n "$VERSION" ]; then
+            echo "VERSION=${VERSION#v}" >> $GITHUB_OUTPUT
           else
             echo "VERSION=none" >> $GITHUB_OUTPUT
-            echo "RELEASED=false" >> $GITHUB_OUTPUT
           fi
 
   build_and_push_docker:
     needs: release
     runs-on: ubuntu-latest
-    if: needs.release.outputs.released == 'true'
+    if: needs.release.outputs.version != 'none'
 
     steps:
       - name: Checkout code
