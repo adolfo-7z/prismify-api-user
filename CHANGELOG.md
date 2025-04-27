@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.0...v1.0.1) (2025-04-27)
+
+### Bug Fixes
+
+* version output ([f8c06f5](https://github.com/tutransparencia/etransparency-api-user/commit/f8c06f5efc6740279d7ee67964095438af61856e))
+
 ## 1.0.0 (2025-04-27)
 
 ### Features
