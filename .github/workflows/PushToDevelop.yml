@@ -1,0 +1,84 @@
+name: Release and Docker Build
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install semantic-release and plugins
+        run: |
+          npm install -g semantic-release \
+            @semantic-release/git \
+            @semantic-release/changelog \
+            @semantic-release/github \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator \
+            conventional-changelog-conventionalcommits
+
+      - name: Run semantic-release
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release --branches develop --debug
+        continue-on-error: true
+
+      - name: Get latest version
+        id: get_version
+        run: |
+          VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "Latest Git tag: $VERSION"
+          if [ -n "$VERSION" ]; then
+            echo "VERSION=${VERSION#v}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=none" >> $GITHUB_OUTPUT
+          fi
+
+  build_and_push_docker:
+    needs: release
+    runs-on: ubuntu-latest
+    if: needs.release.outputs.version != 'none'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        env:
+          VERSION: ${{ needs.release.outputs.version }}
+        run: |
+          echo "Building Docker image with version: $VERSION"
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
