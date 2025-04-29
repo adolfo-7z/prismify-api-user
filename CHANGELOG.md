@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.1...v1.0.2) (2025-04-29)
+
+### Bug Fixes
+
+* fixed admin service tests, now system result is set up correctly ([55df2d3](https://github.com/tutransparencia/etransparency-api-user/commit/55df2d370bb9caa59da4d35e7397f16478621ef9))
+
 ## [1.0.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.0...v1.0.1) (2025-04-27)
 
 ### Bug Fixes
