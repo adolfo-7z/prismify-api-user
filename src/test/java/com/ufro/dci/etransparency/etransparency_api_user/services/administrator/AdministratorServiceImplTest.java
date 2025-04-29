@@ -75,10 +75,12 @@ class AdministratorServiceImplTest {
         institution.setNEmployees(50L);
 
         systemResult = new SystemResult();
+        systemResult.setId(1L);
         systemResult.setDimensions(List.of("Dimension 1", "Dimension 2"));
         systemResult.setDimensionsAverage(List.of(3.5, 4.0));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void testGetAllAdministratorsSuccess() {
         Page<Administrator> adminPage = new PageImpl<>(List.of(administrator));
@@ -96,12 +98,13 @@ class AdministratorServiceImplTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void testGetAdminDashboardSuccess() {
         when(institutionRepository.findAll()).thenReturn(List.of(institution));
         when(processRepository.countByStatus(Process.ProcessStatus.IN_PROGRESS)).thenReturn(5L);
         when(processRepository.countByStatus(Process.ProcessStatus.FINISHED)).thenReturn(3L);
-        when(systemResultRepository.findById(1L)).thenReturn(Optional.of(systemResult));
+        when(systemResultRepository.findTopByOrderByIdDesc()).thenReturn(Optional.of(systemResult));
 
         Map<String, Object> result = (Map<String, Object>) service.getAdminDashboard();
 
