@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - develop
+      - main
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
   release:
@@ -14,12 +17,22 @@ jobs:
 
     outputs:
       version: ${{ steps.get_version.outputs.VERSION }}
+      is_develop: ${{ steps.check_branch.outputs.is_develop }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Check branch
+        id: check_branch
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/develop" ]]; then
+            echo "is_develop=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_develop=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -41,7 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx semantic-release --branches develop --debug
+          npx semantic-release --debug
         continue-on-error: true
 
       - name: Get latest version
@@ -76,9 +89,15 @@ jobs:
       - name: Build and push Docker image
         env:
           VERSION: ${{ needs.release.outputs.version }}
+          IS_DEVELOP: ${{ needs.release.outputs.is_develop }}
         run: |
+          if [[ "$IS_DEVELOP" == "true" ]]; then
+            LATEST_TAG="latest-rc"
+          else
+            LATEST_TAG="latest"
+          fi
           echo "Building Docker image with version: $VERSION"
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION .
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$LATEST_TAG
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$LATEST_TAG
