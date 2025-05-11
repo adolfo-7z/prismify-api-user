@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.2...v1.1.0) (2025-05-11)
+
+### Features
+
+* :construction_worker: Added release and pre-release logic in pipeline ([ccba5fe](https://github.com/tutransparencia/etransparency-api-user/commit/ccba5fe634423b61aadcf8e410f8b6049d97bbab))
+
 ## [1.1.0-rc.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.2...v1.1.0-rc.1) (2025-05-10)
 
 ### Features
