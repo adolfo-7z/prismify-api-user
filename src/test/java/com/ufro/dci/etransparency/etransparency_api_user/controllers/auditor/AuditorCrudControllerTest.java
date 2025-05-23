@@ -18,10 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = TransparencyApiUserApplication.class)
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@TestPropertySource(locations="classpath:test.properties")
 public class AuditorCrudControllerTest {
 
     @Autowired

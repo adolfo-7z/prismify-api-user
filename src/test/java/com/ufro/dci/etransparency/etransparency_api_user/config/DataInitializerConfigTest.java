@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.config;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
 
 @SpringBootTest
+@ActiveProfiles("test")
+@TestPropertySource(locations="classpath:test.properties")
  class DataInitializerConfigTest {
 
     @Value("${spring.application.default-username}")

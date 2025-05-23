@@ -6,6 +6,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.models.evidence.Evidenc
 import com.ufro.dci.etransparency.etransparency_api_user.models.institution.Institution;
 import com.ufro.dci.etransparency.etransparency_api_user.models.maturity.MaturityModel;
 import com.ufro.dci.etransparency.etransparency_api_user.models.recommendation.Recommendation;
+import com.ufro.dci.etransparency.etransparency_api_user.models.report.Report;
 import com.ufro.dci.etransparency.etransparency_api_user.models.result.ProcessResult;
 import com.ufro.dci.etransparency.etransparency_api_user.models.survey.Survey;
 import jakarta.persistence.*;
@@ -95,14 +96,18 @@ public class Process {
     @OneToMany(mappedBy = "process", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Evidence> evidences;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-            CascadeType.REFRESH }, fetch = FetchType.LAZY)
-    @JoinTable(name = "process_recommendation", joinColumns = @JoinColumn(name = "recommendation_id"), inverseJoinColumns = @JoinColumn(name = "process_id"))
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
+    })
+    @JoinTable(name = "process_recommendation", joinColumns = @JoinColumn(name = "process_id"), inverseJoinColumns = @JoinColumn(name = "recommendation_id"))
     private List<Recommendation> recommendations;
 
     @OneToOne
     @JoinColumn(name = "survey_id")
     @ToString.Exclude
     private Survey survey;
+
+    @Embedded
+    private Report report;
 
 }
