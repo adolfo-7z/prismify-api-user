@@ -1,3 +1,4 @@
+
 ## [1.1.0-rc.2](https://github.com/tutransparencia/etransparency-api-user/compare/v1.1.0-rc.1...v1.1.0-rc.2) (2025-05-23)
 
 ### Features
@@ -8,6 +9,7 @@
 
 * added test profile to controllers tests ([76cca08](https://github.com/tutransparencia/etransparency-api-user/commit/76cca08bafa1651d8ec5fd33a61d3262e28b11f3))
 * added test.properties ([27ff753](https://github.com/tutransparencia/etransparency-api-user/commit/27ff753f3c30f7fda7f7bba50693dd821c42a15b))
+
 
 ## [1.1.0-rc.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.0.2...v1.1.0-rc.1) (2025-05-10)
 
