@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - pre-prod
       - main
 
 permissions:
@@ -16,8 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version: ${{ steps.get_version.outputs.VERSION }}
-      is_develop: ${{ steps.check_branch.outputs.is_develop }}
+      version:     ${{ steps.get_version.outputs.VERSION }}
+      is_develop:  ${{ steps.check_branch.outputs.is_develop }}
+      is_preprod:  ${{ steps.check_branch.outputs.is_preprod }}
 
     steps:
       - name: Checkout code
@@ -29,9 +31,14 @@ jobs:
         id: check_branch
         run: |
           if [[ "$GITHUB_REF" == "refs/heads/develop" ]]; then
-            echo "is_develop=true" >> $GITHUB_OUTPUT
+            echo "is_develop=true"  >> $GITHUB_OUTPUT
+            echo "is_preprod=false" >> $GITHUB_OUTPUT
+          elif [[ "$GITHUB_REF" == "refs/heads/pre-prod" ]]; then
+            echo "is_develop=false" >> $GITHUB_OUTPUT
+            echo "is_preprod=true"  >> $GITHUB_OUTPUT
           else
             echo "is_develop=false" >> $GITHUB_OUTPUT
+            echo "is_preprod=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Node.js
@@ -65,7 +72,7 @@ jobs:
           if [ -n "$VERSION" ]; then
             echo "VERSION=${VERSION#v}" >> $GITHUB_OUTPUT
           else
-            echo "VERSION=none" >> $GITHUB_OUTPUT
+            echo "VERSION=none"         >> $GITHUB_OUTPUT
           fi
 
   build_and_push_docker:
@@ -88,15 +95,19 @@ jobs:
 
       - name: Build and push Docker image
         env:
-          VERSION: ${{ needs.release.outputs.version }}
-          IS_DEVELOP: ${{ needs.release.outputs.is_develop }}
+          VERSION:     ${{ needs.release.outputs.version }}
+          IS_DEVELOP:  ${{ needs.release.outputs.is_develop }}
+          IS_PREPROD:  ${{ needs.release.outputs.is_preprod }}
         run: |
           if [[ "$IS_DEVELOP" == "true" ]]; then
+            LATEST_TAG="latest-dev"
+          elif [[ "$IS_PREPROD" == "true" ]]; then
             LATEST_TAG="latest-rc"
           else
             LATEST_TAG="latest"
           fi
-          echo "Building Docker image with version: $VERSION"
+
+          echo "Building Docker image with version: $VERSION and tag: $LATEST_TAG"
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION .
           docker tag ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$LATEST_TAG
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/etransparencia-api-user:$VERSION
