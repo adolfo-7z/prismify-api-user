@@ -19,9 +19,9 @@ public class ClusterResult {
     @Column(length = 50)
     private String dimensionName;
 
-    private double centroid;
+    private String centroid;
 
-    private List<Double> points;
+    private List<String> points;
 
     private int weight;
     

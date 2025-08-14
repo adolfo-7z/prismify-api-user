@@ -3,7 +3,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor;
 import java.util.Date;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.UserDTO;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

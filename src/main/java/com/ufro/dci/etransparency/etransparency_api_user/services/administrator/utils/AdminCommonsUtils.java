@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator.utils;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
 

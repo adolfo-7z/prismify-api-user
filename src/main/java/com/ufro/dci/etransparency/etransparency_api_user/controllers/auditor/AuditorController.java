@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.controllers.auditor;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +23,7 @@ public class AuditorController {
     public ResponseEntity<Object> getAllAuditors(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(name = "date", defaultValue = "desc") String sortDirection,
-            @RequestParam(name = "name", defaultValue = "") String name) {
+            @RequestParam(defaultValue = "") String name) {
         return ResponseHandler.generateResponse(OPERATION_SUCCESSFUL, HttpStatus.OK,
                 auditorService.getAllAuditors(page, size, sortDirection, name));
     }

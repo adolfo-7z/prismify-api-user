@@ -2,7 +2,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor;
 
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.UserUpdateDTO;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

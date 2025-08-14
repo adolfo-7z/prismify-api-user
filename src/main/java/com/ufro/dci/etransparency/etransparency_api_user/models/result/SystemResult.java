@@ -2,7 +2,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.models.result;
 
 import java.util.*;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter

@@ -14,7 +14,6 @@ class MaturityModelFileTest {
     @Test
     void testMaturityModelFileConstructor() {
         MaturityModelFile file = new MaturityModelFile();
-
         assertNull(file.getId());
         assertNull(file.getFileData());
         assertNull(file.getFileName());
@@ -25,16 +24,13 @@ class MaturityModelFileTest {
     @Test
     void testSettersAndGetters() throws SQLException {
         MaturityModelFile file = new MaturityModelFile();
-
         file.setId(1L);
         Blob blobData = new SerialBlob(new byte[]{1, 2, 3});
         file.setFileData(blobData);
         file.setFileName("sample.pdf");
         file.setFileType("application/pdf");
-
         MaturityModel maturityModel = new MaturityModel();
         file.setMaturityModel(maturityModel);
-
         assertEquals(1L, file.getId());
         assertEquals(blobData, file.getFileData());
         assertEquals("sample.pdf", file.getFileName());
@@ -46,10 +42,8 @@ class MaturityModelFileTest {
     void testBlobData() throws SQLException {
         byte[] sampleData = {10, 20, 30};
         Blob blobData = new SerialBlob(sampleData);
-
         MaturityModelFile file = new MaturityModelFile();
         file.setFileData(blobData);
-
         byte[] retrievedData = file.getFileData().getBytes(1, (int) file.getFileData().length());
         assertArrayEquals(sampleData, retrievedData);
     }
@@ -58,9 +52,7 @@ class MaturityModelFileTest {
     void testAllArgsConstructor() throws SQLException {
         Blob blobData = new SerialBlob(new byte[]{4, 5, 6});
         MaturityModel maturityModel = new MaturityModel();
-
         MaturityModelFile file = new MaturityModelFile(2L, blobData, "example.docx", "application/msword", maturityModel);
-
         assertEquals(2L, file.getId());
         assertEquals(blobData, file.getFileData());
         assertEquals("example.docx", file.getFileName());
@@ -72,7 +64,6 @@ class MaturityModelFileTest {
     void testBuilder() throws SQLException {
         Blob blobData = new SerialBlob(new byte[]{7, 8, 9});
         MaturityModel maturityModel = new MaturityModel();
-
         MaturityModelFile file = MaturityModelFile.builder()
                 .id(3L)
                 .fileData(blobData)
@@ -80,7 +71,6 @@ class MaturityModelFileTest {
                 .fileType("text/plain")
                 .maturityModel(maturityModel)
                 .build();
-
         assertEquals(3L, file.getId());
         assertEquals(blobData, file.getFileData());
         assertEquals("file.txt", file.getFileName());
@@ -97,8 +87,6 @@ class MaturityModelFileTest {
                 .fileName("document.pdf")
                 .fileType("application/pdf")
                 .build();
-
-        String toString = file.toString();
         assertEquals(4L, file.getId());
         assertEquals("document.pdf", file.getFileName());
         assertEquals("application/pdf", file.getFileType());

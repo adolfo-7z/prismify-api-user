@@ -13,12 +13,12 @@ import jakarta.servlet.MultipartConfigElement;
 public class CustomDispatcherServletConfig {
 
     @Bean
-    public DispatcherServlet dispatcherServlet() {
+    DispatcherServlet dispatcherServlet() {
         return new DispatcherServlet();
     }
 
     @Bean
-    public ServletRegistrationBean<DispatcherServlet> dispatcherServletRegistration() {
+    ServletRegistrationBean<DispatcherServlet> dispatcherServletRegistration() {
 
         ServletRegistrationBean<DispatcherServlet> registration = new ServletRegistrationBean<>(dispatcherServlet(),
                 "/v1/api/*");
@@ -29,7 +29,7 @@ public class CustomDispatcherServletConfig {
     }
 
     @Bean
-    public DispatcherServletPath dispatcherServletPath() {
+    DispatcherServletPath dispatcherServletPath() {
         return () -> "/v1/api";
     }
 

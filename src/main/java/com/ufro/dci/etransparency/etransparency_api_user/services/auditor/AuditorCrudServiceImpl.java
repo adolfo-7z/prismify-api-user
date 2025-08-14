@@ -2,7 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.services.auditor;
 
 import java.util.*;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.slf4j.*;
 import org.springframework.cache.annotation.*;

@@ -1,6 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.dtos.institution;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

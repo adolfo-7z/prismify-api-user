@@ -3,7 +3,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.models.evidence;
 import com.ufro.dci.etransparency.etransparency_api_user.models.dimension.Dimension;
 import com.ufro.dci.etransparency.etransparency_api_user.models.process.Process;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter

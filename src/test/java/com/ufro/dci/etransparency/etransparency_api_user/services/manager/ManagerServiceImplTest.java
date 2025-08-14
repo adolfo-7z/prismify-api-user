@@ -34,13 +34,11 @@ class ManagerServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         activeManager = new Manager();
         activeManager.setId(1L);
         activeManager.setUsername("activeManager");
         activeManager.setEmail("active@example.com");
         activeManager.setActive(true);
-
         inactiveManager = new Manager();
         inactiveManager.setId(2L);
         inactiveManager.setUsername("inactiveManager");
@@ -52,13 +50,11 @@ class ManagerServiceImplTest {
     void testGetAllManagersSuccess() {
         Page<Manager> managerPage = new PageImpl<>(List.of(activeManager, inactiveManager));
         when(managerRepository.findAll(any(PageRequest.class))).thenReturn(managerPage);
-
         try (MockedStatic<ConversionUtils> mockedStatic = mockStatic(ConversionUtils.class)) {
             mockedStatic.when(() -> ConversionUtils.convertToDTO(activeManager, ManagerDTO.class))
                     .thenReturn(new ManagerDTO());
-
+            @SuppressWarnings("unchecked")
             Map<String, Object> result = (Map<String, Object>) service.getAllManagers(0, 10);
-
             assertNotNull(result);
             assertEquals(1, ((List<?>) result.get("managers")).size());
             assertEquals(1, result.get("totalPages"));
@@ -69,9 +65,8 @@ class ManagerServiceImplTest {
     void testGetAllManagersWithEmptyResult() {
         Page<Manager> emptyPage = new PageImpl<>(Collections.emptyList());
         when(managerRepository.findAll(any(PageRequest.class))).thenReturn(emptyPage);
-
+        @SuppressWarnings("unchecked")
         Map<String, Object> result = (Map<String, Object>) service.getAllManagers(0, 10);
-
         assertNotNull(result);
         assertTrue(((List<?>) result.get("managers")).isEmpty());
         assertEquals(1, result.get("totalPages"));

@@ -43,15 +43,12 @@ class NotificationServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         admin = new Administrator();
         admin.setId(1L);
         admin.setNotifications(List.of("Admin Notification 1", "Admin Notification 2"));
-
         auditor = new Auditor();
         auditor.setId(2L);
         auditor.setNotifications(List.of("Auditor Notification 1"));
-
         manager = new Manager();
         manager.setId(3L);
         manager.setNotifications(List.of("Manager Notification 1", "Manager Notification 2", "Manager Notification 3"));
@@ -60,11 +57,10 @@ class NotificationServiceImplTest {
     @Test
     void testGetUserNotificationsForAdministrator() {
         when(administratorRepository.findById(1L)).thenReturn(Optional.of(admin));
-
         var result = service.getUserNotifications(1L, UserRole.ADMIN);
-
         assertNotNull(result);
         assertTrue(result instanceof java.util.Map);
+        @SuppressWarnings("unchecked")
         List<String> notifications = (List<String>) ((Map<?, ?>) result).get("notifications");
         assertEquals(2, notifications.size());
         assertEquals("Admin Notification 1", notifications.get(0));
@@ -75,11 +71,10 @@ class NotificationServiceImplTest {
     @Test
     void testGetUserNotificationsForAuditor() {
         when(auditorRepository.findById(2L)).thenReturn(Optional.of(auditor));
-
         var result = service.getUserNotifications(2L, UserRole.AUDITOR);
-
         assertNotNull(result);
         assertTrue(result instanceof java.util.Map);
+        @SuppressWarnings("unchecked")
         List<String> notifications = (List<String>) ((Map<?, ?>) result).get("notifications");
         assertEquals(1, notifications.size());
         assertEquals("Auditor Notification 1", notifications.get(0));
@@ -90,11 +85,10 @@ class NotificationServiceImplTest {
     @Test
     void testGetUserNotificationsForManager() {
         when(managerRepository.findById(3L)).thenReturn(Optional.of(manager));
-
         var result = service.getUserNotifications(3L, UserRole.MANAGER);
-
         assertNotNull(result);
         assertTrue(result instanceof java.util.Map);
+        @SuppressWarnings("unchecked")
         List<String> notifications = (List<String>) ((Map<?, ?>) result).get("notifications");
         assertEquals(3, notifications.size());
         assertEquals("Manager Notification 1", notifications.get(0));
@@ -105,7 +99,6 @@ class NotificationServiceImplTest {
     @Test
     void testGetUserNotificationsForAdministratorNotFound() {
         when(administratorRepository.findById(1L)).thenReturn(Optional.empty());
-
         assertThrows(ResourceNotFoundException.class, () -> service.getUserNotifications(1L, UserRole.ADMIN));
         verify(administratorRepository).findById(1L);
         verifyNoInteractions(auditorRepository, managerRepository);
