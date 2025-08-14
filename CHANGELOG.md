@@ -1,3 +1,15 @@
+## [2.0.0-dev.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.2.0-dev.1...v2.0.0-dev.1) (2025-08-14)
+
+### ⚠ BREAKING CHANGES
+
+* updated to spring boot 3.5, tests updated, banner up…
+
+* Merge pull request [#21](https://github.com/tutransparencia/etransparency-api-user/issues/21) from tutransparencia/feature/model-update ([e0a6463](https://github.com/tutransparencia/etransparency-api-user/commit/e0a64636e55e1456570b35ecd4fe28e07b76ab04))
+
+### Features
+
+* added origin url to pullrequest yaml file ([5883377](https://github.com/tutransparencia/etransparency-api-user/commit/5883377ca6107ff02bb52cc9c2f631cd401575c4))
+
 ## [1.2.0-dev.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.1.0...v1.2.0-dev.1) (2025-06-07)
 
 ### Features
