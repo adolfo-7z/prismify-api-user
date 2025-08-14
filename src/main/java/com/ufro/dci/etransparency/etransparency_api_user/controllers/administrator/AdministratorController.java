@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.controllers.administrator;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;

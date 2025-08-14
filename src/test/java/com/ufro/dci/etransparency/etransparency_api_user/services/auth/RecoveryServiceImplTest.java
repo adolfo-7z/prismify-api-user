@@ -5,23 +5,18 @@ import static com.ufro.dci.etransparency.etransparency_api_user.utils.Constants.
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.ufro.dci.etransparency.etransparency_api_user.TransparencyApiUserApplication;
-import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.EmailSendException;
-import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidPasswordException;
-import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.InvalidRecoveryCodeException;
-import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.ResourceNotFoundException;
+import com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom.*;
 import com.ufro.dci.etransparency.etransparency_api_user.models.UserEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.models.administrator.Administrator;
 import com.ufro.dci.etransparency.etransparency_api_user.repositories.administrator.AdministratorRepository;
@@ -37,22 +32,22 @@ public class RecoveryServiceImplTest {
     @Autowired
     private RecoveryService recoveryService;
 
-    @MockBean
+    @MockitoBean
     private AdministratorRepository administratorRepository;
 
-    @MockBean
+    @MockitoBean
     private ManagerRepository managerRepository;
 
-    @MockBean
+    @MockitoBean
     private AuditorRepository auditorRepository;
 
-    @MockBean
+    @MockitoBean
     private EmailService emailService;
 
-    @MockBean
+    @MockitoBean
     private PasswordEncoder passwordEncoder;
 
-    @MockBean
+    @MockitoBean
     private RecoveryCommonsUtils recoveryCommonsUtils;
 
     @Test

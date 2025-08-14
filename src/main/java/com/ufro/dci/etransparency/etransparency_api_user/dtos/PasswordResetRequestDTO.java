@@ -3,7 +3,9 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.password.ValidPassword;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

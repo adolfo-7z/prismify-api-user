@@ -13,61 +13,50 @@ class ClusterResultTest {
     void testClusterResultConstructor() {
         ClusterResult clusterResult = new ClusterResult();
 
-        //assertNull(clusterResult.getId());
         assertNull(clusterResult.getDimensionName());
-        assertEquals(0.0, clusterResult.getCentroid());
+        assertEquals(null, clusterResult.getCentroid());
         assertNull(clusterResult.getPoints());
         assertEquals(0, clusterResult.getWeight());
-        //assertNull(clusterResult.getProcessResult());
     }
 
+    @SuppressWarnings("unused")
     @Test
     void testAllArgsConstructor() {
-        List<Double> points = List.of(1.2, 3.4, 5.6);
+        List<String> points = List.of("1.2", "3.4", "5.6");
         ClusterResult clusterResult = new ClusterResult();
         clusterResult.setDimensionName("Dimension A");
-        clusterResult.setCentroid(4.5);
+        clusterResult.setCentroid("4.5");
         clusterResult.setPoints(points);
         clusterResult.setWeight(10);
         ProcessResult processResult = new ProcessResult();
-        //clusterResult.setProcessResult(processResult);
-
         assertEquals("Dimension A", clusterResult.getDimensionName());
-        assertEquals(4.5, clusterResult.getCentroid());
+        assertEquals("4.5", clusterResult.getCentroid());
         assertEquals(points, clusterResult.getPoints());
         assertEquals(10, clusterResult.getWeight());
-       // assertEquals(processResult, clusterResult.getProcessResult());
     }
 
+    @SuppressWarnings("unused")
     @Test
     void testSettersAndGetters() {
         ClusterResult clusterResult = new ClusterResult();
-
         clusterResult.setDimensionName("Dimension B");
-        clusterResult.setCentroid(3.5);
-        clusterResult.setPoints(List.of(1.0, 2.0, 3.0));
+        clusterResult.setCentroid("3.5");
+        clusterResult.setPoints(List.of("1.0", "2.0", "3.0"));
         clusterResult.setWeight(5);
         ProcessResult processResult = new ProcessResult();
-       // clusterResult.setProcessResult(processResult);
-
         assertEquals("Dimension B", clusterResult.getDimensionName());
-        assertEquals(3.5, clusterResult.getCentroid());
+        assertEquals("3.5", clusterResult.getCentroid());
         assertEquals(3, clusterResult.getPoints().size());
         assertEquals(5, clusterResult.getWeight());
-        //assertEquals(processResult, clusterResult.getProcessResult());
     }
 
     @Test
     void testPointsListOperations() {
         ClusterResult clusterResult = new ClusterResult();
         clusterResult.setPoints(new ArrayList<>());
-
-        // Add a point
-        clusterResult.getPoints().add(2.5);
+        clusterResult.getPoints().add("2.5");
         assertEquals(1, clusterResult.getPoints().size());
-        assertEquals(2.5, clusterResult.getPoints().get(0));
-
-        // Remove a point
+        assertEquals("2.5", clusterResult.getPoints().get(0));
         clusterResult.getPoints().remove(0);
         assertTrue(clusterResult.getPoints().isEmpty());
     }
@@ -76,23 +65,21 @@ class ClusterResultTest {
     void testDimensionNameSetterAndGetter() {
         ClusterResult clusterResult = new ClusterResult();
         clusterResult.setDimensionName("Test Dimension");
-
         assertEquals("Test Dimension", clusterResult.getDimensionName());
     }
 
     @Test
     void testCentroidSetterAndGetter() {
         ClusterResult clusterResult = new ClusterResult();
-        clusterResult.setCentroid(7.8);
-
-        assertEquals(7.8, clusterResult.getCentroid());
+        clusterResult.setCentroid("7.8");
+        assertEquals("7.8", clusterResult.getCentroid());
     }
 
     @Test
     void testWeightSetterAndGetter() {
         ClusterResult clusterResult = new ClusterResult();
         clusterResult.setWeight(15);
-
         assertEquals(15, clusterResult.getWeight());
     }
+
 }

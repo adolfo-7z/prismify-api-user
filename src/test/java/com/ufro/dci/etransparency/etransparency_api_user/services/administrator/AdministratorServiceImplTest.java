@@ -1,7 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.services.administrator;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 import java.util.*;
 

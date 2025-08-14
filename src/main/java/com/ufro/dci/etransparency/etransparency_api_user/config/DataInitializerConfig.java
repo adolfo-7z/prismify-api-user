@@ -28,7 +28,7 @@ public class DataInitializerConfig {
     private final PasswordEncoder passwordEncoder;
 
     @Bean
-    public CommandLineRunner initData() {
+    CommandLineRunner initData() {
         return args -> {
             if (administratorRepository.existsByUsername(defaultUsername)) {
                 return;

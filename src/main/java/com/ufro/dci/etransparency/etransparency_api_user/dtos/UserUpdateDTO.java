@@ -5,7 +5,9 @@ import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.email
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.username.UniqueUsername;
 
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.controllers.notification;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

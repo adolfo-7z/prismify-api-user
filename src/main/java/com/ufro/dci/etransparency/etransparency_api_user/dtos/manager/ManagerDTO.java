@@ -3,7 +3,8 @@ package com.ufro.dci.etransparency.etransparency_api_user.dtos.manager;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.UserDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.institution.InstitutionDTO;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

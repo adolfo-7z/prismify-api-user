@@ -2,7 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.services.notification;
 
 import java.util.*;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

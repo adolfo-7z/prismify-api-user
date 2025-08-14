@@ -68,9 +68,11 @@ jobs:
           MAIL_HOST: ${{ secrets.MAIL_HOST }}
           MAIL_PORT: ${{ secrets.MAIL_PORT }}
           MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           EXP_TIME: ${{vars.EXP_TIME}}
           SERVER_PORT: ${{vars.SERVER_PORT}}
+          ORIGIN_URL: ${{ secrets.ORIGIN_URL }}
         run: mvn clean install
 
       - name: Run SonarQube Scan

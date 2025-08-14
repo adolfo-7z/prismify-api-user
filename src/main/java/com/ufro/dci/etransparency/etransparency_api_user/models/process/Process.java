@@ -72,6 +72,8 @@ public class Process {
 
     private Long nEmployees;
 
+    private Double approvalThreshold;
+
     private Date createdAt;
 
     private Date updatedAt;

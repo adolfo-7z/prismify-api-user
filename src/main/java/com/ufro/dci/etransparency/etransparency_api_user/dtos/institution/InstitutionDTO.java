@@ -6,7 +6,9 @@ import com.ufro.dci.etransparency.etransparency_api_user.dtos.auditor.AuditorDTO
 import com.ufro.dci.etransparency.etransparency_api_user.dtos.manager.ManagerDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.utils.annotations.rut.ValidRut;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

@@ -3,7 +3,8 @@ package com.ufro.dci.etransparency.etransparency_api_user.exceptions.custom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

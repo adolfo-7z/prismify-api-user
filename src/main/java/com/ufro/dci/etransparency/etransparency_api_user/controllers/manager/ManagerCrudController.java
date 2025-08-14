@@ -1,6 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.controllers.manager;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 
 import jakarta.validation.Valid;
 

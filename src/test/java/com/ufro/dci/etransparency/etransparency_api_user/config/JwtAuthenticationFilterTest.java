@@ -1,7 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.config;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
