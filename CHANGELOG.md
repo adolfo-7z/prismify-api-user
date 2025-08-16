@@ -1,3 +1,9 @@
+## [2.0.0-dev.2](https://github.com/tutransparencia/etransparency-api-user/compare/v2.0.0-dev.1...v2.0.0-dev.2) (2025-08-16)
+
+### Features
+
+* removed context path for servlet file, now is set on properties file ([1e36968](https://github.com/tutransparencia/etransparency-api-user/commit/1e36968f5646bde8ceec3a4ed4837d93198587d3))
+
 ## [2.0.0-dev.1](https://github.com/tutransparencia/etransparency-api-user/compare/v1.2.0-dev.1...v2.0.0-dev.1) (2025-08-14)
 
 ### ⚠ BREAKING CHANGES
