@@ -12,6 +12,8 @@ import jakarta.validation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidRut {
     String message() default "Invalid RUT";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
