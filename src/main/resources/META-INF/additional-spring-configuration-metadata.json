@@ -3,32 +3,37 @@
         {
             "name": "jwt.secret.key",
             "type": "java.lang.String",
-            "description": "A description for 'jwt.secret.key'"
+            "description": "The secret key used to sign and verify JWT tokens. It should be kept private and secure."
         },
         {
             "name": "jwt.expiration.time",
             "type": "java.lang.String",
-            "description": "A description for 'jwt.expiration.time'"
+            "description": "The duration after which a generated JWT token expires. Typically defined in milliseconds or a time format."
         },
         {
             "name": "spring.application.default-username",
             "type": "java.lang.String",
-            "description": "A description for 'spring.application.default-username'"
+            "description": "The default username assigned to the initial application user when no users are present in the system."
         },
         {
             "name": "spring.application.default-email",
             "type": "java.lang.String",
-            "description": "A description for 'spring.application.default-email'"
+            "description": "The default email address associated with the initial application user account."
         },
         {
             "name": "spring.application.default-password",
             "type": "java.lang.String",
-            "description": "A description for 'spring.application.default-password'"
+            "description": "The default password for the initial application user. This should be changed after first login for security reasons."
         },
         {
             "name": "origin.url",
             "type": "java.lang.String",
-            "description": "A description for 'origin.url'"
+            "description": "The allowed origin URL for cross-origin requests (CORS). Defines which client domains can access the application."
+        },
+        {
+            "name": "user.api.url",
+            "type": "java.lang.String",
+            "description": "A description for 'user.api.url'"
         }
     ]
 }
