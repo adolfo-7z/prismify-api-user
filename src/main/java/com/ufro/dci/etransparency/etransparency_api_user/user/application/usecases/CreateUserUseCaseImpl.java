@@ -9,12 +9,39 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.U
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Implementación del caso de uso para la creación de usuarios.
+ * <p>
+ * Esta clase se encarga de inicializar los valores por defecto de un nuevo
+ * usuario,
+ * se aplica un algoritmo de hash a la contraseña antes de guardarlo
+ * en el repositorio.
+ *
+ * <p>
+ * La clase está anotada con {@code @RequiredArgsConstructor}, lo que significa
+ * que
+ * se inyectarán las dependencias requeridas {@link UserRepository} y
+ * {@link PasswordHasher}
+ * a través del constructor.
+ *
+ * @author Adolfo Plaza
+ */
 @RequiredArgsConstructor
 public class CreateUserUseCaseImpl implements CreateUserUseCase {
 
     private final UserRepository userRepository;
     private final PasswordHasher hasher;
 
+    /**
+     * Crea un nuevo usuario en el sistema.
+     * <li>Se encripta la contraseña usando {@link PasswordHasher}.</li>
+     * <li>Se guarda el usuario en el {@link UserRepository}.</li>
+     * </ul>
+     *
+     * @param user objeto {@link User} que contiene los datos del nuevo usuario.
+     * @return el {@link User} persistido con los valores inicializados y la
+     *         contraseña encriptada.
+     */
     @Override
     public User createUser(User user) {
         user.setActive(true);

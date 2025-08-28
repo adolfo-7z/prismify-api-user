@@ -57,7 +57,7 @@ class ComposeMailUseCaseImplTest {
     void testSendFinishEvaluationEmail() {
         MailMessage message = new MailMessage();
         composeMailUseCase.sendFinishEvaluationEmail(message);
-        assertEquals("Finalización de Evaluación - Evaluación de Madurez Institucional", message.getSubject());
+        assertEquals("Evaluación Finalizada", message.getSubject());
         assertTrue(message.getBody().contains("finalizado exitosamente"));
         verify(sendMailPort).send(message);
     }

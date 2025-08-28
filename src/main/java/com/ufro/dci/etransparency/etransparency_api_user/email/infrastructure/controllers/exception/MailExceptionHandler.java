@@ -8,9 +8,30 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.ufro.dci.etransparency.etransparency_api_user.commons.exception.CustomErrorResponse;
 import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.UserPortException;
 
+/**
+ * Clase que maneja excepciones relacionadas con operaciones de correo
+ * dentro de la aplicación. Esta clase captura excepciones de tipo
+ * {@link UserPortException} y devuelve una respuesta personalizada al cliente.
+ * 
+ * @author Adolfo Plaza
+ */
 @RestControllerAdvice
 public class MailExceptionHandler {
 
+        /**
+         * Maneja las excepciones de tipo {@link UserPortException}.
+         * 
+         * Este método captura la excepción lanzada, construye un objeto
+         * {@link CustomErrorResponse} con el código de error, mensaje y código HTTP,
+         * y devuelve una {@link ResponseEntity} con estado 500 (Internal Server Error).
+         * 
+         * @param exception la excepción de tipo {@link UserPortException} lanzada
+         *                  durante
+         *                  la ejecución de una operación relacionada con el correo.
+         * @return una {@link ResponseEntity} que contiene el
+         *         {@link CustomErrorResponse}
+         *         con información del error y un estado HTTP 500.
+         */
         @ExceptionHandler(UserPortException.class)
         public ResponseEntity<CustomErrorResponse> handleUserPort(
                         UserPortException exception) {

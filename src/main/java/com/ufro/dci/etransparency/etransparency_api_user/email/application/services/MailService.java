@@ -5,46 +5,93 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.domain.ports.in.C
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Servicio de correo encargado de delegar el envío de distintos tipos de
+ * mensajes de correo
+ * a una implementación concreta de {@link ComposeMailUseCase}.
+ * 
+ * @author Adolfo Plaza
+ */
 @RequiredArgsConstructor
 public class MailService implements ComposeMailUseCase {
 
     private final ComposeMailUseCase composeMailUseCase;
 
+    /**
+     * Envía un correo genérico.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendGenericMail(MailMessage messgae) {
         composeMailUseCase.sendGenericMail(messgae);
     }
 
+    /**
+     * Envía un correo indicando que una evaluación ha sido rechazada.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendEvaluationRejectedEmail(MailMessage message) {
         composeMailUseCase.sendEvaluationRejectedEmail(message);
     }
 
+    /**
+     * Envía un correo relacionado con la auditoría de una evaluación.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendAuditEvaluationEmail(MailMessage message) {
         composeMailUseCase.sendAuditEvaluationEmail(message);
     }
 
+    /**
+     * Envía un correo indicando que una evaluación ha finalizado.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendFinishEvaluationEmail(MailMessage message) {
         composeMailUseCase.sendFinishEvaluationEmail(message);
     }
 
+    /**
+     * Envía un correo notificando una nueva solicitud de evaluación.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendNewEvaluationRequestEmail(MailMessage message) {
         composeMailUseCase.sendNewEvaluationRequestEmail(message);
     }
 
+    /**
+     * Envía un correo indicando que una evidencia ha sido rechazada.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendEvidenceRejectedEmail(MailMessage message) {
         composeMailUseCase.sendEvidenceRejectedEmail(message);
     }
 
+    /**
+     * Envía un correo relacionado con una apelación de evidencia.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendAppealEvidenceEmail(MailMessage message) {
         composeMailUseCase.sendAppealEvidenceEmail(message);
     }
 
+    /**
+     * Envía un correo notificando una nueva solicitud de institución.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendNewInstitutionRequestEmail(MailMessage message) {
         composeMailUseCase.sendNewInstitutionRequestEmail(message);

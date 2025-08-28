@@ -12,17 +12,54 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.domain.ports.out.
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+/**
+ * Implementación de {@link SendMailPort} que envía correos electrónicos
+ * utilizando SMTP a través de {@link JavaMailSender} y plantillas Thymeleaf.
+ * 
+ * <p>
+ * Esta clase prepara un mensaje MIME con contenido HTML generado a partir
+ * de una plantilla Thymeleaf y lo envía a la dirección de correo del
+ * destinatario.
+ * 
+ * <p>
+ * El remitente del correo se establece por defecto como
+ * <code>no-reply@etransparencia.cl</code>.
+ * 
+ * @author Adolfo Plaza
+ */
 @Component
 public class SmtpMailSenderAdapter implements SendMailPort {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
+    /**
+     * Constructor que inicializa el adaptador con un {@link JavaMailSender} y un
+     * {@link TemplateEngine}.
+     *
+     * @param mailSender     el servicio de envío de correos SMTP
+     * @param templateEngine el motor de plantillas Thymeleaf para generar contenido
+     *                       HTML
+     */
     public SmtpMailSenderAdapter(JavaMailSender mailSender, TemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
+    /**
+     * Envía un correo electrónico con contenido HTML generado a partir de una
+     * plantilla.
+     *
+     * <p>
+     * El mensaje se genera utilizando la plantilla
+     * <code>email-template.html</code>,
+     * y se establecen las variables <code>subject</code> y <code>message</code>
+     * para el contenido
+     * del correo.
+     *
+     * @param message el mensaje de correo a enviar
+     * @throws RuntimeException si ocurre un error al enviar el correo
+     */
     @Override
     public void send(MailMessage message) {
         try {

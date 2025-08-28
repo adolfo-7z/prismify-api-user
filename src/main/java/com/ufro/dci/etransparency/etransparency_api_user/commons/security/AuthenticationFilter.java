@@ -17,11 +17,20 @@ import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
+/**
+ * Filtro de autenticación que intercepta cada solicitud HTTP entrante para
+ * validar tokens JWT (JSON Web Tokens).
+ * <p>
+ * Extrae el encabezado {@code Authorization}, verifica la firma y la expiración
+ * del token JWT, y establece la autenticación en el contexto de seguridad de
+ * Spring
+ * si el token es válido.
+ *
+ * @author Adolfo Plaza
+ */
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 

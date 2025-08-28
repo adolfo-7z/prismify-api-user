@@ -16,6 +16,15 @@ import com.nimbusds.jwt.*;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthUserDetails;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.TokenProvider;
 
+/**
+ * Proveedor de tokens JWT que implementa la interfaz {@link TokenProvider}.
+ * <p>
+ * Esta clase se encarga de generar, validar y extraer información de
+ * tokens JWT utilizando una clave secreta y un tiempo de expiración
+ * configurables mediante propiedades de Spring.
+ * 
+ * @author Adolfo Plaza
+ */
 @Component
 public class JwtTokenProvider implements TokenProvider {
 
@@ -25,6 +34,13 @@ public class JwtTokenProvider implements TokenProvider {
     @Value("${jwt.expiration.time}")
     private String expiration;
 
+    /**
+     * Genera un token JWT para un usuario autenticado.
+     *
+     * @param user Detalles del usuario autenticado.
+     * @return Token JWT firmado como cadena.
+     * @throws RuntimeException Si ocurre un error al generar el token.
+     */
     @Override
     public String generateToken(AuthUserDetails user) {
         try {
@@ -48,6 +64,12 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
+    /**
+     * Valida un token JWT verificando su firma y fecha de expiración.
+     *
+     * @param token Token JWT a validar.
+     * @return {@code true} si el token es válido; {@code false} en caso contrario.
+     */
     @Override
     public boolean validateToken(String token) {
         try {
@@ -61,6 +83,13 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
+    /**
+     * Obtiene el conjunto de claims de un token JWT.
+     *
+     * @param token Token JWT del cual extraer los claims.
+     * @return Conjunto de claims {@link JWTClaimsSet}.
+     * @throws RuntimeException Si el token no es válido o no puede ser parseado.
+     */
     @Override
     public JWTClaimsSet getClaims(String token) {
         try {
@@ -70,29 +99,65 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
+    /**
+     * Extrae el nombre de usuario de un token JWT.
+     *
+     * @param token Token JWT.
+     * @return Nombre de usuario contenido en el token.
+     */
     @Override
     public String extractUsername(String token) {
         return getClaim(token, JWTClaimsSet::getSubject);
     }
 
+    /**
+     * Extrae el ID del usuario de un token JWT.
+     *
+     * @param token Token JWT.
+     * @return ID del usuario contenido en el token.
+     */
     @Override
     public Long extractUserId(String token) {
         return getClaim(token, claims -> (Long) claims.getClaim("id"));
     }
 
+    /**
+     * Extrae el rol del usuario de un token JWT.
+     *
+     * @param token Token JWT.
+     * @return Rol del usuario contenido en el token.
+     */
     @Override
     public String extractRole(String token) {
         return getClaim(token, claims -> (String) claims.getClaim("role"));
     }
 
+    /**
+     * Extrae el estado de actividad del usuario de un token JWT.
+     *
+     * @param token Token JWT.
+     * @return {@code true} si el usuario está activo; {@code false} en caso
+     *         contrario.
+     */
     @Override
     public boolean extractIsActive(String token) {
         Boolean isActive = getClaim(token, claims -> (Boolean) claims.getClaim("isActive"));
         return isActive != null && isActive;
     }
 
+    /**
+     * Obtiene un claim específico del token aplicando una función sobre el
+     * {@link JWTClaimsSet}.
+     *
+     * @param <T>            Tipo de dato del claim a extraer.
+     * @param token          Token JWT.
+     * @param claimsFunction Función que recibe los claims y devuelve el valor
+     *                       deseado.
+     * @return Valor del claim extraído.
+     */
     private <T> T getClaim(String token, Function<JWTClaimsSet, T> claimsFunction) {
         JWTClaimsSet claims = getClaims(token);
         return claimsFunction.apply(claims);
     }
+
 }

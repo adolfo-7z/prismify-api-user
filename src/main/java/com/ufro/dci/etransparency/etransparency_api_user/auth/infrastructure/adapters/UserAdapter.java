@@ -15,18 +15,51 @@ import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.con
 
 import lombok.Data;
 
+/**
+ * Adaptador que implementa {@link LoadAuthUserPort} para obtener detalles de
+ * usuario
+ * desde un servicio externo a través de HTTP usando {@link RestTemplate}.
+ * <p>
+ * Esta clase se encarga de consultar la API de usuarios interna y mapear la
+ * respuesta
+ * a la entidad {@link AuthUserDetails}.
+ * 
+ * @author Adolfo Plaza
+ */
 @Component
 public class UserAdapter implements LoadAuthUserPort {
 
     private final RestTemplate restTemplate;
     private String userApiUrl;
 
+    /**
+     * Constructor de {@link UserAdapter}.
+     * 
+     * @param restTemplate Instancia de {@link RestTemplate} utilizada para realizar
+     *                     llamadas HTTP a la API de usuarios.
+     * @param userApiUrl   URL base del servicio de usuarios. Se inyecta desde
+     *                     propiedades de configuración.
+     */
     public UserAdapter(RestTemplate restTemplate,
             @Value("${user.api.url}") String userApiUrl) {
         this.restTemplate = restTemplate;
         this.userApiUrl = userApiUrl;
     }
 
+    /**
+     * Obtiene los detalles de un usuario a partir de su nombre de usuario.
+     * <p>
+     * Realiza una llamada HTTP GET a la API interna y, si se encuentra el usuario,
+     * lo mapea a {@link AuthUserDetails}. En caso de que el usuario no exista,
+     * retorna un {@link Optional#empty()}.
+     * 
+     * @param username Nombre de usuario a buscar.
+     * @return {@link Optional} que contiene los detalles del usuario si se
+     *         encuentra,
+     *         o vacío si no existe.
+     * @throws UserPortException Si ocurre un error en la comunicación con la API
+     *                           o cualquier otra excepción no controlada.
+     */
     @Override
     public Optional<AuthUserDetails> loadByUsername(String username) {
         String url = userApiUrl + "/users/internal/by-username/" + username;

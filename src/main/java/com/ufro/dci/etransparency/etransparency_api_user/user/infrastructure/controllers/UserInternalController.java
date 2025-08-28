@@ -8,6 +8,15 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.application.servic
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.InternalUserAuthDTO;
 
+/**
+ * Controlador REST interno para la gestión de usuarios dentro del sistema.
+ * <p>
+ * Proporciona endpoints para obtener información de usuarios por username o ID,
+ * obtener el email del usuario administrador por defecto y para incrementar
+ * el contador de auditorías realizadas por un usuario.
+ * 
+ * @author Adolfo Plaza
+ */
 @RestController
 @RequestMapping("users/internal")
 public class UserInternalController {
@@ -21,6 +30,12 @@ public class UserInternalController {
         this.defaultUsername = defaultUsername;
     }
 
+    /**
+     * Obtiene la información de un usuario por su username.
+     * 
+     * @param username Nombre de usuario a buscar.
+     * @return ResponseEntity que contiene un DTO con la información del usuario.
+     */
     @GetMapping("/by-username/{username}")
     public ResponseEntity<InternalUserAuthDTO> getUserByUsername(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
@@ -33,6 +48,12 @@ public class UserInternalController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    /**
+     * Obtiene el email de un usuario por su ID.
+     * 
+     * @param id ID del usuario.
+     * @return ResponseEntity que contiene el email del usuario.
+     */
     @GetMapping("/{id}/email")
     public ResponseEntity<String> getUserEmailById(@PathVariable Long id) {
         User user = userService.getUserById(id);
@@ -40,6 +61,12 @@ public class UserInternalController {
         return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
+    /**
+     * Obtiene el email del usuario administrador por defecto configurado en la
+     * aplicación.
+     * 
+     * @return ResponseEntity que contiene el email del administrador.
+     */
     @GetMapping("/admin")
     public ResponseEntity<String> getAdminEmail() {
         User user = userService.getUserByUsername(this.defaultUsername);
@@ -47,6 +74,12 @@ public class UserInternalController {
         return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
+    /**
+     * Incrementa el contador de auditorías realizadas por un usuario.
+     * 
+     * @param id ID del usuario cuya cantidad de auditorías será incrementada.
+     * @return ResponseEntity vacío con estado HTTP 200 OK.
+     */
     @PatchMapping("/{id}/increment-audits")
     public ResponseEntity<Void> incrementAudits(@PathVariable Long id) {
         userService.incrementAuditsPerformed(id);

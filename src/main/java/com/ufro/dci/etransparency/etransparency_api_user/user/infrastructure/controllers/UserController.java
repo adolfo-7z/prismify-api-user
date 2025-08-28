@@ -13,6 +13,14 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.con
 
 import jakarta.validation.Valid;
 
+/**
+ * Controlador REST para la gestión de usuarios en la aplicación.
+ * Proporciona endpoints para crear, leer, actualizar, desactivar y eliminar
+ * usuarios,
+ * así como para obtener notificaciones de un usuario específico.
+ * 
+ * @author Adolfo Plaza
+ */
 @RestController
 @RequestMapping("users")
 public class UserController {
@@ -23,6 +31,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Crea un nuevo usuario en el sistema.
+     * Solo accesible para usuarios con rol ADMIN.
+     * 
+     * @param user DTO que contiene los datos del usuario a crear.
+     * @return ResponseEntity con el usuario creado y estado HTTP 201 (CREATED).
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid CreateUserRequestDTO user) {
@@ -30,6 +45,13 @@ public class UserController {
         return new ResponseEntity<>(UserDTOMapper.toDto(createdUser), HttpStatus.CREATED);
     }
 
+    /**
+     * Obtiene los datos de un usuario por su ID.
+     * Accesible para roles ADMIN, MANAGER y AUDITOR.
+     * 
+     * @param id ID del usuario a consultar.
+     * @return ResponseEntity con el DTO del usuario y estado HTTP 200 (OK).
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
     public ResponseEntity<UserDTO> readUser(@PathVariable Long id) {
@@ -37,6 +59,15 @@ public class UserController {
         return new ResponseEntity<>(UserDTOMapper.toDto(user), HttpStatus.OK);
     }
 
+    /**
+     * Obtiene la lista de todos los usuarios paginada.
+     * Solo accesible para usuarios con rol ADMIN.
+     * 
+     * @param page Número de página (por defecto 0).
+     * @param size Tamaño de la página (por defecto 10).
+     * @param date Orden de la fecha (asc o desc, por defecto "desc").
+     * @return ResponseEntity con la lista de usuarios DTO y estado HTTP 200 (OK).
+     */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(defaultValue = "0") int page,
@@ -46,12 +77,27 @@ public class UserController {
                 .toList(), HttpStatus.OK);
     }
 
+    /**
+     * Obtiene las notificaciones de un usuario por su ID.
+     * Accesible para roles ADMIN, AUDITOR y MANAGER.
+     * 
+     * @param id ID del usuario cuyas notificaciones se desean consultar.
+     * @return ResponseEntity con la lista de notificaciones y estado HTTP 200 (OK).
+     */
     @GetMapping("/notifications/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('MANAGER')")
     public ResponseEntity<List<String>> getUserNotifications(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserNotifications(id), HttpStatus.OK);
     }
 
+    /**
+     * Actualiza parcialmente los datos de un usuario existente.
+     * Accesible para roles ADMIN, MANAGER y AUDITOR.
+     * 
+     * @param id          ID del usuario a actualizar.
+     * @param updatedUser DTO con los datos actualizados del usuario.
+     * @return ResponseEntity con el usuario actualizado y estado HTTP 200 (OK).
+     */
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updatedUser) {
@@ -60,12 +106,27 @@ public class UserController {
         return new ResponseEntity<>(UserDTOMapper.toDto(user), HttpStatus.OK);
     }
 
+    /**
+     * Activa o desactiva el estado de un usuario.
+     * Solo accesible para usuarios con rol ADMIN.
+     * 
+     * @param id ID del usuario cuyo estado se desea cambiar.
+     * @return ResponseEntity con un mensaje indicando el resultado y estado HTTP
+     *         200 (OK).
+     */
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> toggleUserStatus(@PathVariable Long id) {
         return new ResponseEntity<>(userService.toggleUserStatus(id), HttpStatus.OK);
     }
 
+    /**
+     * Elimina un usuario por su ID.
+     * Solo accesible para usuarios con rol ADMIN.
+     * 
+     * @param id ID del usuario a eliminar.
+     * @return ResponseEntity con un mensaje de confirmación y estado HTTP 200 (OK).
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
