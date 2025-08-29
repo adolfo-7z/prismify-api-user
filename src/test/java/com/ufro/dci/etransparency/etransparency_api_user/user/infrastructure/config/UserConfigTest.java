@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.ufro.dci.etransparency.etransparency_api_user.user.application.services.UserService;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.CreateUserIfNotExistsUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.PasswordHasher;
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserEmailPort;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.repositories.UserJpaRepositoryAdapter;
 
@@ -23,6 +24,9 @@ class UserConfigTest {
 
     @MockitoBean
     private PasswordHasher passwordHasher;
+
+    @MockitoBean
+    private UserEmailPort userEmailPort;
 
     @Autowired
     private UserRepository userRepository;

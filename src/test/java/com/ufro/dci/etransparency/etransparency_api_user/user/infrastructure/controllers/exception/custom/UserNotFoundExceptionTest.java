@@ -9,7 +9,7 @@ class UserNotFoundExceptionTest {
     @Test
     void shouldCreateExceptionWithDefaultConstructor() {
         UserNotFoundException exception = new UserNotFoundException();
-        assertEquals("User with the present ID was not found", exception.getMessage());
+        assertEquals("User was not found", exception.getMessage());
         assertEquals("USER_NOT_FOUND", exception.getErrorCode());
     }
 
