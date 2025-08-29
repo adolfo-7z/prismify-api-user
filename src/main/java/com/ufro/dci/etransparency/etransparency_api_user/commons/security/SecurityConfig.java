@@ -49,6 +49,10 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(apiMatcher.matcher("/users/internal/**"))
                         .permitAll()
+                        .requestMatchers(apiMatcher.matcher("/mail/internal/send/**"))
+                        .permitAll()
+                        .requestMatchers(apiMatcher.matcher("/users/recovery/**"))
+                        .permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

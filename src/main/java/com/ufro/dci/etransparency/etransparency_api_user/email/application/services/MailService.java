@@ -97,4 +97,24 @@ public class MailService implements ComposeMailUseCase {
         composeMailUseCase.sendNewInstitutionRequestEmail(message);
     }
 
+    /**
+     * Envía un correo con código de recuperación.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
+    @Override
+    public void sendRecoveryCodeEmail(MailMessage message, String code) {
+        composeMailUseCase.sendRecoveryCodeEmail(message, code);
+    }
+
+    /**
+     * Envía un correo notificando del cambio de contraseña del usuario.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
+    @Override
+    public void sendNewPasswordAlert(MailMessage message) {
+        composeMailUseCase.sendNewPasswordAlert(message);
+    }
+
 }

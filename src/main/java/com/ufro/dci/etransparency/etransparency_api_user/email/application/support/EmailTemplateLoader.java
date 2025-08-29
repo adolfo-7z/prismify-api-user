@@ -56,6 +56,13 @@ public class EmailTemplateLoader {
         }
     }
 
+    private static Map<String, String> templateFor(String key) {
+        Map<String, String> t = templates.get(key);
+        if (t == null)
+            throw new IllegalArgumentException("Unknown template key: " + key);
+        return t;
+    }
+
     /**
      * Obtiene el asunto de la plantilla de correo correspondiente a la clave
      * proporcionada.
@@ -65,7 +72,11 @@ public class EmailTemplateLoader {
      * @throws NullPointerException si la clave no existe o la plantilla es nula
      */
     public static String getSubject(String key) {
-        return templates.get(key).get("subject");
+        return templateFor(key).getOrDefault("subject", "");
+    }
+
+    public static String getBody(String key) {
+        return templateFor(key).getOrDefault("body", "");
     }
 
     /**
@@ -76,8 +87,12 @@ public class EmailTemplateLoader {
      * @return el cuerpo del correo
      * @throws NullPointerException si la clave no existe o la plantilla es nula
      */
-    public static String getBody(String key) {
-        return templates.get(key).get("body");
+    public static String getBody(String key, Map<String, String> variables) {
+        String body = getBody(key);
+        for (Map.Entry<String, String> entry : variables.entrySet()) {
+            body = body.replace("{" + entry.getKey() + "}", entry.getValue());
+        }
+        return body;
     }
 
 }

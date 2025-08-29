@@ -77,6 +77,20 @@ public class UserJpaRepositoryAdapter implements UserRepository {
     }
 
     /**
+     * Busca un usuario por su correo electrónico.
+     * 
+     * @param email Correo electrónico del usuario a buscar.
+     * @return El usuario encontrado.
+     * @throws UserNotFoundException Si no se encuentra el usuario.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public User findByEmail(String email) {
+        return jpaRepository.findByEmail(email)
+                .map(UserEntity::toDomain).orElseThrow(UserNotFoundException::new);
+    }
+
+    /**
      * Verifica si existe un usuario con un correo electrónico dado.
      * 
      * @param email Correo electrónico a verificar.

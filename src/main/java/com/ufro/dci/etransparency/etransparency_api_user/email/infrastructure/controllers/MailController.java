@@ -16,7 +16,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.co
  * @author Adolfo Plaza
  */
 @RestController
-@RequestMapping("/mail/internal")
+@RequestMapping("/mail/internal/send")
 public class MailController {
 
     private final MailService mailService;
@@ -31,7 +31,7 @@ public class MailController {
      * @param request DTO que contiene la información del correo a enviar.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send")
+    @PostMapping("")
     public ResponseEntity<Void> sendMail(@RequestBody SendMailRequestDTO request) {
         mailService.sendGenericMail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -43,7 +43,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evaluation/rejected")
+    @PostMapping("/evaluation/rejected")
     public ResponseEntity<Void> sendEvaluationRejectedEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendEvaluationRejectedEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -55,7 +55,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evaluation/audit")
+    @PostMapping("/evaluation/audit")
     public ResponseEntity<Void> sendAuditEvaluationEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendAuditEvaluationEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -67,7 +67,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evaluation/finish")
+    @PostMapping("/evaluation/finish")
     public ResponseEntity<Void> sendFinishEvaluationEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendFinishEvaluationEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -79,7 +79,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evaluation")
+    @PostMapping("/evaluation")
     public ResponseEntity<Void> sendNewEvaluationRequestEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewEvaluationRequestEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -91,7 +91,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evidence/rejected")
+    @PostMapping("/evidence/rejected")
     public ResponseEntity<Void> sendEvidenceRejectedEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendEvidenceRejectedEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -103,7 +103,7 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/evidence/appeal")
+    @PostMapping("/evidence/appeal")
     public ResponseEntity<Void> sendAppealEvidenceEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendAppealEvidenceEmail(request.toDomain());
         return ResponseEntity.ok().build();
@@ -115,9 +115,34 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/send/institution")
+    @PostMapping("/institution")
     public ResponseEntity<Void> sendNewInstitutionRequestEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewInstitutionRequestEmail(request.toDomain());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Envía un correo con código de recuperación.
+     *
+     * @param request DTO con los datos necesarios para el envío del correo.
+     * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
+     */
+    @PostMapping("/recovery/code/{code}")
+    public ResponseEntity<Void> sendRecoveryCodeEmail(@PathVariable String code,
+            @RequestBody SendMailRequestDTO request) {
+        mailService.sendRecoveryCodeEmail(request.toDomain(), code);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Envía un correo notificando del cambio de contraseña del usuario.
+     *
+     * @param request DTO con los datos necesarios para el envío del correo.
+     * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
+     */
+    @PostMapping("/recovery/new")
+    public ResponseEntity<Void> sendNewPasswordAlert(@RequestBody SendMailRequestDTO request) {
+        mailService.sendNewPasswordAlert(request.toDomain());
         return ResponseEntity.ok().build();
     }
 

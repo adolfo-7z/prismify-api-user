@@ -32,4 +32,19 @@ public class BcryptPasswordHasher implements PasswordHasher {
         return encoder.encode(rawPassword);
     }
 
+    /**
+     * Verifica si la contraseña en texto plano coincide con la contraseña cifrada.
+     *
+     * @param rawPassword    la contraseña en texto plano proporcionada por el
+     *                       usuario
+     * @param hashedPassword la contraseña cifrada almacenada (por ejemplo, en base
+     *                       de datos)
+     * @return {@code true} si las contraseñas coinciden, {@code false} en caso
+     *         contrario
+     */
+    @Override
+    public boolean matches(String rawPassword, String hashedPassword) {
+        return encoder.matches(rawPassword, hashedPassword);
+    }
+
 }

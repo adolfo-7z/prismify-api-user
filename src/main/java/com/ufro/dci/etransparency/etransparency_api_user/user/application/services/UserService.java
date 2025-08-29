@@ -18,12 +18,14 @@ import lombok.RequiredArgsConstructor;
  * @author Adolfo Plaza
  */
 @RequiredArgsConstructor
-public class UserService implements CreateUserUseCase, RetrieveUserUseCase, UpdateUserUseCase, DeleteUserUseCase {
+public class UserService implements CreateUserUseCase, RetrieveUserUseCase, UpdateUserUseCase, DeleteUserUseCase,
+        PasswordRecoveryUseCase {
 
     private final CreateUserUseCase createUserUseCase;
     private final RetrieveUserUseCase retrieveUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+    private final PasswordRecoveryUseCase passwordRecoveryUseCase;
 
     /**
      * Crea un nuevo usuario en el sistema.
@@ -126,6 +128,39 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
     @Override
     public String deleteUser(Long id) {
         return deleteUserUseCase.deleteUser(id);
+    }
+
+    /**
+     * Envia código de recuperación por correo
+     *
+     * @param email correo electrónico del usuario
+     */
+    @Override
+    public void sendRecoveryCode(String email) {
+        passwordRecoveryUseCase.sendRecoveryCode(email);
+    }
+
+    /**
+     * Valida código de recuperación.
+     *
+     * @param email        correo electrónico del usuario
+     * @param recoveryCode código de recuperación
+     */
+    @Override
+    public void validateRecoveryCode(String email, String recoveryCode) {
+        passwordRecoveryUseCase.validateRecoveryCode(email, recoveryCode);
+    }
+
+    /**
+     * Valida nueva contraseña
+     *
+     * @param email              identificador del usuario a eliminar
+     * @param password           contraseña ingresada
+     * @param validationPassword contraseña para validación
+     */
+    @Override
+    public void validateNewPassword(String email, String password, String validationPassword) {
+        passwordRecoveryUseCase.validateNewPassword(email, password, validationPassword);
     }
 
 }

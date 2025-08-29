@@ -8,6 +8,7 @@ import org.thymeleaf.context.Context;
 
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.models.MailMessage;
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.ports.out.SendMailPort;
+import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.MailSendException;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -75,7 +76,7 @@ public class SmtpMailSenderAdapter implements SendMailPort {
             helper.setText(htmlContent, true);
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new RuntimeException("Failed to send email", e);
+            throw new MailSendException();
         }
     }
 

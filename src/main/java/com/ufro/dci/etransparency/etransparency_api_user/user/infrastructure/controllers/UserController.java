@@ -1,6 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,6 +132,54 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    }
+
+    /**
+     * Solicita un código de recuperación de contraseña.
+     * La ruta no requiere autorización
+     *
+     * @param body mapa con la clave {@code email}, que corresponde al correo del
+     *             usuario
+     * @return {@link ResponseEntity} con estado {@code 200 OK} si el código fue
+     *         enviado
+     */
+    @PostMapping("/recovery/code")
+    public ResponseEntity<Void> requestRecoveryCode(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        userService.sendRecoveryCode(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint para validar un código de recuperación de contraseña.
+     * La ruta no requiere autorización
+     *
+     * @param body mapa con las claves {@code email} y {@code recoveryCode}
+     * @return {@link ResponseEntity} con estado {@code 200 OK} si el código es
+     *         válido
+     */
+    @PostMapping("/recovery/validate")
+    public ResponseEntity<Void> validateRecoveryCode(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String recoveryCode = body.get("recoveryCode");
+        userService.validateRecoveryCode(email, recoveryCode);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint para establecer una nueva contraseña tras la validación.
+     * La ruta no requiere autorización
+     *
+     * @param request objeto con los datos necesarios para el restablecimiento de
+     *                contraseña:
+     *                {@code email}, {@code password} y {@code validationPassword}
+     * @return {@link ResponseEntity} con estado {@code 200 OK} si la contraseña se
+     *         actualizó correctamente
+     */
+    @PostMapping("/recovery/password")
+    public ResponseEntity<Void> validateNewPassword(@Valid @RequestBody PasswordResetRequestDTO request) {
+        userService.validateNewPassword(request.getEmail(), request.getPassword(), request.getValidationPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

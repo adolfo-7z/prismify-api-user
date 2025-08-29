@@ -1,5 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.email.application.usecases;
 
+import java.util.Map;
+
 import com.ufro.dci.etransparency.etransparency_api_user.email.application.support.EmailTemplateLoader;
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.models.MailMessage;
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.ports.in.ComposeMailUseCase;
@@ -120,6 +122,32 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
     public void sendNewInstitutionRequestEmail(MailMessage message) {
         message.setSubject(EmailTemplateLoader.getSubject("institutionRequest"));
         message.setBody(EmailTemplateLoader.getBody("institutionRequest"));
+        message.setTo(adminMail);
+        sendMailPort.send(message);
+    }
+
+    /**
+     * Envía un correo con código de recuperación de contraseña
+     * 
+     * @param message Mensaje de correo a enviar
+     */
+    @Override
+    public void sendRecoveryCodeEmail(MailMessage message, String code) {
+        message.setSubject(EmailTemplateLoader.getSubject("recoveryCode"));
+        message.setBody(EmailTemplateLoader.getBody("recoveryCode", Map.of("code", code)));
+        message.setTo(adminMail);
+        sendMailPort.send(message);
+    }
+
+    /**
+     * Envía un correo alertando del cambio de contraseña del usuario
+     * 
+     * @param message Mensaje de correo a enviar
+     */
+    @Override
+    public void sendNewPasswordAlert(MailMessage message) {
+        message.setSubject(EmailTemplateLoader.getSubject("newPassword"));
+        message.setBody(EmailTemplateLoader.getBody("newPassword"));
         message.setTo(adminMail);
         sendMailPort.send(message);
     }

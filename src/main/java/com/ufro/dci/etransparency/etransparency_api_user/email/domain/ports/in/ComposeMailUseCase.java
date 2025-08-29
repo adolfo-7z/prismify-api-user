@@ -18,4 +18,8 @@ public interface ComposeMailUseCase {
     void sendAppealEvidenceEmail(MailMessage message);
 
     void sendNewInstitutionRequestEmail(MailMessage message);
+
+    void sendRecoveryCodeEmail(MailMessage message, String code);
+
+    void sendNewPasswordAlert(MailMessage message);
 }

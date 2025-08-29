@@ -33,10 +33,11 @@ public class UserConfig {
      * @return una instancia de {@link UserService} configurada con sus casos de uso
      */
     @Bean
-    UserService userService(UserRepository userRepository, PasswordHasher hasher) {
+    UserService userService(UserRepository userRepository, PasswordHasher hasher, UserEmailPort mailPort) {
         return new UserService(new CreateUserUseCaseImpl(userRepository, hasher),
                 new RetrieveUserUseCaseImpl(userRepository),
-                new UpdateUserUseCaseImpl(userRepository), new DeleteUserUseCaseImpl(userRepository));
+                new UpdateUserUseCaseImpl(userRepository), new DeleteUserUseCaseImpl(userRepository),
+                new PasswordRecoveryUseCaseImpl(userRepository, mailPort, hasher));
     }
 
     /**
