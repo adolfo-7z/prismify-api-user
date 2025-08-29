@@ -38,6 +38,7 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
      */
     @Override
     public void initialize(UniqueEmail constraintAnnotation) {
+        // Inicializa validador
     }
 
     /**

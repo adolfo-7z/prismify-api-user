@@ -39,6 +39,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
      */
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
+        //Inicializa validador
     }
 
     /**

@@ -15,6 +15,7 @@ import com.nimbusds.jwt.*;
 
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthUserDetails;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.TokenProvider;
+import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.JWTException;
 
 /**
  * Proveedor de tokens JWT que implementa la interfaz {@link TokenProvider}.
@@ -60,7 +61,7 @@ public class JwtTokenProvider implements TokenProvider {
             signedJWT.sign(signer);
             return signedJWT.serialize();
         } catch (JOSEException e) {
-            throw new RuntimeException("Error generating JWT token", e);
+            throw new JWTException("Error generating JWT token");
         }
     }
 
@@ -95,7 +96,7 @@ public class JwtTokenProvider implements TokenProvider {
         try {
             return SignedJWT.parse(token).getJWTClaimsSet();
         } catch (ParseException e) {
-            throw new RuntimeException("Invalid token", e);
+            throw new JWTException("Invalid token");
         }
     }
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ufro.dci.etransparency.etransparency_api_user.commons.exception.CustomErrorResponse;
+import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.EmailTemplateLoaderException;
 import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.MailSendException;
 import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.UserPortException;
 
@@ -61,6 +62,28 @@ public class MailExceptionHandler {
                 CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
                                 HttpStatus.BAD_GATEWAY.value());
                 return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+
+        /**
+         * Maneja las excepciones de tipo {@link EmailTemplateLoaderException}.
+         * 
+         * Este método captura la excepción lanzada, construye un objeto
+         * {@link CustomErrorResponse} con el código de error, mensaje y código HTTP,
+         * y devuelve una {@link ResponseEntity} con estado 500 (Internal Server Error).
+         * 
+         * @param exception la excepción de tipo {@link EmailTemplateLoaderException} lanzada
+         *                  durante
+         *                  la ejecución de una operación relacionada con el Email Template Loader.
+         * @return una {@link ResponseEntity} que contiene el
+         *         {@link CustomErrorResponse}
+         *         con información del error y un estado HTTP 502.
+         */
+        @ExceptionHandler(EmailTemplateLoaderException.class)
+        public ResponseEntity<CustomErrorResponse> handleEmailTemplateLoader(
+                        EmailTemplateLoaderException exception) {
+                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 }

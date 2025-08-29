@@ -6,6 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.exception.custom.EmailTemplateLoaderException;
 
 /**
  * Clase utilitaria para cargar y acceder a plantillas de correo electrónico
@@ -45,21 +46,21 @@ public class EmailTemplateLoader {
                 .getClassLoader()
                 .getResourceAsStream("templates/body-templates.yaml")) {
             if (is == null) {
-                throw new IllegalStateException(
+                throw new EmailTemplateLoaderException(
                         "Email template file not found in classpath: templates/body-templates.yaml");
             }
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             templates = mapper.readValue(is, new TypeReference<Map<String, Map<String, String>>>() {
             });
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load email templates", e);
+            throw new EmailTemplateLoaderException("Failed to load email templates");
         }
     }
 
     private static Map<String, String> templateFor(String key) {
         Map<String, String> t = templates.get(key);
         if (t == null)
-            throw new IllegalArgumentException("Unknown template key: " + key);
+            throw new EmailTemplateLoaderException("Unknown template key: " + key);
         return t;
     }
 
