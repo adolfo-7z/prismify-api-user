@@ -135,7 +135,6 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
     public void sendRecoveryCodeEmail(MailMessage message, String code) {
         message.setSubject(EmailTemplateLoader.getSubject("recoveryCode"));
         message.setBody(EmailTemplateLoader.getBody("recoveryCode", Map.of("code", code)));
-        message.setTo(adminMail);
         sendMailPort.send(message);
     }
 
@@ -148,7 +147,6 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
     public void sendNewPasswordAlert(MailMessage message) {
         message.setSubject(EmailTemplateLoader.getSubject("newPassword"));
         message.setBody(EmailTemplateLoader.getBody("newPassword"));
-        message.setTo(adminMail);
         sendMailPort.send(message);
     }
 
