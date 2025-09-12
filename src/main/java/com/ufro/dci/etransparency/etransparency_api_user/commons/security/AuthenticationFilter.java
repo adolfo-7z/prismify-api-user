@@ -36,13 +36,24 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private final String secretKey;
 
+    private final String apiKey;
+
     /**
      * Constructor que inyecta la clave secreta para verificar los tokens JWT.
      *
      * @param secretKey clave secreta configurada en la aplicación.
      */
-    public AuthenticationFilter(@Value("${jwt.secret.key}") String secretKey) {
+    public AuthenticationFilter(@Value("${jwt.secret.key}") String secretKey,
+            @Value("${transparencia.api.key}") String apiKey) {
         this.secretKey = secretKey;
+        this.apiKey = apiKey;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith(request.getContextPath() + "/auth/login")
+                || path.startsWith(request.getContextPath() + "/users/recovery/");
     }
 
     /**
@@ -50,7 +61,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
      * <p>
      * Extrae el encabezado {@code Authorization}, valida el token JWT y, si es
      * correcto, establece la autenticación en el contexto de seguridad.
-     * </p>
      *
      * @param request     la solicitud HTTP entrante.
      * @param response    la respuesta HTTP en construcción.
@@ -64,6 +74,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
+        String apiKeyHeader = request.getHeader("X-API-KEY");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             try {
@@ -86,11 +97,21 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 }
                 Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
+        } else if (apiKeyHeader != null) {
+            if (!apiKey.equals(apiKeyHeader)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API Key");
+                return;
+            }
+            Authentication authentication = new UsernamePasswordAuthenticationToken("service-client", null,
+                    List.of(new SimpleGrantedAuthority("ROLE_SERVICE")));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing Authorization or API Key");
+            return;
         }
         filterChain.doFilter(request, response);
     }

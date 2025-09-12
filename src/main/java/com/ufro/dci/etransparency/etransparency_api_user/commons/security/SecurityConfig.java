@@ -45,12 +45,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(apiMatcher.matcher("/auth/login"))
                         .permitAll()
-                        .requestMatchers(apiMatcher.matcher("/recovery/**"))
-                        .permitAll()
-                        .requestMatchers(apiMatcher.matcher("/users/internal/**"))
-                        .permitAll()
-                        .requestMatchers(apiMatcher.matcher("/mail/internal/send/**"))
-                        .permitAll()
                         .requestMatchers(apiMatcher.matcher("/users/recovery/**"))
                         .permitAll()
                         .anyRequest().authenticated())
@@ -64,7 +58,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://www." + originUrl,
                 "https://" + originUrl));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "X-API-KEY"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

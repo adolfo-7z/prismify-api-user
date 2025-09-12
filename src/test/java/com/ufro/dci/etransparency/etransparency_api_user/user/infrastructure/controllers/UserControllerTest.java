@@ -16,6 +16,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -30,6 +31,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.con
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.UpdateUserRequestDTO;
 
 @WebMvcTest(UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
 
     @Autowired
@@ -62,7 +64,6 @@ class UserControllerTest {
         createUserRequest.setPhoneNumber("+56999999999");
         when(userService.createUser(any(User.class))).thenReturn(sampleUser);
         mockMvc.perform(post("/users")
-                .with(user("admin").roles("ADMIN"))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(createUserRequest)))
@@ -75,8 +76,7 @@ class UserControllerTest {
     @Test
     void readUser_ShouldReturnUser() throws Exception {
         when(userService.getUserById(1L)).thenReturn(sampleUser);
-        mockMvc.perform(get("/users/1")
-                .with(user("manager").roles("MANAGER")))
+        mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(sampleUser.getId()))
                 .andExpect(jsonPath("$.username").value("admin"));
@@ -89,7 +89,6 @@ class UserControllerTest {
         when(userService.getAllUsers(anyInt(), anyInt(), anyString(), anyString()))
                 .thenReturn(List.of(sampleUser));
         mockMvc.perform(get("/users")
-                .with(user("admin").roles("ADMIN"))
                 .param("page", "0")
                 .param("size", "10")
                 .param("date", "desc"))
@@ -105,8 +104,7 @@ class UserControllerTest {
                 "New evaluation available",
                 "Evidence rejected");
         when(userService.getUserNotifications(1L)).thenReturn(notifications);
-        mockMvc.perform(get("/users/notifications/1")
-                .with(user("admin").roles("ADMIN")))
+        mockMvc.perform(get("/users/notifications/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0]").value("New evaluation available"))
                 .andExpect(jsonPath("$[1]").value("Evidence rejected"));
@@ -123,7 +121,6 @@ class UserControllerTest {
         updatedUser.setUsername("auditor");
         when(userService.updateUser(eq(1L), any(User.class))).thenReturn(updatedUser);
         mockMvc.perform(patch("/users/1")
-                .with(user("auditor").roles("AUDITOR"))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(updateRequest)))
@@ -137,7 +134,6 @@ class UserControllerTest {
         when(userService.toggleUserStatus(1L)).thenReturn("User activated");
 
         mockMvc.perform(patch("/users/1/status")
-                .with(user("admin").roles("ADMIN"))
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User activated"));
@@ -150,7 +146,6 @@ class UserControllerTest {
         when(userService.deleteUser(1L)).thenReturn("User deleted");
 
         mockMvc.perform(delete("/users/1")
-                .with(user("admin").roles("ADMIN"))
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User deleted"));

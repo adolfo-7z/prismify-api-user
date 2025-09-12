@@ -1,6 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.ufro.dci.etransparency.etransparency_api_user.email.application.services.MailService;
@@ -17,6 +18,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.co
  */
 @RestController
 @RequestMapping("/mail/internal/send")
+@PreAuthorize("hasRole('SERVICE')")
 public class MailController {
 
     private final MailService mailService;

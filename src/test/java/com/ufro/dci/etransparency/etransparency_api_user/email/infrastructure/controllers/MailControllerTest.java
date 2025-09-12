@@ -9,8 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,9 +22,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.application.servi
 import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.dto.SendMailRequestDTO;
 
 @WebMvcTest(MailController.class)
-@ImportAutoConfiguration(exclude = {
-        SecurityAutoConfiguration.class
-})
+@AutoConfigureMockMvc(addFilters = false)
 class MailControllerTest {
 
     @Autowired

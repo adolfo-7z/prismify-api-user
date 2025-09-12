@@ -1,6 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.commons.config;
 
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -28,8 +29,14 @@ public class GlobalConfig {
      * @return un objeto {@link RestTemplate} listo para usarse en la aplicación
      */
     @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault()));
+    RestTemplate restTemplate(@Value("${transparencia.api.key}") String apiKey) {
+        RestTemplate restTemplate = new RestTemplate(
+                new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault()));
+        restTemplate.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("X-API-KEY", apiKey);
+            return execution.execute(request, body);
+        });
+        return restTemplate;
     }
 
 }
