@@ -17,6 +17,8 @@ public interface UserRepository {
 
     boolean existsByEmail(String email);
 
+    boolean existsByUsername(String username);
+
     boolean existsByRole(Role role);
 
     List<User> findAll();

@@ -104,6 +104,18 @@ public class UserJpaRepositoryAdapter implements UserRepository {
     }
 
     /**
+     * Verifica si existe un usuario con un nombre de usuario dado.
+     * 
+     * @param username nombre de usuario a verificar.
+     * @return {@code true} si existe un usuario con ese nombre, {@code false} en
+     *         caso contrario.
+     */
+    @Override
+    public boolean existsByUsername(String username){
+        return jpaRepository.existsByUsername(username);
+    }
+
+    /**
      * Verifica si existe algún usuario con un rol específico.
      * 
      * @param role Rol a verificar.
