@@ -111,6 +111,7 @@ public class UserJpaRepositoryAdapter implements UserRepository {
      *         caso contrario.
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByUsername(String username){
         return jpaRepository.existsByUsername(username);
     }
