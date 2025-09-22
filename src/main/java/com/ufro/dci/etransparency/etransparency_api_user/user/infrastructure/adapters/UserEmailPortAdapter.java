@@ -46,7 +46,7 @@ public class UserEmailPortAdapter implements UserEmailPort {
      */
     @Override
     public void sendRecoveryCodeEmail(String to, String code) {
-        postMail("/mail/internal/send/recovery/code/" + code, to);
+        postMail("/internal/mail/send/recovery/code/" + code, to);
     }
 
     /**
@@ -59,7 +59,7 @@ public class UserEmailPortAdapter implements UserEmailPort {
      */
     @Override
     public void sendNewPasswordAlert(String to) {
-        postMail("/mail/internal/send/recovery/new", to);
+        postMail("/internal/mail/send/recovery/new", to);
     }
 
     /**

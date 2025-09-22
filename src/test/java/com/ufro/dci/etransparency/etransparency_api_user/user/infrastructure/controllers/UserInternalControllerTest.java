@@ -42,7 +42,7 @@ class UserInternalControllerTest {
         user.setRole(Role.ADMIN);
         user.setActive(true);
         when(userService.getUserByUsername("techpriest")).thenReturn(user);
-        mockMvc.perform(get("/users/internal/by-username/techpriest"))
+        mockMvc.perform(get("/internal/users/by-username/techpriest"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.username").value("admin"))
@@ -60,7 +60,7 @@ class UserInternalControllerTest {
         user.setRole(Role.ADMIN);
         user.setActive(true);
         when(userService.getUserById(42L)).thenReturn(user);
-        mockMvc.perform(get("/users/internal/42/email"))
+        mockMvc.perform(get("/internal/users/42/email"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("admin@correo.cl"));
     }
@@ -74,7 +74,7 @@ class UserInternalControllerTest {
         user.setRole(Role.ADMIN);
         user.setActive(true);
         when(userService.getUserByUsername(defaultUsername)).thenReturn(user);
-        mockMvc.perform(get("/users/internal/admin"))
+        mockMvc.perform(get("/internal/users/admin"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("admin@correo.cl"));
     }
@@ -82,7 +82,7 @@ class UserInternalControllerTest {
     @Test
     void shouldIncrementAudits() throws Exception {
         doNothing().when(userService).incrementAuditsPerformed(99L);
-        mockMvc.perform(patch("/users/internal/99/increment-audits"))
+        mockMvc.perform(patch("/internal/users/99/increment-audits"))
                 .andExpect(status().isOk());
     }
 

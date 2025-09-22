@@ -47,7 +47,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendGenericMail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send")
+        mockMvc.perform(post("/internal/mail/send")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -57,7 +57,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendEvaluationRejectedEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evaluation/rejected")
+        mockMvc.perform(post("/internal/mail/send/evaluation/rejected")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -67,7 +67,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendAuditEvaluationEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evaluation/audit")
+        mockMvc.perform(post("/internal/mail/send/evaluation/audit")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -77,7 +77,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendFinishEvaluationEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evaluation/finish")
+        mockMvc.perform(post("/internal/mail/send/evaluation/finish")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -87,7 +87,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendNewEvaluationRequestEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evaluation")
+        mockMvc.perform(post("/internal/mail/send/evaluation")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -97,7 +97,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendEvidenceRejectedEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evidence/rejected")
+        mockMvc.perform(post("/internal/mail/send/evidence/rejected")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -107,7 +107,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendAppealEvidenceEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/evidence/appeal")
+        mockMvc.perform(post("/internal/mail/send/evidence/appeal")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -117,7 +117,7 @@ class MailControllerTest {
 
     @Test
     void shouldSendNewInstitutionRequestEmail() throws Exception {
-        mockMvc.perform(post("/mail/internal/send/institution")
+        mockMvc.perform(post("/internal/mail/send/institution")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))

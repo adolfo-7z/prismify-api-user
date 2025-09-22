@@ -17,7 +17,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.co
  * @author Adolfo Plaza
  */
 @RestController
-@RequestMapping("/mail/internal/send")
+@RequestMapping("internal/mail/send")
 @PreAuthorize("hasRole('SERVICE')")
 public class MailController {
 

@@ -19,7 +19,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.con
  * @author Adolfo Plaza
  */
 @RestController
-@RequestMapping("users/internal")
+@RequestMapping("internal/users")
 @PreAuthorize("hasRole('SERVICE')")
 public class UserInternalController {
 
