@@ -54,7 +54,7 @@ public class UserController {
      * @return ResponseEntity con el DTO del usuario y estado HTTP 200 (OK).
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR') or hasRole('SERVICE')")
     public ResponseEntity<UserDTO> readUser(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return new ResponseEntity<>(UserDTOMapper.toDto(user), HttpStatus.OK);

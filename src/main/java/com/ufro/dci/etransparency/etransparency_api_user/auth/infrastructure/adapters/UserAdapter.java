@@ -62,7 +62,7 @@ public class UserAdapter implements LoadAuthUserPort {
      */
     @Override
     public Optional<AuthUserDetails> loadByUsername(String username) {
-        String url = userApiUrl + "/users/internal/by-username/" + username;
+        String url = userApiUrl + "/internal/users/by-username/" + username;
         try {
             ResponseEntity<InternalUserAuthDTO> response = restTemplate.getForEntity(url, InternalUserAuthDTO.class);
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
