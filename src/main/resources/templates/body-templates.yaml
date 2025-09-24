@@ -115,11 +115,21 @@ newPassword:
     body: |
         Estimado/a,
 
-        Le informamos que la contraseña de su cuenta en **e-Transparencia** ha sido cambiada recientemente.
+        Le informamos que la contraseña de su cuenta en e-Transparencia ha sido cambiada recientemente.
 
         Si usted realizó este cambio, no es necesario realizar ninguna acción adicional.
 
         En caso de que no haya solicitado esta modificación, por favor contacte inmediatamente con el equipo de soporte para proteger la seguridad de su cuenta.
 
         Atentamente,
-        Equipo de e-Transparencia 
+        Equipo de e-Transparencia
+
+newAuditorAssignment:
+    subject: "Evaluación asignada"
+    body: |
+        Estimado/a,
+
+        Se le ha asignado la nueva evaluación {newEvaluation} para su auditoría.
+
+        Atentamente,
+        Equipo de e-Transparencia

@@ -150,4 +150,11 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
         sendMailPort.send(message);
     }
 
+    @Override
+    public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation) {
+        message.setSubject(EmailTemplateLoader.getSubject("newAuditorAssignment"));
+        message.setBody(EmailTemplateLoader.getBody("newAuditorAssignment", Map.of("newEvaluation", newEvaluation)));
+        sendMailPort.send(message);
+    }
+
 }

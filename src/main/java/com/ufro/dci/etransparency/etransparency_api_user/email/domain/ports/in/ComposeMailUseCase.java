@@ -22,4 +22,6 @@ public interface ComposeMailUseCase {
     void sendRecoveryCodeEmail(MailMessage message, String code);
 
     void sendNewPasswordAlert(MailMessage message);
+
+    void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation);
 }

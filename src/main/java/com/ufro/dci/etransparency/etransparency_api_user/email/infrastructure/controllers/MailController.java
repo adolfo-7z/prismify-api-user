@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.ufro.dci.etransparency.etransparency_api_user.email.application.services.MailService;
 import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers.dto.SendMailRequestDTO;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Controlador REST para el envío de correos electrónicos internos.
  * <p>
@@ -19,6 +21,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.co
 @RestController
 @RequestMapping("internal/mail/send")
 @PreAuthorize("hasRole('SERVICE')")
+@Slf4j
 public class MailController {
 
     private final MailService mailService;
@@ -36,6 +39,7 @@ public class MailController {
     @PostMapping("")
     public ResponseEntity<Void> sendMail(@RequestBody SendMailRequestDTO request) {
         mailService.sendGenericMail(request.toDomain());
+        log.info("Generic email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -48,6 +52,7 @@ public class MailController {
     @PostMapping("/evaluation/rejected")
     public ResponseEntity<Void> sendEvaluationRejectedEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendEvaluationRejectedEmail(request.toDomain());
+        log.info("Evaluation rejected email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -60,6 +65,7 @@ public class MailController {
     @PostMapping("/evaluation/audit")
     public ResponseEntity<Void> sendAuditEvaluationEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendAuditEvaluationEmail(request.toDomain());
+        log.info("Evaluation audit email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -72,6 +78,7 @@ public class MailController {
     @PostMapping("/evaluation/finish")
     public ResponseEntity<Void> sendFinishEvaluationEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendFinishEvaluationEmail(request.toDomain());
+        log.info("Evaluation finished email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -84,6 +91,7 @@ public class MailController {
     @PostMapping("/evaluation")
     public ResponseEntity<Void> sendNewEvaluationRequestEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewEvaluationRequestEmail(request.toDomain());
+        log.info("New evaluation email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -96,6 +104,7 @@ public class MailController {
     @PostMapping("/evidence/rejected")
     public ResponseEntity<Void> sendEvidenceRejectedEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendEvidenceRejectedEmail(request.toDomain());
+        log.info("Evidence rejected email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -108,6 +117,7 @@ public class MailController {
     @PostMapping("/evidence/appeal")
     public ResponseEntity<Void> sendAppealEvidenceEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendAppealEvidenceEmail(request.toDomain());
+        log.info("Evidence appealed email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -120,6 +130,7 @@ public class MailController {
     @PostMapping("/institution")
     public ResponseEntity<Void> sendNewInstitutionRequestEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewInstitutionRequestEmail(request.toDomain());
+        log.info("New institution request email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -133,6 +144,7 @@ public class MailController {
     public ResponseEntity<Void> sendRecoveryCodeEmail(@PathVariable String code,
             @RequestBody SendMailRequestDTO request) {
         mailService.sendRecoveryCodeEmail(request.toDomain(), code);
+        log.info("Password recovery code email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 
@@ -145,6 +157,22 @@ public class MailController {
     @PostMapping("/recovery/new")
     public ResponseEntity<Void> sendNewPasswordAlert(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewPasswordAlert(request.toDomain());
+        log.info("New password alert email sent to: " + request.getTo());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Envía un correo notificando al auditor de que se le ha asignado una nueva
+     * evaluación a auditar
+     *
+     * @param request DTO con los datos necesarios para el envío del correo.
+     * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
+     */
+    @PostMapping("/auditor/assignment/{newEvaluation}")
+    public ResponseEntity<Void> sendAuditorAssigmentEmail(@RequestBody SendMailRequestDTO request,
+            @PathVariable String newEvaluation) {
+        mailService.sendAuditorAssigmentEmail(request.toDomain(), newEvaluation);
+        log.info("New auditor assignment email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 

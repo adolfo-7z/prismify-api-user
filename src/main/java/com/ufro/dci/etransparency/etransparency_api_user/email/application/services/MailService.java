@@ -117,4 +117,9 @@ public class MailService implements ComposeMailUseCase {
         composeMailUseCase.sendNewPasswordAlert(message);
     }
 
+    @Override
+    public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation){
+        composeMailUseCase.sendAuditorAssigmentEmail(message, newEvaluation);
+    }
+
 }
