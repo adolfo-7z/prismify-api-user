@@ -73,8 +73,8 @@ public class MailService implements ComposeMailUseCase {
      * @param message el mensaje de correo a enviar
      */
     @Override
-    public void sendEvidenceRejectedEmail(MailMessage message) {
-        composeMailUseCase.sendEvidenceRejectedEmail(message);
+    public void sendEvidenceRejectedEmail(MailMessage message, String evaluationName) {
+        composeMailUseCase.sendEvidenceRejectedEmail(message, evaluationName);
     }
 
     /**
@@ -83,8 +83,8 @@ public class MailService implements ComposeMailUseCase {
      * @param message el mensaje de correo a enviar
      */
     @Override
-    public void sendAppealEvidenceEmail(MailMessage message) {
-        composeMailUseCase.sendAppealEvidenceEmail(message);
+    public void sendAppealEvidenceEmail(MailMessage message, String evaluationName) {
+        composeMailUseCase.sendAppealEvidenceEmail(message, evaluationName);
     }
 
     /**
@@ -118,7 +118,7 @@ public class MailService implements ComposeMailUseCase {
     }
 
     @Override
-    public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation){
+    public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation) {
         composeMailUseCase.sendAuditorAssigmentEmail(message, newEvaluation);
     }
 

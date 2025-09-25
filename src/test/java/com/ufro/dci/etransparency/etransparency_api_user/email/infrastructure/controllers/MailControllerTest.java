@@ -1,6 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -97,22 +98,24 @@ class MailControllerTest {
 
     @Test
     void shouldSendEvidenceRejectedEmail() throws Exception {
-        mockMvc.perform(post("/internal/mail/send/evidence/rejected")
+        String evaluationName = "EvaluationTest";
+        mockMvc.perform(post("/internal/mail/send/evidence/rejected/"+evaluationName)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
                 .andExpect(status().isOk());
-        verify(mailService).sendEvidenceRejectedEmail(any());
+        verify(mailService).sendEvidenceRejectedEmail(any(), anyString());
     }
 
     @Test
     void shouldSendAppealEvidenceEmail() throws Exception {
-        mockMvc.perform(post("/internal/mail/send/evidence/appeal")
+        String evaluationName = "EvaluationTest";
+        mockMvc.perform(post("/internal/mail/send/evidence/appeal/"+evaluationName)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
                 .andExpect(status().isOk());
-        verify(mailService).sendAppealEvidenceEmail(any());
+        verify(mailService).sendAppealEvidenceEmail(any(), anyString());
     }
 
     @Test

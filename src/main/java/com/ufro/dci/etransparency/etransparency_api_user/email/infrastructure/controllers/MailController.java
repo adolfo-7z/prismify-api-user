@@ -101,9 +101,9 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/evidence/rejected")
-    public ResponseEntity<Void> sendEvidenceRejectedEmail(@RequestBody SendMailRequestDTO request) {
-        mailService.sendEvidenceRejectedEmail(request.toDomain());
+    @PostMapping("/evidence/rejected/{evaluationName}")
+    public ResponseEntity<Void> sendEvidenceRejectedEmail(@RequestBody SendMailRequestDTO request, @PathVariable String evaluationName) {
+        mailService.sendEvidenceRejectedEmail(request.toDomain(), evaluationName);
         log.info("Evidence rejected email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
@@ -114,9 +114,9 @@ public class MailController {
      * @param request DTO con los datos necesarios para el envío del correo.
      * @return ResponseEntity con estado HTTP 200 OK si el envío fue exitoso.
      */
-    @PostMapping("/evidence/appeal")
-    public ResponseEntity<Void> sendAppealEvidenceEmail(@RequestBody SendMailRequestDTO request) {
-        mailService.sendAppealEvidenceEmail(request.toDomain());
+    @PostMapping("/evidence/appeal/{evaluationName}")
+    public ResponseEntity<Void> sendAppealEvidenceEmail(@RequestBody SendMailRequestDTO request, @PathVariable String evaluationName) {
+        mailService.sendAppealEvidenceEmail(request.toDomain(), evaluationName);
         log.info("Evidence appealed email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }

@@ -75,18 +75,22 @@ class ComposeMailUseCaseImplTest {
     @Test
     void testSendEvidenceRejectedEmail() {
         MailMessage message = new MailMessage();
-        composeMailUseCase.sendEvidenceRejectedEmail(message);
+        String evaluationName = "EvaluationTest";
+        composeMailUseCase.sendEvidenceRejectedEmail(message, evaluationName);
         assertEquals("Evidencia Rechazada", message.getSubject());
         assertTrue(message.getBody().contains("rechazada"));
+        assertTrue(message.getBody().contains(evaluationName));
         verify(sendMailPort).send(message);
     }
 
     @Test
     void testSendAppealEvidenceEmail() {
         MailMessage message = new MailMessage();
-        composeMailUseCase.sendAppealEvidenceEmail(message);
+        String evaluationName = "EvaluationTest";
+        composeMailUseCase.sendAppealEvidenceEmail(message, evaluationName);
         assertEquals("Evidencia Apelada", message.getSubject());
         assertTrue(message.getBody().contains("apelación"));
+        assertTrue(message.getBody().contains(evaluationName));
         verify(sendMailPort).send(message);
     }
 

@@ -62,7 +62,7 @@ evidenceRejected:
     body: |
         Estimado/a,
 
-        Le informamos que una de las evidencias presentadas en el marco de la evaluación de e-Transparencia ha sido rechazada tras un proceso de revisión técnica.
+        Le informamos que una de las evidencias presentadas en {evaluationName} ha sido rechazada tras un proceso de revisión técnica.
 
         Entre las posibles razones del rechazo se encuentran:
         - Evidencia no relacionada con el criterio evaluado.
@@ -81,7 +81,7 @@ appealedEvidence:
     body: |
         Estimado/a Auditor/a,
 
-        Se ha registrado una apelación en el sistema de e-Transparencia relacionada con una evidencia previamente rechazada.
+        Se ha registrado una apelación para {evaluationName} en el sistema de e-Transparencia relacionada con una evidencia previamente rechazada.
 
         Le solicitamos revisar la nueva información proporcionada por la institución evaluada, junto con los argumentos adjuntos en la apelación, y determinar si procede la aceptación de dicha evidencia.
 
@@ -130,6 +130,26 @@ newAuditorAssignment:
         Estimado/a,
 
         Se le ha asignado la nueva evaluación {newEvaluation} para su auditoría.
+
+        Atentamente,
+        Equipo de e-Transparencia
+
+evidenceRejected:
+    subject: "Evidencia Rechazada"
+    body: |
+        Estimado/a,
+
+        Una de las evidencias en su evaluación {evaluationName} ha sido rechazada.
+
+        Atentamente,
+        Equipo de e-Transparencia
+
+evidenceAppealed:
+    subject: "Evidencia Apelada"
+    body: |
+        Estimado/a,
+
+        Una de las evidencias rechazadas en la evaluación {evaluationName} ha sido apelada.
 
         Atentamente,
         Equipo de e-Transparencia

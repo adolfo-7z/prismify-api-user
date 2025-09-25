@@ -35,7 +35,7 @@ class UserAdapterTest {
     @Test
     void shouldReturnAuthUserDetails_WhenUserExists() {
         String username = "juancito";
-        String fullUrl = apiUrl + "/users/internal/by-username/" + username;
+        String fullUrl = apiUrl + "/internal/users/by-username/" + username;
         UserAdapter.InternalUserAuthDTO dto = new UserAdapter.InternalUserAuthDTO();
         dto.setId(42L);
         dto.setUsername(username);

@@ -58,15 +58,17 @@ class MailServiceTest {
     @Test
     void shouldSendEvidenceRejectedEmail() {
         MailMessage message = new MailMessage();
-        mailService.sendEvidenceRejectedEmail(message);
-        verify(composeMailUseCase).sendEvidenceRejectedEmail(message);
+        String evaluationName = "EvaluationTest";
+        mailService.sendEvidenceRejectedEmail(message, evaluationName);
+        verify(composeMailUseCase).sendEvidenceRejectedEmail(message, evaluationName);
     }
 
     @Test
     void shouldSendAppealEvidenceEmail() {
         MailMessage message = new MailMessage();
-        mailService.sendAppealEvidenceEmail(message);
-        verify(composeMailUseCase).sendAppealEvidenceEmail(message);
+        String evaluationName = "EvaluationTest";
+        mailService.sendAppealEvidenceEmail(message, evaluationName);
+        verify(composeMailUseCase).sendAppealEvidenceEmail(message, evaluationName);
     }
 
     @Test

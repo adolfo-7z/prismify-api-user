@@ -94,9 +94,9 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
      * @param message Mensaje de correo a enviar
      */
     @Override
-    public void sendEvidenceRejectedEmail(MailMessage message) {
+    public void sendEvidenceRejectedEmail(MailMessage message, String evaluationName) {
         message.setSubject(EmailTemplateLoader.getSubject("evidenceRejected"));
-        message.setBody(EmailTemplateLoader.getBody("evidenceRejected"));
+        message.setBody(EmailTemplateLoader.getBody("evidenceRejected", Map.of("evaluationName", evaluationName)));
         sendMailPort.send(message);
     }
 
@@ -106,9 +106,9 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
      * @param message Mensaje de correo a enviar
      */
     @Override
-    public void sendAppealEvidenceEmail(MailMessage message) {
+    public void sendAppealEvidenceEmail(MailMessage message, String evaluationName) {
         message.setSubject(EmailTemplateLoader.getSubject("appealedEvidence"));
-        message.setBody(EmailTemplateLoader.getBody("appealedEvidence"));
+        message.setBody(EmailTemplateLoader.getBody("appealedEvidence", Map.of("evaluationName", evaluationName)));
         sendMailPort.send(message);
     }
 
@@ -150,6 +150,11 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
         sendMailPort.send(message);
     }
 
+    /**
+     * Envía un correo notificando al auditor de que se le ha asignado una nueva evaluación a auditar.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation) {
         message.setSubject(EmailTemplateLoader.getSubject("newAuditorAssignment"));

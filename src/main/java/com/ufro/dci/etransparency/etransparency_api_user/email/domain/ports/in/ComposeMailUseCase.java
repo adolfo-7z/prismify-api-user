@@ -13,9 +13,9 @@ public interface ComposeMailUseCase {
 
     void sendNewEvaluationRequestEmail(MailMessage message);
 
-    void sendEvidenceRejectedEmail(MailMessage message);
+    void sendEvidenceRejectedEmail(MailMessage message, String evaluationName);
 
-    void sendAppealEvidenceEmail(MailMessage message);
+    void sendAppealEvidenceEmail(MailMessage message, String evaluationName);
 
     void sendNewInstitutionRequestEmail(MailMessage message);
 
