@@ -1,7 +1,10 @@
 package com.ufro.dci.etransparency.etransparency_api_user.commons.security;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.ContentTypeOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -25,8 +29,8 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("${origin.url}")
-    private String originUrl;
+    @Value("${spring.application.cors.allowed-origins}")
+    private List<String> allowedOrigins;
 
     private final AuthenticationFilter authenticationFilter;
 
@@ -41,8 +45,13 @@ public class SecurityConfig {
         PathPatternRequestMatcher.Builder apiMatcher = PathPatternRequestMatcher.withDefaults();
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(websiteConfigurationSource()))
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers
+                        .httpStrictTransportSecurity(hsts -> hsts.disable())
+                        .frameOptions(frame -> frame.sameOrigin())
+                        .contentTypeOptions(ContentTypeOptionsConfig::disable)
+                        .xssProtection(withDefaults()))
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(apiMatcher.matcher("/auth/login"))
                         .permitAll()
                         .requestMatchers(apiMatcher.matcher("/users/recovery/**"))
@@ -55,11 +64,12 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource websiteConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://www." + originUrl,
-                "https://" + originUrl));
+        configuration.setAllowedOrigins(new ArrayList<>(allowedOrigins));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "X-API-KEY"));
-        configuration.setAllowCredentials(true);
+        configuration
+                .setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "X-API-KEY"));
+        configuration.setAllowCredentials(false);
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

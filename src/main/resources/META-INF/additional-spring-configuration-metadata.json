@@ -39,6 +39,11 @@
             "name": "transparencia.api.key",
             "type": "java.lang.String",
             "description": "API Key for M2M authentication"
+        },
+        {
+            "name": "spring.application.cors.allowed-origins",
+            "type": "java.lang.String",
+            "description": "List of allowed origins to communicate with the application"
         }
     ]
 }
