@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 
 public class UserDTOMapper {
@@ -16,7 +17,7 @@ public class UserDTOMapper {
         dto.setActive(user.isActive());
         dto.setRole(user.getRole());
         dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setNotifications(user.getNotifications());
+        dto.setNotifications(user.getNotifications().stream().map(UserDTOMapper::toDto).toList());
         dto.setTotalInstitutions(user.getTotalInstitutions());
         dto.setAuditsPerformed(user.getAuditsPerformed());
         dto.setPosition(user.getPosition());
@@ -42,6 +43,19 @@ public class UserDTOMapper {
         user.setAcronym(dto.getAcronym());
         user.setAuditsPerformed(dto.getAuditsPerformed());
         return user;
+    }
+
+    public static NotificationDTO toDto(Notification notification) {
+        NotificationDTO dto = new NotificationDTO();
+        dto.setMessage(notification.getMessage());
+        dto.setDate(notification.getDate());
+        return dto;
+    }
+
+    public static Notification fromDto(NotificationDTO dto) {
+        if (dto == null)
+            return null;
+        return new Notification(dto.getId(), dto.getMessage(), dto.getDate());
     }
 
 }

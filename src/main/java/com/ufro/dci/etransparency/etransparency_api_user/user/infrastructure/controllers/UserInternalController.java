@@ -88,4 +88,10 @@ public class UserInternalController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> addNotification(@PathVariable Long id, @RequestParam String message) {
+        userService.createNotification(id, message);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

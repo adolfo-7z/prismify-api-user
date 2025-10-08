@@ -1,0 +1,15 @@
+package com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in;
+
+import java.util.List;
+
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
+
+public interface ManageNotificationUseCase {
+    void createNotification(Long userId, String message);
+
+    List<Notification> getNotifications(Long userId);
+
+    void removeNotification(Long userId, Long id);
+
+    void clearNotifications(Long userId);
+}

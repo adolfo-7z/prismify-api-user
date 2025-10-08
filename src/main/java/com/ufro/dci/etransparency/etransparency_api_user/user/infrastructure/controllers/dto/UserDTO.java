@@ -19,7 +19,7 @@ public class UserDTO {
     private boolean isActive;
     private Role role;
     private String phoneNumber;
-    private List<String> notifications;
+    private List<NotificationDTO> notifications;
     private Long totalInstitutions;
     private Long auditsPerformed;
     private String position;

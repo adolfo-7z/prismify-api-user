@@ -75,20 +75,4 @@ class RetrieveUserUseCaseImplTest {
                 Mockito.verify(userRepository).findAllPaged(page, size, order, name);
         }
 
-        @Test
-        void shouldReturnUserNotifications() {
-                Long userId = 101L;
-                List<String> notifications = List.of("Notification 1", "Notification 2");
-                User user = new User();
-                user.setId(userId);
-                user.setNotifications(notifications);
-                Mockito.when(userRepository.findById(userId)).thenReturn(user);
-                List<String> result = useCase.getUserNotifications(userId);
-                assertThat(result)
-                                .isNotNull()
-                                .hasSize(2)
-                                .containsExactly("Notification 1", "Notification 2");
-                Mockito.verify(userRepository).findById(userId);
-        }
-
 }

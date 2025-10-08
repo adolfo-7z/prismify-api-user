@@ -99,19 +99,6 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserNotifications_ShouldReturnNotificationList() throws Exception {
-        List<String> notifications = List.of(
-                "New evaluation available",
-                "Evidence rejected");
-        when(userService.getUserNotifications(1L)).thenReturn(notifications);
-        mockMvc.perform(get("/users/notifications/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0]").value("New evaluation available"))
-                .andExpect(jsonPath("$[1]").value("Evidence rejected"));
-        verify(userService).getUserNotifications(1L);
-    }
-
-    @Test
     void updateUser_ShouldReturnUpdatedUser() throws Exception {
         UpdateUserRequestDTO updateRequest = new UpdateUserRequestDTO();
         updateRequest.setEmail("nuevocorreo@correo.cl");

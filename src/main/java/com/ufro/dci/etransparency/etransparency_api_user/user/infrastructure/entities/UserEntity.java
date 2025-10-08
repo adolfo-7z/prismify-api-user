@@ -52,7 +52,7 @@ public class UserEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "user_notifications", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "notification")
-    private List<String> notifications = new ArrayList<>();
+    private List<NotificationEmbeddable> notifications = new ArrayList<>();
 
     private Long totalInstitutions;
 
@@ -80,52 +80,59 @@ public class UserEntity {
     private LocalDateTime updatedAt;
 
     public User toDomain() {
-        return new User(
-                id,
-                username,
-                email,
-                password,
-                isActive,
-                role,
-                phoneNumber,
-                recoveryCode,
-                recoveryCodeExpiration,
-                notifications != null ? List.copyOf(notifications) : new ArrayList<>(),
-                totalInstitutions,
-                auditsPerformed,
-                position,
-                rut,
-                city,
-                color,
-                acronym,
-                createdAt,
-                updatedAt);
+        User user = new User();
+        user.setId(this.id);
+        user.setUsername(this.username);
+        user.setEmail(this.email);
+        user.setPassword(this.password);
+        user.setActive(this.isActive);
+        user.setRole(this.role);
+        user.setPhoneNumber(this.phoneNumber);
+        user.setRecoveryCode(this.recoveryCode);
+        user.setRecoveryCodeExpiration(this.recoveryCodeExpiration);
+        user.setNotifications(
+                this.notifications != null ? this.notifications.stream().map(NotificationEmbeddable::toDomain).toList()
+                        : List.of());
+        user.setTotalInstitutions(this.totalInstitutions);
+        user.setAuditsPerformed(this.auditsPerformed);
+        user.setPosition(this.position);
+        user.setRut(this.rut);
+        user.setCity(this.city);
+        user.setColor(this.color);
+        user.setAcronym(this.acronym);
+        user.setCreatedAt(this.createdAt);
+        user.setUpdatedAt(this.updatedAt);
+        return user;
     }
 
-    public static UserEntity fromDomain(User user) {
-        if (user == null)
+    public static UserEntity fromDomain(User domain) {
+        if (domain == null)
             return null;
         UserEntity entity = new UserEntity();
-        entity.setId(user.getId());
-        entity.setUsername(user.getUsername());
-        entity.setEmail(user.getEmail());
-        entity.setPassword(user.getPassword());
-        entity.setActive(user.isActive());
-        entity.setRole(user.getRole());
-        entity.setPhoneNumber(user.getPhoneNumber());
-        entity.setRecoveryCode(user.getRecoveryCode());
-        entity.setRecoveryCodeExpiration(user.getRecoveryCodeExpiration());
+        entity.setId(domain.getId());
+        entity.setUsername(domain.getUsername());
+        entity.setEmail(domain.getEmail());
+        entity.setPassword(domain.getPassword());
+        entity.setActive(domain.isActive());
+        entity.setRole(domain.getRole());
+        entity.setPhoneNumber(domain.getPhoneNumber());
+        entity.setRecoveryCode(domain.getRecoveryCode());
+        entity.setRecoveryCodeExpiration(domain.getRecoveryCodeExpiration());
         entity.setNotifications(
-                user.getNotifications() != null ? new ArrayList<>(user.getNotifications()) : new ArrayList<>());
-        entity.setTotalInstitutions(user.getTotalInstitutions());
-        entity.setAuditsPerformed(user.getAuditsPerformed());
-        entity.setPosition(user.getPosition());
-        entity.setRut(user.getRut());
-        entity.setCity(user.getCity());
-        entity.setColor(user.getColor());
-        entity.setAcronym(user.getAcronym());
-        entity.setCreatedAt(user.getCreatedAt());
-        entity.setUpdatedAt(user.getUpdatedAt());
+                domain.getNotifications() != null
+                        ? domain.getNotifications().stream()
+                                .map(NotificationEmbeddable::fromDomain)
+                                .toList()
+                        : List.of());
+        entity.setTotalInstitutions(domain.getTotalInstitutions());
+        entity.setAuditsPerformed(domain.getAuditsPerformed());
+        entity.setPosition(domain.getPosition());
+        entity.setRut(domain.getRut());
+        entity.setCity(domain.getCity());
+        entity.setColor(domain.getColor());
+        entity.setAcronym(domain.getAcronym());
+        entity.setCreatedAt(domain.getCreatedAt());
+        entity.setUpdatedAt(domain.getUpdatedAt());
         return entity;
     }
 

@@ -60,15 +60,4 @@ public class RetrieveUserUseCaseImpl implements RetrieveUserUseCase {
         return userRepository.findAllPaged(page, size, dateOrder, name);
     }
 
-    /**
-     * Recupera las notificaciones de un usuario a partir de su identificador.
-     *
-     * @param id identificador único del usuario
-     * @return lista de notificaciones del usuario
-     */
-    @Override
-    public List<String> getUserNotifications(Long id) {
-        return userRepository.findById(id).getNotifications();
-    }
-
 }

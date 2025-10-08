@@ -37,7 +37,8 @@ public class UserConfig {
         return new UserService(new CreateUserUseCaseImpl(userRepository, hasher),
                 new RetrieveUserUseCaseImpl(userRepository),
                 new UpdateUserUseCaseImpl(userRepository), new DeleteUserUseCaseImpl(userRepository),
-                new PasswordRecoveryUseCaseImpl(userRepository, mailPort, hasher));
+                new PasswordRecoveryUseCaseImpl(userRepository, mailPort, hasher),
+                new ManageNotificationUseCaseImpl(userRepository));
     }
 
     /**

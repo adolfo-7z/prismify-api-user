@@ -79,19 +79,6 @@ public class UserController {
     }
 
     /**
-     * Obtiene las notificaciones de un usuario por su ID.
-     * Accesible para roles ADMIN, AUDITOR y MANAGER.
-     * 
-     * @param id ID del usuario cuyas notificaciones se desean consultar.
-     * @return ResponseEntity con la lista de notificaciones y estado HTTP 200 (OK).
-     */
-    @GetMapping("/notifications/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR') or hasRole('MANAGER')")
-    public ResponseEntity<List<String>> getUserNotifications(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUserNotifications(id), HttpStatus.OK);
-    }
-
-    /**
      * Actualiza parcialmente los datos de un usuario existente.
      * Accesible para roles ADMIN, MANAGER y AUDITOR.
      * 
@@ -179,6 +166,31 @@ public class UserController {
     @PostMapping("/recovery/password")
     public ResponseEntity<Void> validateNewPassword(@Valid @RequestBody PasswordResetRequestDTO request) {
         userService.validateNewPassword(request.getEmail(), request.getPassword(), request.getValidationPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Obtiene las notificaciones de un usuario por su ID.
+     * Accesible para roles ADMIN, AUDITOR y MANAGER.
+     * 
+     * @param id ID del usuario cuyas notificaciones se desean consultar.
+     * @return ResponseEntity con la lista de notificaciones y estado HTTP 200 (OK).
+     */
+    @GetMapping("/{id}/notifications")
+    public ResponseEntity<List<NotificationDTO>> getUserNotifications(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getNotifications(id).stream().map(UserDTOMapper::toDto).toList(),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}/notifications/{id}")
+    public ResponseEntity<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
+        userService.removeNotification(userId, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}/notifications}")
+    public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
+        userService.clearNotifications(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

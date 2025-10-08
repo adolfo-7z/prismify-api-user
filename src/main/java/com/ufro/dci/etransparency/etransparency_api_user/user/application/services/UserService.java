@@ -2,6 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.application.servi
 
 import java.util.List;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.*;
 
@@ -19,13 +20,14 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class UserService implements CreateUserUseCase, RetrieveUserUseCase, UpdateUserUseCase, DeleteUserUseCase,
-        PasswordRecoveryUseCase {
+        PasswordRecoveryUseCase, ManageNotificationUseCase {
 
     private final CreateUserUseCase createUserUseCase;
     private final RetrieveUserUseCase retrieveUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final PasswordRecoveryUseCase passwordRecoveryUseCase;
+    private final ManageNotificationUseCase manageNotificationUseCase;
 
     /**
      * Crea un nuevo usuario en el sistema.
@@ -73,17 +75,6 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
     @Override
     public List<User> getAllUsers(int page, int size, String dateOrder, String name) {
         return retrieveUserUseCase.getAllUsers(page, size, dateOrder, name);
-    }
-
-    /**
-     * Obtiene las notificaciones de un usuario específico.
-     *
-     * @param id identificador del usuario
-     * @return lista de notificaciones del usuario
-     */
-    @Override
-    public List<String> getUserNotifications(Long id) {
-        return retrieveUserUseCase.getUserNotifications(id);
     }
 
     /**
@@ -161,6 +152,32 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
     @Override
     public void validateNewPassword(String email, String password, String validationPassword) {
         passwordRecoveryUseCase.validateNewPassword(email, password, validationPassword);
+    }
+
+    @Override
+    public void createNotification(Long userId, String message) {
+        manageNotificationUseCase.createNotification(userId, message);
+    }
+
+    /**
+     * Obtiene las notificaciones de un usuario específico.
+     *
+     * @param id identificador del usuario
+     * @return lista de notificaciones del usuario
+     */
+    @Override
+    public List<Notification> getNotifications(Long userId) {
+        return manageNotificationUseCase.getNotifications(userId);
+    }
+
+    @Override
+    public void removeNotification(Long userId, Long id) {
+        manageNotificationUseCase.removeNotification(userId, id);
+    }
+
+    @Override
+    public void clearNotifications(Long userId) {
+        manageNotificationUseCase.clearNotifications(userId);
     }
 
 }

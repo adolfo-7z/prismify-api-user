@@ -21,7 +21,7 @@ public class User {
     private String phoneNumber;
     private String recoveryCode;
     private LocalDateTime recoveryCodeExpiration;
-    private List<String> notifications;
+    private List<Notification> notifications;
 
     private Long totalInstitutions;
     private Long auditsPerformed;
