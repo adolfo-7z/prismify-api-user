@@ -188,7 +188,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}/notifications}")
+    @DeleteMapping("/{userId}/notifications")
     public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
         userService.clearNotifications(userId);
         return new ResponseEntity<>(HttpStatus.OK);
