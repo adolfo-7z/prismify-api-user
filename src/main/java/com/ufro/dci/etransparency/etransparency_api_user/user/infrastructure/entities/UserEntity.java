@@ -49,10 +49,8 @@ public class UserEntity {
 
     private LocalDateTime recoveryCodeExpiration;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_notifications", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "notification")
-    private List<NotificationEmbeddable> notifications = new ArrayList<>();
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<NotificationEntity> notifications = new ArrayList<>();
 
     private Long totalInstitutions;
 
@@ -91,7 +89,7 @@ public class UserEntity {
         user.setRecoveryCode(this.recoveryCode);
         user.setRecoveryCodeExpiration(this.recoveryCodeExpiration);
         user.setNotifications(
-                this.notifications != null ? this.notifications.stream().map(NotificationEmbeddable::toDomain).toList()
+                this.notifications != null ? this.notifications.stream().map(NotificationEntity::toDomain).toList()
                         : List.of());
         user.setTotalInstitutions(this.totalInstitutions);
         user.setAuditsPerformed(this.auditsPerformed);
@@ -121,7 +119,7 @@ public class UserEntity {
         entity.setNotifications(
                 domain.getNotifications() != null
                         ? domain.getNotifications().stream()
-                                .map(NotificationEmbeddable::fromDomain)
+                                .map(n -> NotificationEntity.fromDomain(n, entity))
                                 .toList()
                         : List.of());
         entity.setTotalInstitutions(domain.getTotalInstitutions());

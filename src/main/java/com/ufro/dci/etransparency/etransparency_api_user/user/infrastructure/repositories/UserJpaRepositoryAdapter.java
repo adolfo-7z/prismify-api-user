@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.*;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.UserNotFoundException;
-import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.entities.NotificationEmbeddable;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.entities.NotificationEntity;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.entities.UserEntity;
 
 /**
@@ -185,7 +185,7 @@ public class UserJpaRepositoryAdapter implements UserRepository {
             existing.setColor(user.getColor());
             existing.setAcronym(user.getAcronym());
             existing.setNotifications(
-                    new ArrayList<>(user.getNotifications().stream().map(NotificationEmbeddable::fromDomain).toList()));
+                    new ArrayList<>(user.getNotifications().stream().map(n->NotificationEntity.fromDomain(n, existing)).toList()));
             existing.setAuditsPerformed(user.getAuditsPerformed());
             return Optional.of(jpaRepository.save(existing).toDomain());
         }).orElse(Optional.empty());
