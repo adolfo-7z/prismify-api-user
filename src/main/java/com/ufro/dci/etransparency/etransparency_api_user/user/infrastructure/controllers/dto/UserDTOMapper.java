@@ -47,6 +47,7 @@ public class UserDTOMapper {
 
     public static NotificationDTO toDto(Notification notification) {
         NotificationDTO dto = new NotificationDTO();
+        dto.setId(notification.getId());
         dto.setMessage(notification.getMessage());
         dto.setDate(notification.getDate());
         return dto;

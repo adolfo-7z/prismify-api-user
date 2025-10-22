@@ -180,4 +180,9 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
         manageNotificationUseCase.clearNotifications(userId);
     }
 
+    @Override
+    public void createAdminNotification(String message) {
+        manageNotificationUseCase.createAdminNotification(message);
+    }
+
 }

@@ -88,9 +88,15 @@ public class UserInternalController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/notifications/{id}")
     public ResponseEntity<Void> addNotification(@PathVariable Long id, @RequestParam String message) {
         userService.createNotification(id, message);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/notifications/admin")
+    public ResponseEntity<Void> addAdminNotification(@RequestParam String message) {
+        userService.createAdminNotification(message);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

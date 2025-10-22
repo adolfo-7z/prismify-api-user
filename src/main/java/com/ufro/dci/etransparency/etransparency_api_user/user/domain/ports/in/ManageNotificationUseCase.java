@@ -7,6 +7,8 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Noti
 public interface ManageNotificationUseCase {
     void createNotification(Long userId, String message);
 
+    void createAdminNotification(String message);
+
     List<Notification> getNotifications(Long userId);
 
     void removeNotification(Long userId, Long id);

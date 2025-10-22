@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -53,6 +54,7 @@ class UserControllerTest {
         sampleUser.setEmail("admin@correo.cl");
         sampleUser.setRole(Role.ADMIN);
         sampleUser.setActive(true);
+        sampleUser.setNotifications(new ArrayList<>());
     }
 
     @Test
@@ -80,7 +82,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(sampleUser.getId()))
                 .andExpect(jsonPath("$.username").value("admin"));
-
         verify(userService).getUserById(1L);
     }
 
@@ -94,7 +95,6 @@ class UserControllerTest {
                 .param("date", "desc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("admin"));
-
         verify(userService).getAllUsers(0, 10, "desc", "desc");
     }
 
@@ -106,6 +106,7 @@ class UserControllerTest {
         updatedUser.setId(1L);
         updatedUser.setEmail("nuevocorreo@correo.cl");
         updatedUser.setUsername("auditor");
+        updatedUser.setNotifications(new ArrayList<>());
         when(userService.updateUser(eq(1L), any(User.class))).thenReturn(updatedUser);
         mockMvc.perform(patch("/users/1")
                 .with(csrf())
@@ -119,24 +120,20 @@ class UserControllerTest {
     @Test
     void toggleUserStatus_ShouldReturnStatusMessage() throws Exception {
         when(userService.toggleUserStatus(1L)).thenReturn("User activated");
-
         mockMvc.perform(patch("/users/1/status")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User activated"));
-
         verify(userService).toggleUserStatus(1L);
     }
 
     @Test
     void deleteUser_ShouldReturnDeletionMessage() throws Exception {
         when(userService.deleteUser(1L)).thenReturn("User deleted");
-
         mockMvc.perform(delete("/users/1")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User deleted"));
-
         verify(userService).deleteUser(1L);
     }
 

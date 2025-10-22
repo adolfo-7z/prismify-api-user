@@ -91,6 +91,12 @@ public class UserJpaRepositoryAdapter implements UserRepository {
                 .map(UserEntity::toDomain).orElseThrow(UserNotFoundException::new);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public User findByRole(Role role) {
+        return jpaRepository.findByRole(role).map(UserEntity::toDomain).orElseThrow(UserNotFoundException::new);
+    }
+
     /**
      * Verifica si existe un usuario con un correo electrónico dado.
      * 
@@ -185,7 +191,8 @@ public class UserJpaRepositoryAdapter implements UserRepository {
             existing.setColor(user.getColor());
             existing.setAcronym(user.getAcronym());
             existing.setNotifications(
-                    new ArrayList<>(user.getNotifications().stream().map(n->NotificationEntity.fromDomain(n, existing)).toList()));
+                    new ArrayList<>(user.getNotifications().stream()
+                            .map(n -> NotificationEntity.fromDomain(n, existing)).toList()));
             existing.setAuditsPerformed(user.getAuditsPerformed());
             return Optional.of(jpaRepository.save(existing).toDomain());
         }).orElse(Optional.empty());

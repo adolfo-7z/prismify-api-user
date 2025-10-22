@@ -151,7 +151,8 @@ public class ComposeMailUseCaseImpl implements ComposeMailUseCase {
     }
 
     /**
-     * Envía un correo notificando al auditor de que se le ha asignado una nueva evaluación a auditar.
+     * Envía un correo notificando al auditor de que se le ha asignado una nueva
+     * evaluación a auditar.
      * 
      * @param message el mensaje de correo a enviar
      */

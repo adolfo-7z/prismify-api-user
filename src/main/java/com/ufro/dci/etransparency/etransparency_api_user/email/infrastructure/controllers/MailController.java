@@ -91,7 +91,6 @@ public class MailController {
     @PostMapping("/evaluation")
     public ResponseEntity<Void> sendNewEvaluationRequestEmail(@RequestBody SendMailRequestDTO request) {
         mailService.sendNewEvaluationRequestEmail(request.toDomain());
-        log.info("New evaluation email sent to: " + request.getTo());
         return ResponseEntity.ok().build();
     }
 

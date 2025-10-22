@@ -1,9 +1,11 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.application.usecases;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.ManageNotificationUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
@@ -25,6 +27,23 @@ public class ManageNotificationUseCaseImpl implements ManageNotificationUseCase 
         notifications.add(notification);
         user.setNotifications(notifications);
         userRepository.save(user);
+    }
+
+    @Override
+    public void createAdminNotification(String message) {
+        User admin = userRepository.findByRole(Role.ADMIN);
+        List<Notification> notifications = admin.getNotifications();
+        if (notifications == null) {
+            notifications = new ArrayList<>();
+        } else {
+            notifications = new ArrayList<>(notifications);
+        }
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setDate(LocalDateTime.now());
+        notifications.add(notification);
+        admin.setNotifications(notifications);
+        userRepository.save(admin);
     }
 
     @Override
