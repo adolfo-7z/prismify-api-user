@@ -182,16 +182,30 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}/notifications/{id}")
-    public ResponseEntity<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
-        userService.removeNotification(userId, id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+/**
+ * Elimina una notificación específica de un usuario.
+ * Accesible para roles ADMIN, AUDITOR y MANAGER.
+ *
+ * @param userId ID del usuario al que pertenece la notificación.
+ * @param id     ID de la notificación a eliminar.
+ * @return ResponseEntity con estado HTTP 200 (OK) si la eliminación fue exitosa.
+ */
+@DeleteMapping("/{userId}/notifications/{id}")
+public ResponseEntity<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
+    userService.removeNotification(userId, id);
+    return new ResponseEntity<>(HttpStatus.OK);
+}
 
-    @DeleteMapping("/{userId}/notifications")
-    public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
-        userService.clearNotifications(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
+/**
+ * Elimina todas las notificaciones de un usuario.
+ * Accesible para roles ADMIN, AUDITOR y MANAGER.
+ *
+ * @param userId ID del usuario cuyas notificaciones se desean eliminar.
+ * @return ResponseEntity con estado HTTP 200 (OK) si la limpieza fue exitosa.
+ */
+@DeleteMapping("/{userId}/notifications")
+public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
+    userService.clearNotifications(userId);
+    return new ResponseEntity<>(HttpStatus.OK);
+}
 }

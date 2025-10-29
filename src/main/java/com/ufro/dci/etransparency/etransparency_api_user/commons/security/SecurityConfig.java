@@ -24,6 +24,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Configuración de seguridad para la aplicación.
+ * <p>
+ * Define las políticas de seguridad, incluyendo CORS, manejo de sesiones, cabeceras de seguridad,
+ * rutas públicas y privadas, y la integración del filtro de autenticación personalizado.
+ * <ul>
+ *   <li>Permite el acceso público a los endpoints de login y recuperación de usuarios.</li>
+ *   <li>Requiere autenticación para el resto de los endpoints.</li>
+ *   <li>Configura CORS según los orígenes permitidos definidos en las variables de entorno.</li>
+ *   <li>Deshabilita CSRF y configura la política de sesión como stateless.</li>
+ *   <li>Agrega el filtro de autenticación JWT/API Key antes del filtro estándar de Spring Security.</li>
+ * </ul>
+ *
+ * @author Adolfo Plaza
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity

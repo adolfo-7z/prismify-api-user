@@ -170,19 +170,34 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
         return manageNotificationUseCase.getNotifications(userId);
     }
 
-    @Override
-    public void removeNotification(Long userId, Long id) {
-        manageNotificationUseCase.removeNotification(userId, id);
-    }
+/**
+ * Elimina una notificación específica de un usuario.
+ *
+ * @param userId identificador del usuario al que pertenece la notificación
+ * @param id     identificador de la notificación a eliminar
+ */
+@Override
+public void removeNotification(Long userId, Long id) {
+    manageNotificationUseCase.removeNotification(userId, id);
+}
 
-    @Override
-    public void clearNotifications(Long userId) {
-        manageNotificationUseCase.clearNotifications(userId);
-    }
+/**
+ * Elimina todas las notificaciones de un usuario.
+ *
+ * @param userId identificador del usuario cuyas notificaciones serán eliminadas
+ */
+@Override
+public void clearNotifications(Long userId) {
+    manageNotificationUseCase.clearNotifications(userId);
+}
 
-    @Override
-    public void createAdminNotification(String message) {
-        manageNotificationUseCase.createAdminNotification(message);
-    }
-
+/**
+ * Crea una notificación dirigida a los administradores del sistema.
+ *
+ * @param message contenido del mensaje de la notificación
+ */
+@Override
+public void createAdminNotification(String message) {
+    manageNotificationUseCase.createAdminNotification(message);
+}
 }

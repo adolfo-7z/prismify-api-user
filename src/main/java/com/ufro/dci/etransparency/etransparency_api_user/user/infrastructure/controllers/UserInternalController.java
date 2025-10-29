@@ -88,12 +88,25 @@ public class UserInternalController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+/**
+     * Crea una notificación para un usuario identificado por su ID.
+     *
+     * @param id ID del usuario que recibirá la notificación.
+     * @param message Contenido del mensaje de la notificación.
+     * @return ResponseEntity vacío con estado HTTP 200 OK.
+     */
     @PostMapping("/notifications/{id}")
     public ResponseEntity<Void> addNotification(@PathVariable Long id, @RequestParam String message) {
         userService.createNotification(id, message);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Crea una notificación dirigida al usuario administrador por defecto.
+     *
+     * @param message Contenido del mensaje de la notificación.
+     * @return ResponseEntity vacío con estado HTTP 200 OK.
+     */
     @PostMapping("/notifications/admin")
     public ResponseEntity<Void> addAdminNotification(@RequestParam String message) {
         userService.createAdminNotification(message);

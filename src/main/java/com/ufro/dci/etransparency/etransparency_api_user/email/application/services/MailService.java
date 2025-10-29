@@ -23,8 +23,8 @@ public class MailService implements ComposeMailUseCase {
      * @param message el mensaje de correo a enviar
      */
     @Override
-    public void sendGenericMail(MailMessage messgae) {
-        composeMailUseCase.sendGenericMail(messgae);
+    public void sendGenericMail(MailMessage message) {
+        composeMailUseCase.sendGenericMail(message);
     }
 
     /**
