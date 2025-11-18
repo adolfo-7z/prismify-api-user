@@ -41,7 +41,7 @@ public class ManageNotificationUseCaseImpl implements ManageNotificationUseCase 
     @Override
     public void createNotification(Long userId, String message) {
         User user = userRepository.findById(userId);
-        List<Notification> notifications = user.getNotifications();
+        List<Notification> notifications = new ArrayList<>(user.getNotifications());
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setDate(LocalDateTime.now());

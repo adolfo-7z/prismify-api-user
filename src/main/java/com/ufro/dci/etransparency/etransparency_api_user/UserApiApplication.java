@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TransparencyApiUserApplication {
+public class UserApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TransparencyApiUserApplication.class, args);
+		SpringApplication.run(UserApiApplication.class, args);
 	}
 
 }
