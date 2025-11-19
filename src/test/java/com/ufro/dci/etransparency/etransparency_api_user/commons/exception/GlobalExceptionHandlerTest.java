@@ -25,7 +25,6 @@ class GlobalExceptionHandlerTest {
     void shouldHandleValidationException() {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "testObject");
         bindingResult.addError(new FieldError("testObject", "name", "must not be blank"));
-        @SuppressWarnings("null")
         MethodArgumentNotValidException exception = new MethodArgumentNotValidException(null, bindingResult);
         ResponseEntity<CustomErrorResponse> response = handler.handleValidationExceptions(exception);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
