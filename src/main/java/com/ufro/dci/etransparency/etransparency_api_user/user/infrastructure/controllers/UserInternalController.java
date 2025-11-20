@@ -88,10 +88,10 @@ public class UserInternalController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-/**
+    /**
      * Crea una notificación para un usuario identificado por su ID.
      *
-     * @param id ID del usuario que recibirá la notificación.
+     * @param id      ID del usuario que recibirá la notificación.
      * @param message Contenido del mensaje de la notificación.
      * @return ResponseEntity vacío con estado HTTP 200 OK.
      */
