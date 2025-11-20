@@ -190,9 +190,11 @@ public class UserJpaRepositoryAdapter implements UserRepository {
             existing.setCity(user.getCity());
             existing.setColor(user.getColor());
             existing.setAcronym(user.getAcronym());
-            existing.setNotifications(
-                    new ArrayList<>(user.getNotifications().stream()
-                            .map(n -> NotificationEntity.fromDomain(n, existing)).toList()));
+            existing.getNotifications().clear();
+            existing.getNotifications().addAll(
+                    user.getNotifications().stream()
+                            .map(n -> NotificationEntity.fromDomain(n, existing))
+                            .toList());
             existing.setAuditsPerformed(user.getAuditsPerformed());
             return Optional.of(jpaRepository.save(existing).toDomain());
         }).orElse(Optional.empty());

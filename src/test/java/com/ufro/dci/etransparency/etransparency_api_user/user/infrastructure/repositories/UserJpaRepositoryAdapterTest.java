@@ -115,6 +115,7 @@ class UserJpaRepositoryAdapterTest {
     void shouldUpdateUser() {
         when(jpaRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
         when(jpaRepository.findById(anyLong())).thenReturn(Optional.of(sampleEntity));
+        sampleEntity.setNotifications(new ArrayList<>());
         User saved = adapter.save(sampleUser);
         saved.setEmail("juan@correo.cl");
         Optional<User> updated = adapter.update(saved);
