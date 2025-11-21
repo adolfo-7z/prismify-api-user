@@ -15,14 +15,17 @@ import lombok.RequiredArgsConstructor;
 /**
  * Implementación del caso de uso para la gestión de notificaciones de usuario.
  * <p>
- * Esta clase permite crear, obtener, eliminar y limpiar notificaciones tanto para usuarios individuales como para el administrador.
- * Utiliza el repositorio de usuarios para acceder y modificar las notificaciones asociadas a cada usuario.
+ * Esta clase permite crear, obtener, eliminar y limpiar notificaciones tanto
+ * para usuarios individuales como para el administrador.
+ * Utiliza el repositorio de usuarios para acceder y modificar las
+ * notificaciones asociadas a cada usuario.
  *
  * <ul>
- *   <li>Permite crear notificaciones para un usuario específico o para el administrador.</li>
- *   <li>Permite obtener todas las notificaciones de un usuario.</li>
- *   <li>Permite eliminar una notificación específica de un usuario.</li>
- *   <li>Permite limpiar todas las notificaciones de un usuario.</li>
+ * <li>Permite crear notificaciones para un usuario específico o para el
+ * administrador.</li>
+ * <li>Permite obtener todas las notificaciones de un usuario.</li>
+ * <li>Permite eliminar una notificación específica de un usuario.</li>
+ * <li>Permite limpiar todas las notificaciones de un usuario.</li>
  * </ul>
  *
  * @author Adolfo Plaza
@@ -92,10 +95,9 @@ public class ManageNotificationUseCaseImpl implements ManageNotificationUseCase 
      */
     @Override
     public void removeNotification(Long userId, Long id) {
-        User user = userRepository.findById(id);
-        List<Notification> notifications = user.getNotifications();
-        notifications.removeIf(n -> n.getId().equals(id));
-        userRepository.save(user);
+        User user = userRepository.findById(userId);
+        user.getNotifications().removeIf(n -> n.getId().equals(id));
+        userRepository.update(user);
     }
 
     /**

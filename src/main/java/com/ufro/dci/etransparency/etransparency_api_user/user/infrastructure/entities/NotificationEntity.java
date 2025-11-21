@@ -34,6 +34,10 @@ public class NotificationEntity {
 
     public static NotificationEntity fromDomain(Notification domain, UserEntity user) {
         NotificationEntity entity = new NotificationEntity();
+        if (domain.getId() != null) {
+            entity.setId(domain.getId());
+        }
+
         entity.setId(domain.getId());
         entity.setMessage(domain.getMessage());
         entity.setDate(domain.getDate());

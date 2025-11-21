@@ -177,6 +177,7 @@ public class UserController {
      * @return ResponseEntity con la lista de notificaciones y estado HTTP 200 (OK).
      */
     @GetMapping("/{id}/notifications")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
     public ResponseEntity<List<NotificationDTO>> getUserNotifications(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getNotifications(id).stream().map(UserDTOMapper::toDto).toList(),
                 HttpStatus.OK);
@@ -192,6 +193,7 @@ public class UserController {
      *         exitosa.
      */
     @DeleteMapping("/{userId}/notifications/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
     public ResponseEntity<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
         userService.removeNotification(userId, id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -205,6 +207,7 @@ public class UserController {
      * @return ResponseEntity con estado HTTP 200 (OK) si la limpieza fue exitosa.
      */
     @DeleteMapping("/{userId}/notifications")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
     public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
         userService.clearNotifications(userId);
         return new ResponseEntity<>(HttpStatus.OK);

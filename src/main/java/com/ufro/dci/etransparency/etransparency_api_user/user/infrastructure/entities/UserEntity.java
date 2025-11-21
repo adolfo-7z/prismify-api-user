@@ -3,6 +3,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.en
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -89,8 +90,11 @@ public class UserEntity {
         user.setRecoveryCode(this.recoveryCode);
         user.setRecoveryCodeExpiration(this.recoveryCodeExpiration);
         user.setNotifications(
-                this.notifications != null ? this.notifications.stream().map(NotificationEntity::toDomain).toList()
-                        : List.of());
+                this.notifications != null
+                        ? this.notifications.stream()
+                                .map(NotificationEntity::toDomain)
+                                .collect(Collectors.toCollection(ArrayList::new))
+                        : new ArrayList<>());
         user.setTotalInstitutions(this.totalInstitutions);
         user.setAuditsPerformed(this.auditsPerformed);
         user.setPosition(this.position);

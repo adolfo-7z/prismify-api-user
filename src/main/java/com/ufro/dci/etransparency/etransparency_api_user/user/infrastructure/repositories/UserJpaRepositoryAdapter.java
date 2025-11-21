@@ -196,6 +196,7 @@ public class UserJpaRepositoryAdapter implements UserRepository {
                             .map(n -> NotificationEntity.fromDomain(n, existing))
                             .toList());
             existing.setAuditsPerformed(user.getAuditsPerformed());
+            existing.setActive(user.isActive());
             return Optional.of(jpaRepository.save(existing).toDomain());
         }).orElse(Optional.empty());
     }
