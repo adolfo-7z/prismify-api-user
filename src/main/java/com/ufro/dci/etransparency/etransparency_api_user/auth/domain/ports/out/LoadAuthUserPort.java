@@ -6,4 +6,6 @@ import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthU
 
 public interface LoadAuthUserPort {
     Optional<AuthUserDetails> loadByUsername(String username);
+
+    Optional<AuthUserDetails> loadByEmail(String email);
 }

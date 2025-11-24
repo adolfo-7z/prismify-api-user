@@ -68,6 +68,18 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
     }
 
     /**
+     * Recupera un usuario por su correo electrónico.
+     *
+     * @param email correo electrónico a buscar
+     * @return el usuario correspondiente al email
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserByEmail(String email) {
+        return retrieveUserUseCase.getUserByEmail(email);
+    }
+
+    /**
      * Obtiene una lista paginada de usuarios con opciones de filtrado y
      * ordenamiento.
      *

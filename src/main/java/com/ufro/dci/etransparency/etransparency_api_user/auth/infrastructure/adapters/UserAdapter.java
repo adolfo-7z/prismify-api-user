@@ -3,7 +3,6 @@ package com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.ad
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -62,29 +61,40 @@ public class UserAdapter implements LoadAuthUserPort {
      */
     @Override
     public Optional<AuthUserDetails> loadByUsername(String username) {
-        String url = userApiUrl + "/internal/users/by-username/" + username;
+        return fetchUser("/internal/users/by-username/", username);
+    }
+
+    @Override
+    public Optional<AuthUserDetails> loadByEmail(String email) {
+        return fetchUser("/internal/users/by-email/", email);
+    }
+
+    private Optional<AuthUserDetails> fetchUser(String path, String value) {
+        String url = userApiUrl + path + value;
+
         try {
             ResponseEntity<InternalUserAuthDTO> response = restTemplate.getForEntity(url, InternalUserAuthDTO.class);
+
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                InternalUserAuthDTO dto = response.getBody();
-                if (dto != null) {
-                    return Optional.of(new AuthUserDetails(
-                            dto.getId(),
-                            dto.getUsername(),
-                            dto.getPassword(),
-                            dto.getRole(),
-                            dto.isActive()));
-                }
+                return Optional.of(mapToAuthUserDetails(response.getBody()));
             }
+
+            return Optional.empty();
+
         } catch (HttpClientErrorException.NotFound e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return Optional.empty();
-            }
-            throw new UserPortException();
+            return Optional.empty();
         } catch (Exception e) {
             throw new UserPortException();
         }
-        return Optional.empty();
+    }
+
+    private AuthUserDetails mapToAuthUserDetails(InternalUserAuthDTO dto) {
+        return new AuthUserDetails(
+                dto.getId(),
+                dto.getUsername(),
+                dto.getPassword(),
+                dto.getRole(),
+                dto.isActive());
     }
 
     @Data

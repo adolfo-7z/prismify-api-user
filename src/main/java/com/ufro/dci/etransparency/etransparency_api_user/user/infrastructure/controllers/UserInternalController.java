@@ -51,6 +51,24 @@ public class UserInternalController {
     }
 
     /**
+     * Obtiene la información de un usuario por su email.
+     * 
+     * @param email Correo electrónico de usuario a buscar.
+     * @return ResponseEntity que contiene un DTO con la información del usuario.
+     */
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<InternalUserAuthDTO> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        InternalUserAuthDTO dto = new InternalUserAuthDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole().name(),
+                user.isActive());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    /**
      * Obtiene el email de un usuario por su ID.
      * 
      * @param id ID del usuario.

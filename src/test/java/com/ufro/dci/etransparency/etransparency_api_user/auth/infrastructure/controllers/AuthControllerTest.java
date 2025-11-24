@@ -41,9 +41,9 @@ class AuthControllerTest {
     @DisplayName("login_ShouldReturnToken_WhenCredentialsAreValid")
     void login_ShouldReturnToken_WhenCredentialsAreValid() throws Exception {
         AuthRequestDTO request = new AuthRequestDTO();
-        request.setUsername("techpriest");
-        request.setPassword("sacredpassword");
-        String mockToken = "BearerMachineSpiritToken";
+        request.setIdentifier("username");
+        request.setPassword("password");
+        String mockToken = "BearerToken";
         Mockito.when(authService.login(anyString(), anyString()))
                 .thenReturn(mockToken);
         mockMvc.perform(post("/auth/login")

@@ -11,6 +11,8 @@ public interface RetrieveUserUseCase {
 
     User getUserByUsername(String username);
 
+    User getUserByEmail(String email);
+
     Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active, Role role);
 
 }

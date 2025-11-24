@@ -48,7 +48,7 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request)
             throws InvalidCredentialsException {
         AuthResponseDTO response = new AuthResponseDTO();
-        response.setToken(authService.login(request.getUsername(), request.getPassword()));
+        response.setToken(authService.login(request.getIdentifier(), request.getPassword()));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

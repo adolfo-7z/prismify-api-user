@@ -47,6 +47,17 @@ public class RetrieveUserUseCaseImpl implements RetrieveUserUseCase {
     }
 
     /**
+     * Recupera un usuario por su correo electrónico.
+     *
+     * @param email correo electrónico a buscar
+     * @return el usuario correspondiente al email
+     */
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    /**
      * Obtiene una lista paginada de usuarios con posibilidad de ordenar por fecha
      * y filtrar por nombre.
      *
@@ -57,7 +68,8 @@ public class RetrieveUserUseCaseImpl implements RetrieveUserUseCase {
      * @return lista de usuarios que cumplen con los criterios de búsqueda
      */
     @Override
-    public Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active, Role role) {
+    public Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active,
+            Role role) {
         return userRepository.findAll(page, size, username, email, date, active, role);
     }
 

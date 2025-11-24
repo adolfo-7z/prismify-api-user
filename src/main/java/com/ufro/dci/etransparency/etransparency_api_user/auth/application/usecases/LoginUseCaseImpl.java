@@ -1,5 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.auth.application.usecases;
 
+import java.util.Optional;
+
 import org.apache.hc.client5.http.auth.InvalidCredentialsException;
 
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthUserDetails;
@@ -36,12 +38,21 @@ public class LoginUseCaseImpl implements LoginUseCase {
      *                                     la contraseña es incorrecta.
      */
     @Override
-    public String login(String username, String rawPassword) throws InvalidCredentialsException {
-        AuthUserDetails user = loadAuthUserPort.loadByUsername(username)
-                .orElseThrow(InvalidCredentialsException::new);
+    public String login(String identifier, String rawPassword) throws InvalidCredentialsException {
+        Optional<AuthUserDetails> userOpt;
+        if (isEmail(identifier)) {
+            userOpt = loadAuthUserPort.loadByEmail(identifier);
+        } else {
+            userOpt = loadAuthUserPort.loadByUsername(identifier);
+        }
+        AuthUserDetails user = userOpt.orElseThrow(InvalidCredentialsException::new);
         if (!user.isActive() || !hasher.matches(rawPassword, user.hashedPassword())) {
             throw new InvalidCredentialsException();
         }
         return tokenProvider.generateToken(user);
+    }
+
+    private boolean isEmail(String value) {
+        return value.contains("@");
     }
 }
