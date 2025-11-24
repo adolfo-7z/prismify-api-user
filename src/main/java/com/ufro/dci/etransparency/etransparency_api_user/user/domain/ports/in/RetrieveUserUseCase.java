@@ -1,7 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 
 public interface RetrieveUserUseCase {
@@ -10,6 +11,6 @@ public interface RetrieveUserUseCase {
 
     User getUserByUsername(String username);
 
-    List<User> getAllUsers(int page, int size, String dateOrder, String name);
-    
+    Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active, Role role);
+
 }

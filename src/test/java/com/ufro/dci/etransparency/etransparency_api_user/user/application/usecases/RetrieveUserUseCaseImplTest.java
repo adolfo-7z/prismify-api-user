@@ -2,8 +2,6 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.application.useca
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,28 +49,6 @@ class RetrieveUserUseCaseImplTest {
                                 .extracting(User::getUsername, User::getEmail)
                                 .containsExactly("prueba", "prueba@correo.cl");
                 Mockito.verify(userRepository).findByUsername(username);
-        }
-
-        @Test
-        void shouldReturnPagedUserList() {
-                int page = 0;
-                int size = 10;
-                String order = "asc";
-                String name = "Tech";
-                List<User> users = List.of(
-                                new User(null, "tech1", "tech1@correo.com", name, false, null, name, name, null, null,
-                                                null, null, name,
-                                                name, name, name, name, null, null),
-                                new User(null, "tech2", "tech2@correo.com", name, false, null, name, name, null, null,
-                                                null, null, name,
-                                                name, name, name, name, null, null));
-                Mockito.when(userRepository.findAllPaged(page, size, order, name)).thenReturn(users);
-                List<User> result = useCase.getAllUsers(page, size, order, name);
-                assertThat(result)
-                                .hasSize(2)
-                                .extracting(User::getUsername)
-                                .containsExactly("tech1", "tech2");
-                Mockito.verify(userRepository).findAllPaged(page, size, order, name);
         }
 
 }

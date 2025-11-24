@@ -1,7 +1,8 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.application.usecases;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.RetrieveUserUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
@@ -56,8 +57,8 @@ public class RetrieveUserUseCaseImpl implements RetrieveUserUseCase {
      * @return lista de usuarios que cumplen con los criterios de búsqueda
      */
     @Override
-    public List<User> getAllUsers(int page, int size, String dateOrder, String name) {
-        return userRepository.findAllPaged(page, size, dateOrder, name);
+    public Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active, Role role) {
+        return userRepository.findAll(page, size, username, email, date, active, role);
     }
 
 }

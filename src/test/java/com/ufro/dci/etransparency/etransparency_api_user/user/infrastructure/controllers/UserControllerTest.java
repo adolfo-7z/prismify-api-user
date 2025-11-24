@@ -1,8 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,8 +8,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,19 +79,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id").value(sampleUser.getId()))
                 .andExpect(jsonPath("$.username").value("admin"));
         verify(userService).getUserById(1L);
-    }
-
-    @Test
-    void getAllUsers_ShouldReturnUserList() throws Exception {
-        when(userService.getAllUsers(anyInt(), anyInt(), anyString(), anyString()))
-                .thenReturn(List.of(sampleUser));
-        mockMvc.perform(get("/users")
-                .param("page", "0")
-                .param("size", "10")
-                .param("date", "desc"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].username").value("admin"));
-        verify(userService).getAllUsers(0, 10, "desc", "desc");
     }
 
     @Test

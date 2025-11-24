@@ -1,5 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.repositories;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.data.domain.*;
@@ -159,15 +161,56 @@ public class UserJpaRepositoryAdapter implements UserRepository {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<User> findAllPaged(int page, int size, String date, String name) {
-        Sort sort = date.equalsIgnoreCase("asc")
-                ? Sort.by("updatedAt").ascending()
-                : Sort.by("updatedAt").descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return jpaRepository.findAll(pageable)
-                .stream()
-                .map(UserEntity::toDomain)
-                .toList();
+    public Page<User> findAll(int page, int size, String username, String email, String date, Boolean active,
+            Role role) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Object[]> result = jpaRepository.findAllUsersFiltered(
+                username,
+                email,
+                active,
+                role != null ? role.name() : null,
+                date,
+                pageable);
+
+        return result.map(row -> {
+            User u = new User();
+
+            u.setId(row[0] != null ? ((Number) row[0]).longValue() : null);
+            u.setUsername((String) row[1]);
+            u.setEmail((String) row[2]);
+            u.setActive(row[3] != null && (Boolean) row[3]);
+
+            u.setRole(row[4] != null ? Role.valueOf((String) row[4]) : null);
+
+            u.setCreatedAt(toLocalDateTime(row[5]));
+            u.setUpdatedAt(toLocalDateTime(row[6]));
+
+            u.setTotalInstitutions(row[7] != null ? ((Number) row[7]).longValue() : null);
+            u.setAuditsPerformed(row[8] != null ? ((Number) row[8]).longValue() : null);
+
+            u.setNotifications(List.of());
+            u.setPassword(null);
+            u.setPhoneNumber(null);
+            u.setRecoveryCode(null);
+            u.setRecoveryCodeExpiration(null);
+
+            u.setPosition(null);
+            u.setRut(null);
+            u.setCity(null);
+            u.setColor(null);
+            u.setAcronym(null);
+
+            return u;
+        });
+    }
+
+    private LocalDateTime toLocalDateTime(Object value) {
+        if (value == null)
+            return null;
+        if (value instanceof Timestamp ts)
+            return ts.toLocalDateTime();
+        return null;
     }
 
     /**

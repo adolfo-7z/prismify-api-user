@@ -3,12 +3,14 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.co
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.application.services.UserService;
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.*;
 
@@ -71,11 +73,17 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "desc") String date) {
-        return new ResponseEntity<>(userService.getAllUsers(page, size, date, date).stream().map(UserDTOMapper::toDto)
-                .toList(), HttpStatus.OK);
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false, defaultValue = "desc") String date,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) Role role) {
+        Page<UserDTO> userDtos = userService.getAllUsers(page, size, username, email, date, active, role)
+                .map(UserDTOMapper::toDto);
+        return ResponseEntity.ok(userDtos);
     }
 
     /**

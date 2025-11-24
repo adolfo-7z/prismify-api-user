@@ -15,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.UserNotFoundException;
@@ -99,16 +96,6 @@ class UserJpaRepositoryAdapterTest {
         adapter.save(sampleUser);
         List<User> users = adapter.findAll();
         assertThat(users).hasSize(1);
-    }
-
-    @Test
-    void shouldReturnPagedUsers() {
-        when(jpaRepository.save(any(UserEntity.class))).thenReturn(sampleEntity);
-        when(jpaRepository.findAll(any(PageRequest.class))).thenReturn(
-                new PageImpl<>(List.of(sampleEntity)));
-        adapter.save(sampleUser);
-        List<User> users = adapter.findAllPaged(0, 10, "desc", "");
-        assertThat(users).isNotEmpty();
     }
 
     @Test

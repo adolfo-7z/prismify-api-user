@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
-import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
-import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.*;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.ManageNotificationUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
 
@@ -44,13 +42,7 @@ public class ManageNotificationUseCaseImpl implements ManageNotificationUseCase 
     @Override
     public void createNotification(Long userId, String message) {
         User user = userRepository.findById(userId);
-        List<Notification> notifications = new ArrayList<>(user.getNotifications());
-        Notification notification = new Notification();
-        notification.setMessage(message);
-        notification.setDate(LocalDateTime.now());
-        notifications.add(notification);
-        user.setNotifications(notifications);
-        userRepository.save(user);
+        addNotificationToUser(user, message);
     }
 
     /**
@@ -61,18 +53,22 @@ public class ManageNotificationUseCaseImpl implements ManageNotificationUseCase 
     @Override
     public void createAdminNotification(String message) {
         User admin = userRepository.findByRole(Role.ADMIN);
-        List<Notification> notifications = admin.getNotifications();
-        if (notifications == null) {
-            notifications = new ArrayList<>();
-        } else {
-            notifications = new ArrayList<>(notifications);
-        }
+        addNotificationToUser(admin, message);
+    }
+
+    private void addNotificationToUser(User user, String message) {
+        List<Notification> notifications = user.getNotifications() != null
+                ? new ArrayList<>(user.getNotifications())
+                : new ArrayList<>();
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setDate(LocalDateTime.now());
         notifications.add(notification);
-        admin.setNotifications(notifications);
-        userRepository.save(admin);
+        if (notifications.size() > 10) {
+            notifications.remove(0);
+        }
+        user.setNotifications(notifications);
+        userRepository.save(user);
     }
 
     /**

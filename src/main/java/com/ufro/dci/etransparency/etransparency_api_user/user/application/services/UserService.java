@@ -2,8 +2,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.application.servi
 
 import java.util.List;
 
-import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Notification;
-import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.*;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.*;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return el usuario creado
      */
     @Override
+    @Transactional
     public User createUser(User user) {
         return createUserUseCase.createUser(user);
     }
@@ -47,6 +50,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return el usuario correspondiente al id proporcionado
      */
     @Override
+    @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return retrieveUserUseCase.getUserById(id);
     }
@@ -58,6 +62,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return el usuario correspondiente al username
      */
     @Override
+    @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return retrieveUserUseCase.getUserByUsername(username);
     }
@@ -73,8 +78,10 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return lista de usuarios
      */
     @Override
-    public List<User> getAllUsers(int page, int size, String dateOrder, String name) {
-        return retrieveUserUseCase.getAllUsers(page, size, dateOrder, name);
+    @Transactional(readOnly = true)
+    public Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active,
+            Role role) {
+        return retrieveUserUseCase.getAllUsers(page, size, username, email, date, active, role);
     }
 
     /**
@@ -85,6 +92,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return el usuario actualizado
      */
     @Override
+    @Transactional
     public User updateUser(Long id, User updatedUser) {
         return updateUserUseCase.updateUser(id, updatedUser);
     }
@@ -96,6 +104,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return mensaje indicando el nuevo estado del usuario
      */
     @Override
+    @Transactional
     public String toggleUserStatus(Long id) {
         return updateUserUseCase.toggleUserStatus(id);
     }
@@ -106,6 +115,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @param id identificador del usuario
      */
     @Override
+    @Transactional
     public void incrementAuditsPerformed(Long id) {
         updateUserUseCase.incrementAuditsPerformed(id);
     }
@@ -117,6 +127,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return mensaje confirmando la eliminación
      */
     @Override
+    @Transactional
     public String deleteUser(Long id) {
         return deleteUserUseCase.deleteUser(id);
     }
@@ -127,6 +138,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @param email correo electrónico del usuario
      */
     @Override
+    @Transactional
     public void sendRecoveryCode(String email) {
         passwordRecoveryUseCase.sendRecoveryCode(email);
     }
@@ -138,6 +150,7 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @param recoveryCode código de recuperación
      */
     @Override
+    @Transactional
     public void validateRecoveryCode(String email, String recoveryCode) {
         passwordRecoveryUseCase.validateRecoveryCode(email, recoveryCode);
     }
@@ -150,11 +163,13 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @param validationPassword contraseña para validación
      */
     @Override
+    @Transactional
     public void validateNewPassword(String email, String password, String validationPassword) {
         passwordRecoveryUseCase.validateNewPassword(email, password, validationPassword);
     }
 
     @Override
+    @Transactional
     public void createNotification(Long userId, String message) {
         manageNotificationUseCase.createNotification(userId, message);
     }
@@ -166,38 +181,42 @@ public class UserService implements CreateUserUseCase, RetrieveUserUseCase, Upda
      * @return lista de notificaciones del usuario
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Notification> getNotifications(Long userId) {
         return manageNotificationUseCase.getNotifications(userId);
     }
 
-/**
- * Elimina una notificación específica de un usuario.
- *
- * @param userId identificador del usuario al que pertenece la notificación
- * @param id     identificador de la notificación a eliminar
- */
-@Override
-public void removeNotification(Long userId, Long id) {
-    manageNotificationUseCase.removeNotification(userId, id);
-}
+    /**
+     * Elimina una notificación específica de un usuario.
+     *
+     * @param userId identificador del usuario al que pertenece la notificación
+     * @param id     identificador de la notificación a eliminar
+     */
+    @Override
+    @Transactional
+    public void removeNotification(Long userId, Long id) {
+        manageNotificationUseCase.removeNotification(userId, id);
+    }
 
-/**
- * Elimina todas las notificaciones de un usuario.
- *
- * @param userId identificador del usuario cuyas notificaciones serán eliminadas
- */
-@Override
-public void clearNotifications(Long userId) {
-    manageNotificationUseCase.clearNotifications(userId);
-}
+    /**
+     * Elimina todas las notificaciones de un usuario.
+     *
+     * @param userId identificador del usuario cuyas notificaciones serán eliminadas
+     */
+    @Override
+    @Transactional
+    public void clearNotifications(Long userId) {
+        manageNotificationUseCase.clearNotifications(userId);
+    }
 
-/**
- * Crea una notificación dirigida a los administradores del sistema.
- *
- * @param message contenido del mensaje de la notificación
- */
-@Override
-public void createAdminNotification(String message) {
-    manageNotificationUseCase.createAdminNotification(message);
-}
+    /**
+     * Crea una notificación dirigida a los administradores del sistema.
+     *
+     * @param message contenido del mensaje de la notificación
+     */
+    @Override
+    @Transactional
+    public void createAdminNotification(String message) {
+        manageNotificationUseCase.createAdminNotification(message);
+    }
 }

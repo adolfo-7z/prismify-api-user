@@ -3,6 +3,8 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 
@@ -25,7 +27,7 @@ public interface UserRepository {
 
     List<User> findAll();
 
-    List<User> findAllPaged(int page, int size, String dateOrder, String name);
+    Page<User> findAll(int page, int size, String username, String email, String date, Boolean active, Role role);
 
     Optional<User> update(User user);
 

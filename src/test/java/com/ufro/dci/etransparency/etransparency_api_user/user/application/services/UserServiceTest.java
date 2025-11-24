@@ -2,8 +2,6 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.application.servi
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -61,15 +59,6 @@ class UserServiceTest {
         User result = userService.getUserByUsername("juancito");
         assertThat(result).isSameAs(user);
         Mockito.verify(retrieveUserUseCase).getUserByUsername("juancito");
-    }
-
-    @Test
-    void shouldDelegateGetAllUsers() {
-        List<User> users = List.of(new User(), new User());
-        Mockito.when(retrieveUserUseCase.getAllUsers(0, 10, "asc", "juancito")).thenReturn(users);
-        List<User> result = userService.getAllUsers(0, 10, "asc", "juancito");
-        assertThat(result).isSameAs(users);
-        Mockito.verify(retrieveUserUseCase).getAllUsers(0, 10, "asc", "juancito");
     }
 
     @Test

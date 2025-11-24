@@ -51,6 +51,7 @@ public class UserEntity {
     private LocalDateTime recoveryCodeExpiration;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy("date ASC")
     private List<NotificationEntity> notifications = new ArrayList<>();
 
     private Long totalInstitutions;
