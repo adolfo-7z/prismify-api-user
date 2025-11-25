@@ -24,7 +24,7 @@ class UserInternalControllerTest {
 
     private MockMvc mockMvc;
 
-    private final String defaultUsername = "adminTechPriest";
+    private final String defaultUsername = "admin";
 
     @BeforeEach
     void setUp() {
@@ -41,8 +41,8 @@ class UserInternalControllerTest {
         user.setPassword("password123");
         user.setRole(Role.ADMIN);
         user.setActive(true);
-        when(userService.getUserByUsername("techpriest")).thenReturn(user);
-        mockMvc.perform(get("/internal/users/by-username/techpriest"))
+        when(userService.getUserByUsername("admin")).thenReturn(user);
+        mockMvc.perform(get("/internal/users/by-username/admin"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.username").value("admin"))
@@ -54,7 +54,7 @@ class UserInternalControllerTest {
     @Test
     void shouldReturnUserEmailById() throws Exception {
         User user = new User();
-        user.setId(1L);
+        user.setId(42L);
         user.setUsername("admin");
         user.setEmail("admin@correo.cl");
         user.setRole(Role.ADMIN);
@@ -83,6 +83,41 @@ class UserInternalControllerTest {
     void shouldIncrementAudits() throws Exception {
         doNothing().when(userService).incrementAuditsPerformed(99L);
         mockMvc.perform(patch("/internal/users/99/increment-audits"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnUserByEmail() throws Exception {
+        User user = new User();
+        user.setId(10L);
+        user.setUsername("juan_perez");
+        user.setEmail("correo@empresa.cl");
+        user.setPassword("password");
+        user.setRole(Role.ADMIN);
+        user.setActive(true);
+        when(userService.getUserByEmail("correo@empresa.cl")).thenReturn(user);
+        mockMvc.perform(get("/internal/users/by-email/correo@empresa.cl"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10L))
+                .andExpect(jsonPath("$.username").value("juan_perez"))
+                .andExpect(jsonPath("$.password").value("password"))
+                .andExpect(jsonPath("$.role").value("ADMIN"))
+                .andExpect(jsonPath("$.active").value(true));
+    }
+
+    @Test
+    void shouldAddNotification() throws Exception {
+        doNothing().when(userService).createNotification(55L, "hello world");
+        mockMvc.perform(post("/internal/users/notifications/55")
+                .param("message", "hello world"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldAddAdminNotification() throws Exception {
+        doNothing().when(userService).createAdminNotification("system alert");
+        mockMvc.perform(post("/internal/users/notifications/admin")
+                .param("message", "system alert"))
                 .andExpect(status().isOk());
     }
 

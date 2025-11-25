@@ -4,12 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.ufro.dci.etransparency.etransparency_api_user.email.application.support.EmailTemplateLoader;
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.models.MailMessage;
 import com.ufro.dci.etransparency.etransparency_api_user.email.domain.ports.out.SendMailPort;
 
@@ -102,6 +107,54 @@ class ComposeMailUseCaseImplTest {
         assertTrue(message.getBody().contains("nueva solicitud de inscripción"));
         assertEquals("admin@correo.cl", message.getTo());
         verify(sendMailPort).send(message);
+    }
+
+    @Test
+    void testSendRecoveryCodeEmail() {
+        try (MockedStatic<EmailTemplateLoader> utilities = Mockito.mockStatic(EmailTemplateLoader.class)) {
+            String code = "ABC123";
+            MailMessage message = new MailMessage();
+            utilities.when(() -> EmailTemplateLoader.getSubject("recoveryCode"))
+                    .thenReturn("Código de Recuperación");
+            utilities.when(() -> EmailTemplateLoader.getBody("recoveryCode", Map.of("code", code)))
+                    .thenReturn("Tu código de recuperación es: ABC123");
+            composeMailUseCase.sendRecoveryCodeEmail(message, code);
+            assertEquals("Código de Recuperación", message.getSubject());
+            assertEquals("Tu código de recuperación es: ABC123", message.getBody());
+            verify(sendMailPort).send(message);
+        }
+    }
+
+    @Test
+    void testSendNewPasswordAlert() {
+        try (MockedStatic<EmailTemplateLoader> utilities = Mockito.mockStatic(EmailTemplateLoader.class)) {
+            MailMessage message = new MailMessage();
+            utilities.when(() -> EmailTemplateLoader.getSubject("newPassword"))
+                    .thenReturn("Nueva Contraseña Generada");
+            utilities.when(() -> EmailTemplateLoader.getBody("newPassword"))
+                    .thenReturn("Se ha generado una nueva contraseña para tu cuenta.");
+            composeMailUseCase.sendNewPasswordAlert(message);
+            assertEquals("Nueva Contraseña Generada", message.getSubject());
+            assertEquals("Se ha generado una nueva contraseña para tu cuenta.", message.getBody());
+            verify(sendMailPort).send(message);
+        }
+    }
+
+    @Test
+    void testSendAuditorAssigmentEmail() {
+        try (MockedStatic<EmailTemplateLoader> utilities = Mockito.mockStatic(EmailTemplateLoader.class)) {
+            String evaluationName = "Evaluación 001";
+            MailMessage message = new MailMessage();
+            utilities.when(() -> EmailTemplateLoader.getSubject("newAuditorAssignment"))
+                    .thenReturn("Nuevo Auditor Asignado");
+            utilities.when(() -> EmailTemplateLoader.getBody("newAuditorAssignment",
+                    Map.of("newEvaluation", evaluationName)))
+                    .thenReturn("Has sido asignado a la evaluación Evaluación 001");
+            composeMailUseCase.sendAuditorAssigmentEmail(message, evaluationName);
+            assertEquals("Nuevo Auditor Asignado", message.getSubject());
+            assertEquals("Has sido asignado a la evaluación Evaluación 001", message.getBody());
+            verify(sendMailPort).send(message);
+        }
     }
 
 }

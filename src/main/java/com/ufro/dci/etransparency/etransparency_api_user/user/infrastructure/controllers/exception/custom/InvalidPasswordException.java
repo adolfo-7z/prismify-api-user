@@ -3,7 +3,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.co
 public class InvalidPasswordException extends RuntimeException {
 
     private static final String DEFAULT_ERROR_CODE = "BAD_REQUEST";
-    private static final String DEFAULT_ERROR_MESSAGE = "Invalid received passwords";
+    private static final String DEFAULT_ERROR_MESSAGE = "Invalid credentials";
 
     private final String errorCode;
 

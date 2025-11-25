@@ -1,5 +1,6 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.repositories;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.UserNotFoundException;
@@ -42,11 +48,11 @@ class UserJpaRepositoryAdapterTest {
             new ArrayList<>(),
             0L,
             0L,
-            "High Magos",
+            "Tester",
             "88888888-8",
-            "Forge World Mars",
-            "Martian Red",
-            "Sigma",
+            "Temuco",
+            "Rojo",
+            "TSR",
             LocalDateTime.now(),
             LocalDateTime.now());
 
@@ -130,6 +136,91 @@ class UserJpaRepositoryAdapterTest {
     void shouldThrowIfUserNotFoundByUsername() {
         assertThatThrownBy(() -> adapter.findByUsername("nonexistent"))
                 .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldFindUserByEmail() {
+        when(jpaRepository.findByEmail("juan@correo.cl"))
+                .thenReturn(Optional.of(sampleEntity));
+        User found = adapter.findByEmail("juan@correo.cl");
+        assertThat(found).isNotNull();
+        assertThat(found.getUsername()).isEqualTo("juancito");
+    }
+
+    @Test
+    void shouldThrowIfUserNotFoundByEmail() {
+        when(jpaRepository.findByEmail("missing@mail.cl"))
+                .thenReturn(Optional.empty());
+        assertThatThrownBy(() -> adapter.findByEmail("missing@mail.cl"))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldFindUserByRole() {
+        when(jpaRepository.findByRole(Role.ADMIN))
+                .thenReturn(Optional.of(sampleEntity));
+        User found = adapter.findByRole(Role.ADMIN);
+        assertThat(found).isNotNull();
+        assertThat(found.getEmail()).isEqualTo("juan@correo.cl");
+    }
+
+    @Test
+    void shouldThrowIfUserNotFoundByRole() {
+        when(jpaRepository.findByRole(Role.AUDITOR))
+                .thenReturn(Optional.empty());
+        assertThatThrownBy(() -> adapter.findByRole(Role.AUDITOR))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldReturnTrueIfUsernameExists() {
+        when(jpaRepository.existsByUsername("juancito")).thenReturn(true);
+        boolean exists = adapter.existsByUsername("juancito");
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfUsernameDoesNotExist() {
+        when(jpaRepository.existsByUsername("missing")).thenReturn(false);
+        boolean exists = adapter.existsByUsername("missing");
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldReturnPagedFilteredUsers() {
+        Object[] row = new Object[] {
+                1L,
+                "juancito",
+                "juan@correo.cl",
+                true,
+                "ADMIN",
+                Timestamp.valueOf(LocalDateTime.now().minusDays(1)),
+                Timestamp.valueOf(LocalDateTime.now()),
+                3L,
+                10L
+        };
+        Page<Object[]> mockedPage = new PageImpl<>(List.<Object[]>of(row));
+        when(jpaRepository.findAllUsersFiltered(
+                eq("juancito"),
+                eq("juan@correo.cl"),
+                eq(true),
+                eq("ADMIN"),
+                eq("2024-01-01"),
+                any(Pageable.class))).thenReturn(mockedPage);
+        Page<User> result = adapter.findAll(
+                0, 10,
+                "juancito",
+                "juan@correo.cl",
+                "2024-01-01",
+                true,
+                Role.ADMIN);
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        User u = result.getContent().get(0);
+        assertThat(u.getUsername()).isEqualTo("juancito");
+        assertThat(u.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(u.getTotalInstitutions()).isEqualTo(3L);
+        assertThat(u.getAuditsPerformed()).isEqualTo(10L);
     }
 
 }
