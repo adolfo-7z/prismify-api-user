@@ -117,6 +117,11 @@ public class MailService implements ComposeMailUseCase {
         composeMailUseCase.sendNewPasswordAlert(message);
     }
 
+    /**
+     * Envía un correo notificando al auditor sobre nueva asignación.
+     * 
+     * @param message el mensaje de correo a enviar
+     */
     @Override
     public void sendAuditorAssigmentEmail(MailMessage message, String newEvaluation) {
         composeMailUseCase.sendAuditorAssigmentEmail(message, newEvaluation);

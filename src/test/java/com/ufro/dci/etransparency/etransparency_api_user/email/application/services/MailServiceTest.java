@@ -78,4 +78,27 @@ class MailServiceTest {
         verify(composeMailUseCase).sendNewInstitutionRequestEmail(message);
     }
 
+    @Test
+    void shouldSendRecoveryCodeEmail() {
+        MailMessage message = new MailMessage();
+        String code = "123456";
+        mailService.sendRecoveryCodeEmail(message, code);
+        verify(composeMailUseCase).sendRecoveryCodeEmail(message, code);
+    }
+
+    @Test
+    void shouldSendNewPasswordAlert() {
+        MailMessage message = new MailMessage();
+        mailService.sendNewPasswordAlert(message);
+        verify(composeMailUseCase).sendNewPasswordAlert(message);
+    }
+
+    @Test
+    void shouldSendAuditorAssignmentEmail() {
+        MailMessage message = new MailMessage();
+        String newEvaluation = "Evaluation X";
+        mailService.sendAuditorAssigmentEmail(message, newEvaluation);
+        verify(composeMailUseCase).sendAuditorAssigmentEmail(message, newEvaluation);
+    }
+
 }

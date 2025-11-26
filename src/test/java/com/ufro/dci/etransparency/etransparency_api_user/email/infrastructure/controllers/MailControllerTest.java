@@ -2,6 +2,7 @@ package com.ufro.dci.etransparency.etransparency_api_user.email.infrastructure.c
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -99,7 +100,7 @@ class MailControllerTest {
     @Test
     void shouldSendEvidenceRejectedEmail() throws Exception {
         String evaluationName = "EvaluationTest";
-        mockMvc.perform(post("/internal/mail/send/evidence/rejected/"+evaluationName)
+        mockMvc.perform(post("/internal/mail/send/evidence/rejected/" + evaluationName)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -110,7 +111,7 @@ class MailControllerTest {
     @Test
     void shouldSendAppealEvidenceEmail() throws Exception {
         String evaluationName = "EvaluationTest";
-        mockMvc.perform(post("/internal/mail/send/evidence/appeal/"+evaluationName)
+        mockMvc.perform(post("/internal/mail/send/evidence/appeal/" + evaluationName)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -126,6 +127,38 @@ class MailControllerTest {
                 .content(toJson(request)))
                 .andExpect(status().isOk());
         verify(mailService).sendNewInstitutionRequestEmail(any());
+    }
+
+    @Test
+    void shouldSendRecoveryCodeEmail() throws Exception {
+        String code = "ABC123";
+        mockMvc.perform(post("/internal/mail/send/recovery/code/" + code)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)))
+                .andExpect(status().isOk());
+        verify(mailService).sendRecoveryCodeEmail(any(), eq(code));
+    }
+
+    @Test
+    void shouldSendNewPasswordAlert() throws Exception {
+        mockMvc.perform(post("/internal/mail/send/recovery/new")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)))
+                .andExpect(status().isOk());
+        verify(mailService).sendNewPasswordAlert(any());
+    }
+
+    @Test
+    void shouldSendAuditorAssignmentEmail() throws Exception {
+        String newEvaluation = "Evaluation123";
+        mockMvc.perform(post("/internal/mail/send/auditor/assignment/" + newEvaluation)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)))
+                .andExpect(status().isOk());
+        verify(mailService).sendAuditorAssigmentEmail(any(), eq(newEvaluation));
     }
 
 }
