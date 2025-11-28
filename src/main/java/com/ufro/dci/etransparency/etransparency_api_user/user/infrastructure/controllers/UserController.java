@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +44,9 @@ public class UserController {
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid CreateUserRequestDTO user) {
+    public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody @Valid CreateUserRequestDTO user) {
         User createdUser = userService.createUser(user.toDomain());
-        return new ResponseEntity<>(UserDTOMapper.toDto(createdUser), HttpStatus.CREATED);
+        return ApiResponse.created(UserDTOMapper.toDto(createdUser));
     }
 
     /**
@@ -99,10 +98,10 @@ public class UserController {
      */
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updatedUser) {
+    public ApiResponse<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequestDTO updatedUser) {
         User partialUser = UserDTOMapper.fromDto(updatedUser);
         User user = userService.updateUser(id, partialUser);
-        return new ResponseEntity<>(UserDTOMapper.toDto(user), HttpStatus.OK);
+        return ApiResponse.ok(UserDTOMapper.toDto(user));
     }
 
     /**
@@ -115,8 +114,8 @@ public class UserController {
      */
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> toggleUserStatus(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.toggleUserStatus(id), HttpStatus.OK);
+    public ApiResponse<String> toggleUserStatus(@PathVariable Long id) {
+        return ApiResponse.ok(userService.toggleUserStatus(id));
     }
 
     /**
@@ -128,8 +127,8 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    public ApiResponse<String> deleteUser(@PathVariable Long id) {
+        return ApiResponse.ok(userService.deleteUser(id));
     }
 
     /**
@@ -142,10 +141,10 @@ public class UserController {
      *         enviado
      */
     @PostMapping("/recovery/code")
-    public ResponseEntity<Void> requestRecoveryCode(@RequestBody Map<String, String> body) {
+    public ApiResponse<Void> requestRecoveryCode(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         userService.sendRecoveryCode(email);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok(null);
     }
 
     /**
@@ -157,11 +156,11 @@ public class UserController {
      *         válido
      */
     @PostMapping("/recovery/validate")
-    public ResponseEntity<Void> validateRecoveryCode(@RequestBody Map<String, String> body) {
+    public ApiResponse<Void> validateRecoveryCode(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String recoveryCode = body.get("recoveryCode");
         userService.validateRecoveryCode(email, recoveryCode);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok(null);
     }
 
     /**
@@ -175,9 +174,9 @@ public class UserController {
      *         actualizó correctamente
      */
     @PostMapping("/recovery/password")
-    public ResponseEntity<Void> validateNewPassword(@Valid @RequestBody PasswordResetRequestDTO request) {
+    public ApiResponse<Void> validateNewPassword(@Valid @RequestBody PasswordResetRequestDTO request) {
         userService.validateNewPassword(request.getEmail(), request.getPassword(), request.getValidationPassword());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok(null);
     }
 
     /**
@@ -189,9 +188,9 @@ public class UserController {
      */
     @GetMapping("/{id}/notifications")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
-    public ResponseEntity<List<NotificationDTO>> getUserNotifications(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getNotifications(id).stream().map(UserDTOMapper::toDto).toList(),
-                HttpStatus.OK);
+    public ApiResponse<List<NotificationDTO>> getUserNotifications(@PathVariable Long id) {
+        List<NotificationDTO> dtos = userService.getNotifications(id).stream().map(UserDTOMapper::toDto).toList();
+        return ApiResponse.ok(dtos);
     }
 
     /**
@@ -205,9 +204,9 @@ public class UserController {
      */
     @DeleteMapping("/{userId}/notifications/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
-    public ResponseEntity<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
+    public ApiResponse<Void> removeNotification(@PathVariable Long userId, @PathVariable Long id) {
         userService.removeNotification(userId, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok(null);
     }
 
     /**
@@ -219,8 +218,8 @@ public class UserController {
      */
     @DeleteMapping("/{userId}/notifications")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR')")
-    public ResponseEntity<Void> removeAllNotifications(@PathVariable Long userId) {
+    public ApiResponse<Void> removeAllNotifications(@PathVariable Long userId) {
         userService.clearNotifications(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok(null);
     }
 }

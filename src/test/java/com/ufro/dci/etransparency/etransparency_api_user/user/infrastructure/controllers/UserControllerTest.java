@@ -1,9 +1,7 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -70,8 +68,8 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(createUserRequest)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(sampleUser.getId()))
-                .andExpect(jsonPath("$.username").value("admin"));
+                .andExpect(jsonPath("$.data.id").value(sampleUser.getId()))
+                .andExpect(jsonPath("$.data.username").value("admin"));
         verify(userService).createUser(any(User.class));
     }
 
@@ -80,8 +78,8 @@ class UserControllerTest {
         when(userService.getUserById(1L)).thenReturn(sampleUser);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(sampleUser.getId()))
-                .andExpect(jsonPath("$.username").value("admin"));
+                .andExpect(jsonPath("$.data.id").value(sampleUser.getId()))
+                .andExpect(jsonPath("$.data.username").value("admin"));
         verify(userService).getUserById(1L);
     }
 
@@ -100,7 +98,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("nuevocorreo@correo.cl"));
+                .andExpect(jsonPath("$.data.email").value("nuevocorreo@correo.cl"));
         verify(userService).updateUser(eq(1L), any(User.class));
     }
 
@@ -110,7 +108,7 @@ class UserControllerTest {
         mockMvc.perform(patch("/users/1/status")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User activated"));
+                .andExpect(jsonPath("$.data").value("User activated"));
         verify(userService).toggleUserStatus(1L);
     }
 
@@ -120,7 +118,7 @@ class UserControllerTest {
         mockMvc.perform(delete("/users/1")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User deleted"));
+                .andExpect(jsonPath("$.data").value("User deleted"));
         verify(userService).deleteUser(1L);
     }
 
@@ -134,9 +132,9 @@ class UserControllerTest {
                 .param("page", "0")
                 .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].id").value(1L))
-                .andExpect(jsonPath("$.content[0].username").value("admin"))
-                .andExpect(jsonPath("$.content[0].email").value("admin@correo.cl"));
+                .andExpect(jsonPath("$.data[0].id").value(1L))
+                .andExpect(jsonPath("$.data[0].username").value("admin"))
+                .andExpect(jsonPath("$.data[0].email").value("admin@correo.cl"));
     }
 
     @Test
@@ -184,7 +182,7 @@ class UserControllerTest {
         when(userService.getNotifications(1L)).thenReturn(notifications);
         mockMvc.perform(get("/users/1/notifications"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].message").value("Test message"));
+                .andExpect(jsonPath("$.data[0].message").value("Test message"));
     }
 
     @Test

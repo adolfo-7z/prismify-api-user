@@ -50,7 +50,7 @@ class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(mockToken));
+                .andExpect(jsonPath("$.data.token").value(mockToken));
     }
 
 }

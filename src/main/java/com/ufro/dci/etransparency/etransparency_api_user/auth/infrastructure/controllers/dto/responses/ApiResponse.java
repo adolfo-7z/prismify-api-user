@@ -1,4 +1,4 @@
-package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses;
+package com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.dto.responses;
 
 import java.util.Map;
 

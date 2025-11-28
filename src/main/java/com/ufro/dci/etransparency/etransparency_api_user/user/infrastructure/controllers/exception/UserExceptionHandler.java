@@ -60,11 +60,13 @@ public class UserExceptionHandler {
          *         Error)
          */
         @ExceptionHandler(UpdateMapperException.class)
-        public ResponseEntity<CustomErrorResponse> handleUpdateMapper(
+        public ResponseEntity<ApiResponse<Object>> handleUpdateMapper(
                         UpdateMapperException exception) {
-                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                                HttpStatus.INTERNAL_SERVER_ERROR.value());
-                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
         }
 
         /**
@@ -78,11 +80,13 @@ public class UserExceptionHandler {
          *         el código de error, mensaje y el estado HTTP 400 (Bad Request)
          */
         @ExceptionHandler(InvalidRecoveryCodeException.class)
-        public ResponseEntity<CustomErrorResponse> handleInvalidRecoveryCode(
+        public ResponseEntity<ApiResponse<Object>> handleInvalidRecoveryCode(
                         InvalidRecoveryCodeException exception) {
-                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                                HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.fail(error));
         }
 
         /**
@@ -95,11 +99,13 @@ public class UserExceptionHandler {
          *         el código de error, mensaje y el estado HTTP 400 (Bad Request)
          */
         @ExceptionHandler(InvalidPasswordException.class)
-        public ResponseEntity<CustomErrorResponse> handleInvalidPassword(
+        public ResponseEntity<ApiResponse<Object>> handleInvalidPassword(
                         InvalidPasswordException exception) {
-                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                                HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.fail(error));
         }
 
         /**
@@ -113,11 +119,13 @@ public class UserExceptionHandler {
          *         Error)
          */
         @ExceptionHandler(UserEmailPortException.class)
-        public ResponseEntity<CustomErrorResponse> handleUserEmailPort(
+        public ResponseEntity<ApiResponse<Object>> handleUserEmailPort(
                         UserEmailPortException exception) {
-                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                                HttpStatus.INTERNAL_SERVER_ERROR.value());
-                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
         }
 
 }
