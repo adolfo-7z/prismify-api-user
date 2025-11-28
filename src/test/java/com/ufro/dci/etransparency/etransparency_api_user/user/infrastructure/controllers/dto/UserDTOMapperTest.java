@@ -11,6 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.UpdateUserRequestDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.UserDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.UserDTOMapper;
 
 @ExtendWith(MockitoExtension.class)
 class UserDTOMapperTest {

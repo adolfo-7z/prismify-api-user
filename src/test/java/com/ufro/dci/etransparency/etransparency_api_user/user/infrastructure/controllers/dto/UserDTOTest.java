@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.NotificationDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.UserDTO;
 
 class UserDTOTest {
 

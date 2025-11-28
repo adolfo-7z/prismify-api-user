@@ -1,4 +1,4 @@
-package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto;
+package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

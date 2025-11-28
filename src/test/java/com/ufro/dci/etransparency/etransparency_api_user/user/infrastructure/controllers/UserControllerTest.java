@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.application.services.UserService;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.*;
-import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.*;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.*;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)

@@ -1,11 +1,14 @@
 package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception;
 
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ufro.dci.etransparency.etransparency_api_user.commons.exception.CustomErrorResponse;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.ApiError;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.ApiResponse;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.*;
 
 /**
@@ -22,6 +25,11 @@ import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.con
 @RestControllerAdvice
 public class UserExceptionHandler {
 
+        private String traceId() {
+                String id = MDC.get("traceId");
+                return id != null ? id : "";
+        }
+
         /**
          * Maneja la excepción {@link UserNotFoundException} lanzada cuando
          * un usuario no es encontrado en el sistema.
@@ -32,11 +40,13 @@ public class UserExceptionHandler {
          *         el código de error, mensaje y el estado HTTP 404 (Not Found)
          */
         @ExceptionHandler(UserNotFoundException.class)
-        public ResponseEntity<CustomErrorResponse> handleUserNotFound(
+        public ResponseEntity<ApiResponse<Object>> handleUserNotFound(
                         UserNotFoundException exception) {
-                CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                                HttpStatus.NOT_FOUND.value());
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.fail(error));
         }
 
         /**

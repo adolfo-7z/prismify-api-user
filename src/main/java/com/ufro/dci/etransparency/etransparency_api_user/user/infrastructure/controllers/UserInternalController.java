@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.application.services.UserService;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
-import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.InternalUserAuthDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.InternalUserAuthDTO;
 
 /**
  * Controlador REST interno para la gestión de usuarios dentro del sistema.

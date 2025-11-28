@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.CreateUserRequestDTO;
+
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.InternalUserAuthDTO;
+
 class InternalUserAuthDTOTest {
 
     @Test

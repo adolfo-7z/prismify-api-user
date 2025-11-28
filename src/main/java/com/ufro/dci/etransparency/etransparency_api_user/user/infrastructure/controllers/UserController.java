@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import com.ufro.dci.etransparency.etransparency_api_user.user.application.services.UserService;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.Role;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
-import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.*;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.ApiResponse;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.PageMeta;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.*;
 
 import jakarta.validation.Valid;
 
@@ -57,9 +59,9 @@ public class UserController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('AUDITOR') or hasRole('SERVICE')")
-    public ResponseEntity<UserDTO> readUser(@PathVariable Long id) {
+    public ApiResponse<UserDTO> readUser(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        return new ResponseEntity<>(UserDTOMapper.toDto(user), HttpStatus.OK);
+        return ApiResponse.ok(UserDTOMapper.toDto(user));
     }
 
     /**
@@ -73,7 +75,7 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<UserDTO>> getAllUsers(
+    public ApiResponse<List<UserDTO>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String username,
@@ -83,7 +85,8 @@ public class UserController {
             @RequestParam(required = false) Role role) {
         Page<UserDTO> userDtos = userService.getAllUsers(page, size, username, email, date, active, role)
                 .map(UserDTOMapper::toDto);
-        return ResponseEntity.ok(userDtos);
+        return ApiResponse.paged(userDtos.getContent(), PageMeta.of(userDtos.getNumber(), userDtos.getSize(),
+                userDtos.getTotalElements(), userDtos.getTotalPages()));
     }
 
     /**

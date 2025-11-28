@@ -8,6 +8,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.UpdateUserRequestDTO;
+
 import jakarta.validation.*;
 
 class UpdateUserRequestDTOTest {

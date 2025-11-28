@@ -1,4 +1,4 @@
-package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto;
+package com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user;
 
 import java.time.LocalDateTime;
 import java.util.List;

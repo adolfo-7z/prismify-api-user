@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.SendMailRequestDTO;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.user.SendMailRequestDTO;
 import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.UserEmailPortException;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserEmailPort;
 
