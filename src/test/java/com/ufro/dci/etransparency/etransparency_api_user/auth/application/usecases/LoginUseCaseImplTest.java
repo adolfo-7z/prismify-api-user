@@ -3,7 +3,6 @@ package com.ufro.dci.etransparency.etransparency_api_user.auth.application.useca
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
-import org.apache.hc.client5.http.auth.InvalidCredentialsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +14,7 @@ import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthU
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.LoadAuthUserPort;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.PasswordMatcher;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.TokenProvider;
+import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.InvalidCredentialsException;
 
 @ExtendWith(MockitoExtension.class)
 class LoginUseCaseImplTest {

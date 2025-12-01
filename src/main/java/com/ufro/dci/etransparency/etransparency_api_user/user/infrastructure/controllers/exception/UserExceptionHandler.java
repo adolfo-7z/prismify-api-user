@@ -128,4 +128,24 @@ public class UserExceptionHandler {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
         }
 
+        @ExceptionHandler(UsernameAlreadyExistsException.class)
+        public ResponseEntity<ApiResponse<Object>> handleUsernameAlreadyExists(
+                        UsernameAlreadyExistsException exception) {
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.fail(error));
+        }
+
+        @ExceptionHandler(EmailAlreadyExistsException.class)
+        public ResponseEntity<ApiResponse<Object>> handleEmailAlreadyExists(
+                        EmailAlreadyExistsException exception) {
+                ApiError error = new ApiError(
+                                exception.getErrorCode(),
+                                exception.getMessage(),
+                                traceId());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.fail(error));
+        }
+
 }

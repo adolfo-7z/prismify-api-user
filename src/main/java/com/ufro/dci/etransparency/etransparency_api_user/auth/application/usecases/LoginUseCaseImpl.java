@@ -2,11 +2,10 @@ package com.ufro.dci.etransparency.etransparency_api_user.auth.application.useca
 
 import java.util.Optional;
 
-import org.apache.hc.client5.http.auth.InvalidCredentialsException;
-
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.model.AuthUserDetails;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.in.LoginUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.domain.ports.out.*;
+import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.InvalidCredentialsException;
 
 import lombok.RequiredArgsConstructor;
 

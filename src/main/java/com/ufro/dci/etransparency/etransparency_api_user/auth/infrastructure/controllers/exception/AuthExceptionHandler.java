@@ -1,22 +1,28 @@
 package com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception;
 
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.InvalidCredentialsException;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.JWTException;
 import com.ufro.dci.etransparency.etransparency_api_user.auth.infrastructure.controllers.exception.custom.UserPortException;
-import com.ufro.dci.etransparency.etransparency_api_user.commons.exception.CustomErrorResponse;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.ApiError;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.dto.responses.ApiResponse;
 
 /**
  * Manejador global de excepciones para el módulo de autenticación.
  * <p>
- * Esta clase captura y gestiona las excepciones personalizadas relacionadas con la autenticación,
+ * Esta clase captura y gestiona las excepciones personalizadas relacionadas con
+ * la autenticación,
  * devolviendo respuestas de error estructuradas al cliente.
  * <ul>
- *   <li>Maneja excepciones de tipo {@link UserPortException} y {@link JWTException}.</li>
- *   <li>Devuelve una respuesta con el código de error, mensaje descriptivo y estado HTTP 500.</li>
+ * <li>Maneja excepciones de tipo {@link UserPortException} y
+ * {@link JWTException}.</li>
+ * <li>Devuelve una respuesta con el código de error, mensaje descriptivo y
+ * estado HTTP 500.</li>
  * </ul>
  *
  * @author Adolfo Plaza
@@ -24,38 +30,61 @@ import com.ufro.dci.etransparency.etransparency_api_user.commons.exception.Custo
 @RestControllerAdvice
 public class AuthExceptionHandler {
 
+    private String traceId() {
+        String id = MDC.get("traceId");
+        return id != null ? id : "";
+    }
+
     /**
-     * Maneja excepciones de tipo {@link UserPortException} lanzadas durante el proceso de autenticación.
+     * Maneja excepciones de tipo {@link UserPortException} lanzadas durante el
+     * proceso de autenticación.
      * <p>
-     * Devuelve una respuesta de error personalizada con el código y mensaje de la excepción,
+     * Devuelve una respuesta de error personalizada con el código y mensaje de la
+     * excepción,
      * junto con el estado HTTP 500 (Internal Server Error).
      *
      * @param exception la excepción capturada de tipo UserPortException
      * @return ResponseEntity con la estructura de error personalizada y estado 500
      */
     @ExceptionHandler(UserPortException.class)
-    public ResponseEntity<CustomErrorResponse> handleUserPort(
+    public ResponseEntity<ApiResponse<Object>> handleUserPort(
             UserPortException exception) {
-        CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        ApiError error = new ApiError(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                traceId());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
     }
 
     /**
-     * Maneja excepciones de tipo {@link JWTException} relacionadas con errores en el manejo de tokens JWT.
+     * Maneja excepciones de tipo {@link JWTException} relacionadas con errores en
+     * el manejo de tokens JWT.
      * <p>
-     * Devuelve una respuesta de error personalizada con el código y mensaje de la excepción,
+     * Devuelve una respuesta de error personalizada con el código y mensaje de la
+     * excepción,
      * junto con el estado HTTP 500 (Internal Server Error).
      *
      * @param exception la excepción capturada de tipo JWTException
      * @return ResponseEntity con la estructura de error personalizada y estado 500
      */
     @ExceptionHandler(JWTException.class)
-    public ResponseEntity<CustomErrorResponse> handleJWT(
+    public ResponseEntity<ApiResponse<Object>> handleJWT(
             JWTException exception) {
-        CustomErrorResponse response = new CustomErrorResponse(exception.getErrorCode(), exception.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        ApiError error = new ApiError(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                traceId());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidCredentials(
+            InvalidCredentialsException exception) {
+        ApiError error = new ApiError(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                traceId());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
     }
 
 }

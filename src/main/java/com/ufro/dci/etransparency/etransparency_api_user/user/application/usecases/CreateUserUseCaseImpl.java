@@ -2,10 +2,14 @@ package com.ufro.dci.etransparency.etransparency_api_user.user.application.useca
 
 import java.util.ArrayList;
 
+import org.springframework.dao.DataIntegrityViolationException;
+
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.models.User;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.in.CreateUserUseCase;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.PasswordHasher;
 import com.ufro.dci.etransparency.etransparency_api_user.user.domain.ports.out.UserRepository;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.EmailAlreadyExistsException;
+import com.ufro.dci.etransparency.etransparency_api_user.user.infrastructure.controllers.exception.custom.UsernameAlreadyExistsException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,13 +48,25 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
      */
     @Override
     public User createUser(User user) {
-        user.setActive(true);
-        user.setTotalInstitutions(0L);
-        user.setAuditsPerformed(0L);
-        user.setNotifications(new ArrayList<>());
-        String hashedPssword = hasher.hash(user.getPassword());
-        user.setPassword(hashedPssword);
-        return userRepository.save(user);
+        try {
+            user.setActive(true);
+            user.setTotalInstitutions(0L);
+            user.setAuditsPerformed(0L);
+            user.setNotifications(new ArrayList<>());
+            String hashedPssword = hasher.hash(user.getPassword());
+            user.setPassword(hashedPssword);
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            String msg = e.getMostSpecificCause().getMessage();
+
+            if (msg.contains("users_username_key")) {
+                throw new UsernameAlreadyExistsException("Username already exists: " + user.getUsername());
+            }
+            if (msg.contains("users_email_key")) {
+                throw new EmailAlreadyExistsException("Email already exists: " + user.getEmail());
+            }
+            throw e;
+        }
     }
 
 }
