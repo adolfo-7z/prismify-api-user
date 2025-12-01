@@ -84,7 +84,7 @@ public class AuthExceptionHandler {
                 exception.getErrorCode(),
                 exception.getMessage(),
                 traceId());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail(error));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.fail(error));
     }
 
 }
