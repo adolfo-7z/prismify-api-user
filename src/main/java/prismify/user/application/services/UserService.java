@@ -1,0 +1,233 @@
+package prismify.user.application.services;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import prismify.user.domain.models.*;
+import prismify.user.domain.ports.in.*;
+
+/**
+ * Servicio que implementa los casos de uso relacionados con la gestión de
+ * usuarios.
+ * <p>
+ * Esta clase actúa como un orquestador que delega las operaciones de creación,
+ * recuperación, actualización y eliminación de usuarios en sus respectivas
+ * dependencias.
+ *
+ * @author Adolfo Plaza
+ */
+@RequiredArgsConstructor
+public class UserService implements CreateUserUseCase, RetrieveUserUseCase, UpdateUserUseCase, DeleteUserUseCase,
+        PasswordRecoveryUseCase, ManageNotificationUseCase {
+
+    private final CreateUserUseCase createUserUseCase;
+    private final RetrieveUserUseCase retrieveUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
+    private final PasswordRecoveryUseCase passwordRecoveryUseCase;
+    private final ManageNotificationUseCase manageNotificationUseCase;
+
+    /**
+     * Crea un nuevo usuario en el sistema.
+     *
+     * @param user objeto {@link User} con los datos del usuario a crear
+     * @return el usuario creado
+     */
+    @Override
+    @Transactional
+    public User createUser(User user) {
+        return createUserUseCase.createUser(user);
+    }
+
+    /**
+     * Recupera un usuario por su identificador único.
+     *
+     * @param id identificador del usuario
+     * @return el usuario correspondiente al id proporcionado
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserById(Long id) {
+        return retrieveUserUseCase.getUserById(id);
+    }
+
+    /**
+     * Recupera un usuario por su nombre de usuario.
+     *
+     * @param username nombre de usuario a buscar
+     * @return el usuario correspondiente al username
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserByUsername(String username) {
+        return retrieveUserUseCase.getUserByUsername(username);
+    }
+
+    /**
+     * Recupera un usuario por su correo electrónico.
+     *
+     * @param email correo electrónico a buscar
+     * @return el usuario correspondiente al email
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserByEmail(String email) {
+        return retrieveUserUseCase.getUserByEmail(email);
+    }
+
+    /**
+     * Obtiene una lista paginada de usuarios con opciones de filtrado y
+     * ordenamiento.
+     *
+     * @param page      número de página
+     * @param size      cantidad de usuarios por página
+     * @param dateOrder orden de la fecha (ascendente o descendente)
+     * @param name      filtro por nombre de usuario
+     * @return lista de usuarios
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<User> getAllUsers(int page, int size, String username, String email, String date, Boolean active,
+            Role role) {
+        return retrieveUserUseCase.getAllUsers(page, size, username, email, date, active, role);
+    }
+
+    /**
+     * Actualiza los datos de un usuario.
+     *
+     * @param id          identificador del usuario a actualizar
+     * @param updatedUser objeto {@link User} con los nuevos datos
+     * @return el usuario actualizado
+     */
+    @Override
+    @Transactional
+    public User updateUser(Long id, User updatedUser) {
+        return updateUserUseCase.updateUser(id, updatedUser);
+    }
+
+    /**
+     * Activa o desactiva el estado de un usuario.
+     *
+     * @param id identificador del usuario
+     * @return mensaje indicando el nuevo estado del usuario
+     */
+    @Override
+    @Transactional
+    public String toggleUserStatus(Long id) {
+        return updateUserUseCase.toggleUserStatus(id);
+    }
+
+    /**
+     * Incrementa el número de auditorías realizadas por un usuario.
+     *
+     * @param id identificador del usuario
+     */
+    @Override
+    @Transactional
+    public void incrementAuditsPerformed(Long id) {
+        updateUserUseCase.incrementAuditsPerformed(id);
+    }
+
+    /**
+     * Elimina un usuario del sistema.
+     *
+     * @param id identificador del usuario a eliminar
+     * @return mensaje confirmando la eliminación
+     */
+    @Override
+    @Transactional
+    public String deleteUser(Long id) {
+        return deleteUserUseCase.deleteUser(id);
+    }
+
+    /**
+     * Envia código de recuperación por correo
+     *
+     * @param email correo electrónico del usuario
+     */
+    @Override
+    @Transactional
+    public void sendRecoveryCode(String email) {
+        passwordRecoveryUseCase.sendRecoveryCode(email);
+    }
+
+    /**
+     * Valida código de recuperación.
+     *
+     * @param email        correo electrónico del usuario
+     * @param recoveryCode código de recuperación
+     */
+    @Override
+    @Transactional
+    public void validateRecoveryCode(String email, String recoveryCode) {
+        passwordRecoveryUseCase.validateRecoveryCode(email, recoveryCode);
+    }
+
+    /**
+     * Valida nueva contraseña
+     *
+     * @param email              identificador del usuario a eliminar
+     * @param password           contraseña ingresada
+     * @param validationPassword contraseña para validación
+     */
+    @Override
+    @Transactional
+    public void validateNewPassword(String email, String password, String validationPassword) {
+        passwordRecoveryUseCase.validateNewPassword(email, password, validationPassword);
+    }
+
+    @Override
+    @Transactional
+    public void createNotification(Long userId, String message) {
+        manageNotificationUseCase.createNotification(userId, message);
+    }
+
+    /**
+     * Obtiene las notificaciones de un usuario específico.
+     *
+     * @param id identificador del usuario
+     * @return lista de notificaciones del usuario
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Notification> getNotifications(Long userId) {
+        return manageNotificationUseCase.getNotifications(userId);
+    }
+
+    /**
+     * Elimina una notificación específica de un usuario.
+     *
+     * @param userId identificador del usuario al que pertenece la notificación
+     * @param id     identificador de la notificación a eliminar
+     */
+    @Override
+    @Transactional
+    public void removeNotification(Long userId, Long id) {
+        manageNotificationUseCase.removeNotification(userId, id);
+    }
+
+    /**
+     * Elimina todas las notificaciones de un usuario.
+     *
+     * @param userId identificador del usuario cuyas notificaciones serán eliminadas
+     */
+    @Override
+    @Transactional
+    public void clearNotifications(Long userId) {
+        manageNotificationUseCase.clearNotifications(userId);
+    }
+
+    /**
+     * Crea una notificación dirigida a los administradores del sistema.
+     *
+     * @param message contenido del mensaje de la notificación
+     */
+    @Override
+    @Transactional
+    public void createAdminNotification(String message) {
+        manageNotificationUseCase.createAdminNotification(message);
+    }
+}

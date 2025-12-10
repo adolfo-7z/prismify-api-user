@@ -1,0 +1,108 @@
+package prismify.auth.infrastructure.adapters;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import lombok.Data;
+import prismify.auth.domain.model.AuthUserDetails;
+import prismify.auth.domain.ports.out.LoadAuthUserPort;
+import prismify.auth.infrastructure.controllers.exception.custom.UserPortException;
+
+/**
+ * Adaptador que implementa {@link LoadAuthUserPort} para obtener detalles de
+ * usuario
+ * desde un servicio externo a través de HTTP usando {@link RestTemplate}.
+ * <p>
+ * Esta clase se encarga de consultar la API de usuarios interna y mapear la
+ * respuesta
+ * a la entidad {@link AuthUserDetails}.
+ * 
+ * @author Adolfo Plaza
+ */
+@Component
+public class UserAdapter implements LoadAuthUserPort {
+
+    private final RestTemplate restTemplate;
+    private String userApiUrl;
+
+    /**
+     * Constructor de {@link UserAdapter}.
+     * 
+     * @param restTemplate Instancia de {@link RestTemplate} utilizada para realizar
+     *                     llamadas HTTP a la API de usuarios.
+     * @param userApiUrl   URL base del servicio de usuarios. Se inyecta desde
+     *                     propiedades de configuración.
+     */
+    public UserAdapter(RestTemplate restTemplate,
+            @Value("${user.api.url}") String userApiUrl) {
+        this.restTemplate = restTemplate;
+        this.userApiUrl = userApiUrl;
+    }
+
+    /**
+     * Obtiene los detalles de un usuario a partir de su nombre de usuario.
+     * <p>
+     * Realiza una llamada HTTP GET a la API interna y, si se encuentra el usuario,
+     * lo mapea a {@link AuthUserDetails}. En caso de que el usuario no exista,
+     * retorna un {@link Optional#empty()}.
+     * 
+     * @param username Nombre de usuario a buscar.
+     * @return {@link Optional} que contiene los detalles del usuario si se
+     *         encuentra,
+     *         o vacío si no existe.
+     * @throws UserPortException Si ocurre un error en la comunicación con la API
+     *                           o cualquier otra excepción no controlada.
+     */
+    @Override
+    public Optional<AuthUserDetails> loadByUsername(String username) {
+        return fetchUser("/internal/users/by-username/", username);
+    }
+
+    @Override
+    public Optional<AuthUserDetails> loadByEmail(String email) {
+        return fetchUser("/internal/users/by-email/", email);
+    }
+
+    private Optional<AuthUserDetails> fetchUser(String path, String value) {
+        String url = userApiUrl + path + value;
+
+        try {
+            ResponseEntity<InternalUserAuthDTO> response = restTemplate.getForEntity(url, InternalUserAuthDTO.class);
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return Optional.of(mapToAuthUserDetails(response.getBody()));
+            }
+
+            return Optional.empty();
+
+        } catch (HttpClientErrorException.NotFound e) {
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new UserPortException();
+        }
+    }
+
+    private AuthUserDetails mapToAuthUserDetails(InternalUserAuthDTO dto) {
+        return new AuthUserDetails(
+                dto.getId(),
+                dto.getUsername(),
+                dto.getPassword(),
+                dto.getRole(),
+                dto.isActive());
+    }
+
+    @Data
+    public static class InternalUserAuthDTO {
+        private Long id;
+        private String username;
+        private String password;
+        private String role;
+        private boolean active;
+    }
+
+}

@@ -1,0 +1,62 @@
+package prismify.user.infrastructure.controllers.dto.user;
+
+import prismify.user.domain.models.Notification;
+import prismify.user.domain.models.User;
+
+public class UserDTOMapper {
+
+    private UserDTOMapper() {
+        throw new UnsupportedOperationException("Mapper class");
+    }
+
+    public static UserDTO toDto(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setActive(user.isActive());
+        dto.setRole(user.getRole());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setNotifications(user.getNotifications().stream().map(UserDTOMapper::toDto).toList());
+        dto.setTotalInstitutions(user.getTotalInstitutions());
+        dto.setAuditsPerformed(user.getAuditsPerformed());
+        dto.setPosition(user.getPosition());
+        dto.setRut(user.getRut());
+        dto.setCity(user.getCity());
+        dto.setColor(user.getColor());
+        dto.setAcronym(user.getAcronym());
+        dto.setCreatedAt(user.getCreatedAt());
+        dto.setUpdatedAt(user.getUpdatedAt());
+        return dto;
+    }
+
+    public static User fromDto(UpdateUserRequestDTO dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setPosition(dto.getPosition());
+        user.setRut(dto.getRut());
+        user.setCity(dto.getCity());
+        user.setColor(dto.getColor());
+        user.setAcronym(dto.getAcronym());
+        user.setAuditsPerformed(dto.getAuditsPerformed());
+        return user;
+    }
+
+    public static NotificationDTO toDto(Notification notification) {
+        NotificationDTO dto = new NotificationDTO();
+        dto.setId(notification.getId());
+        dto.setMessage(notification.getMessage());
+        dto.setDate(notification.getDate());
+        return dto;
+    }
+
+    public static Notification fromDto(NotificationDTO dto) {
+        if (dto == null)
+            return null;
+        return new Notification(dto.getId(), dto.getMessage(), dto.getDate());
+    }
+
+}
