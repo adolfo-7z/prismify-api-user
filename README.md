@@ -39,12 +39,12 @@ Proyecto que permite la gestión de usuarios y autentificación en la plataforma
 
 ### Tecnologías utilizadas
 
-* [Spring Framework] (https://spring.io/projects/spring-framework)
-* [Spring Boot] (https://spring.io/projects/spring-boot)
-* [Spring Security] (https://spring.io/projects/spring-security)
+* [Spring_Framework] (https://spring.io/projects/spring-framework)
+* [Spring_Boot] (https://spring.io/projects/spring-boot)
+* [Spring_Security] (https://spring.io/projects/spring-security)
 * [Hibernate] (https://hibernate.org/orm/)
-* [Spring Data] (https://spring.io/projects/spring-data)
+* [Spring_Data] (https://spring.io/projects/spring-data)
 
 ### Autores
 
-* [Adolfo Plaza] (https://github.com/adolfo-7z)
+* [Adolfo_Plaza] (https://github.com/adolfo-7z)
